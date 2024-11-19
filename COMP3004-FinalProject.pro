@@ -8,7 +8,6 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-# This is a test comment to see if the repository is working :)
 SOURCES += \
     main.cpp \
     mainwindow.cpp
