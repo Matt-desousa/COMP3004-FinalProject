@@ -6,15 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>582</width>
-    <height>990</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-<<<<<<< Updated upstream
    <widget class="QProgressBar" name="ChargeIndicator">
     <property name="geometry">
      <rect>
@@ -89,207 +88,6 @@
     <property name="text">
      <string>Plugged In</string>
     </property>
-=======
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>1281</width>
-      <height>981</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>1</number>
-    </property>
-    <widget class="QWidget" name="user">
-     <attribute name="title">
-      <string>User</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="dataCollection">
-     <attribute name="title">
-      <string>Data Collection</string>
-     </attribute>
-     <widget class="QComboBox" name="dropdown">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>60</y>
-        <width>121</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="currentText">
-       <string>H1 Left</string>
-      </property>
-      <item>
-       <property name="text">
-        <string>H1 Left</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>H1 Right</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>H2 Left</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>H2 Right</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>H3 Left</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>H3 Right</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>H4 Left </string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>H4 Right</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>H5 Left </string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>H5 RIght</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>H6 Left</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>H6 Right</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F1 Left</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F1 Right</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F2 Left</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F2 Right</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F3 Left</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F3 Right</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F4 Left</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F4 Right</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F5 Left</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F5 Right</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F6 Left</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>F6 Right</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string/>
-       </property>
-      </item>
-     </widget>
-     <widget class="QSlider" name="horizontalSlider">
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>70</y>
-        <width>160</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="sliderValue">
-      <property name="geometry">
-       <rect>
-        <x>360</x>
-        <y>70</y>
-        <width>62</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>5</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="skinContactChecked">
-      <property name="geometry">
-       <rect>
-        <x>400</x>
-        <y>60</y>
-        <width>131</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Skin Contact</string>
-      </property>
-     </widget>
-    </widget>
->>>>>>> Stashed changes
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -297,23 +95,10 @@
     <rect>
      <x>0</x>
      <y>0</y>
-<<<<<<< Updated upstream
      <width>800</width>
      <height>22</height>
     </rect>
    </property>
-=======
-     <width>582</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuRaDoTech_Simulator">
-    <property name="title">
-     <string>RaDoTech Simulator</string>
-    </property>
-   </widget>
-   <addaction name="menuRaDoTech_Simulator"/>
->>>>>>> Stashed changes
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
