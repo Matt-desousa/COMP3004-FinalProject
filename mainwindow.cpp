@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
             {"F4 Left",{5,150}},{"F4 Right",{5,150}},{"F5 Left",{5,130}},{"F5 Right",{5,130}},{"F6 Left",{5,150}},{"F6 Right",{5,150}}
         };
 
+    test_storage  = new ReadingStorage(&ranges);
+
         // Connect dropdown to update the slider range and value
         connect(ui->dropdown,QOverload<int>::of(&QComboBox::currentIndexChanged),this,[=](int index){
             QString selectedOption = ui->dropdown->currentText();
@@ -61,7 +63,9 @@ void MainWindow::handleCheckboxToggled(bool checked){
     }
     else if(!checked && lastState){
         qDebug() << "Lift the device off the skin";
+        test_storage->log_data_point(ui->dropdown->currentText(), QPair<int, int>(ui->horizontalSlider->value(), ui->horizontalSlider->value())); //test adding a point to a storage block
         ui->horizontalSlider->setEnabled(false);
+
     }
     lastState = checked;
 }

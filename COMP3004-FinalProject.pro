@@ -11,11 +11,13 @@ CONFIG += c++11
 SOURCES += \
     battery.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    readingstorage.cpp
 
 HEADERS += \
     battery.h \
-    mainwindow.h
+    mainwindow.h \
+    readingstorage.h
 
 FORMS += \
     mainwindow.ui

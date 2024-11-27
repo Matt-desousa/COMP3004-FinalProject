@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "battery.h"
+#include "readingstorage.h"
 #include <QMap>
 #include <QPair>
 #include <QDebug>
@@ -25,5 +26,7 @@ private:
     QMap<QString,QPair<int,int>> ranges; //ranges for each spot(min,max)
     bool lastState;
     void handleCheckboxToggled(bool checked);// skin contact
+
+    ReadingStorage* test_storage; //DELETE LATER
 };
 #endif // MAINWINDOW_H

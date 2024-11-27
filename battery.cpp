@@ -63,3 +63,5 @@ void Battery::update_charge_UI(){
     //send new palette to charging indicator
     charging_indicator->setPalette(charge_indicator_palette);
 }
+
+
