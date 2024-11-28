@@ -9,7 +9,7 @@
 #include <QDebug>
 #include <QList>
 #include <QPushButton>
-
+#include <QInputDialog>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -35,5 +35,6 @@ private:
 private slots:
     void onFahrenheitSelected();//temp conversion
     void onCelsiusSelected();//temp convresion
+    void onAddTagButtonClicked(); //add tag
 };
 #endif // MAINWINDOW_H

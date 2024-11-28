@@ -164,5 +164,20 @@ void MainWindow::onCelsiusSelected(){
 
 //add tag
 void MainWindow::onAddTagButtonClicked(){
+    bool ok;
+    QString tagName = QInputDialog::getText(this, "Add Tag", "Enter Tag Name:", QLineEdit::Normal, "", &ok);
 
+        // If the user clicks "OK" and enters a name, create the tag button
+        if (ok && !tagName.isEmpty()) {
+            QPushButton *newTagButton = new QPushButton("+" + tagName, this);
+            newTagButton->setCheckable(true);
+
+            // Add the button to the layout
+            ui->formLayout->addWidget(newTagButton);
+
+            //add the button to the tagButtonGroup
+            tagButtonGroup.append(newTagButton);
+
+        }
+        ui->addTag->setChecked(false);
 }
