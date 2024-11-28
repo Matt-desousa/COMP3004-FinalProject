@@ -12,12 +12,15 @@ SOURCES += \
     battery.cpp \
     main.cpp \
     mainwindow.cpp \
-    readingstorage.cpp
+    readingstorage.cpp \
+    user.cpp
 
 HEADERS += \
     battery.h \
+    defs.h \
     mainwindow.h \
-    readingstorage.h
+    readingstorage.h \
+    user.h
 
 FORMS += \
     mainwindow.ui
