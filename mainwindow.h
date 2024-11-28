@@ -29,7 +29,10 @@ private:
     bool lastState;
     void handleCheckboxToggled(bool checked);// skin contact
     void saveNotes(); //data collection
+    int calculateAverage();
+    void processRyodorakuData();
     QList<QPushButton*> tagButtonGroup; //data collections:tags
+    QMap<QString,int> spotValues; // store scanned data
     ReadingStorage* test_storage; //DELETE LATER
 
 private slots:

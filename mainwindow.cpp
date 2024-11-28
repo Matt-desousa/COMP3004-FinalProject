@@ -16,6 +16,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     ranges = {
         {"H1 Left", {5, 190}}, {"H1 Right", {5, 190}}, {"H2 Left", {5, 170}}, {"H2 Right", {5, 170}}, {"H3 Left", {5, 140}}, {"H3 Right", {5, 140}}, {"H4 Left", {5, 170}}, {"H4 Right", {5, 170}}, {"H5 Left", {5, 200}}, {"H5 Right", {5, 200}}, {"H6 Left", {5, 200}}, {"H6 Right", {5, 200}}, {"F1 Left", {5, 160}}, {"F1 Right", {5, 160}}, {"F2 Left", {5, 130}}, {"F2 Right", {5, 130}}, {"F3 Left", {5, 150}}, {"F3 Right", {5, 150}}, {"F4 Left", {5, 150}}, {"F4 Right", {5, 150}}, {"F5 Left", {5, 130}}, {"F5 Right", {5, 130}}, {"F6 Left", {5, 150}}, {"F6 Right", {5, 150}}};
+    // Initialize with default values
+    for(const QString &spot: ranges.keys()){
+        spotValues[spot] = ranges[spot].first;
+    }
 
     // Connect dropdown to update the slider range and value
     connect(ui->dropdown, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index)
@@ -27,27 +31,39 @@ MainWindow::MainWindow(QWidget *parent)
             ui->horizontalSlider->setRange(range.first,range.second);
 
             //reset slider to the minimum value of the range
-            ui->horizontalSlider->setValue(range.first); });
+            ui->horizontalSlider->setValue(range.first);
+            ui->horizontalSlider->setEnabled(false);
+    });
 
-    // update slider value
+    // Update slider value
     connect(ui->horizontalSlider, &QSlider::valueChanged, this, [=](int value)
             { ui->sliderValue->setText(QString::number(value)); });
 
-    // disable slider and dropdown
+    // Disable slider and dropdown
     ui->horizontalSlider->setEnabled(false);
     ui->dropdown->setEnabled(false);
 
-    // connect the checkbox to the handle function
+    //Update values on slider changes
+    connect(ui->horizontalSlider,&QSlider::valueChanged,this,[=](int value){
+        QString selectedSpot = ui->dropdown->currentText();
+        spotValues[selectedSpot] = value;
+    });
+
+    // Connect the checkbox to the handle function
     connect(ui->skinContactChecked, &QCheckBox::toggled, this, &MainWindow::handleCheckboxToggled);
 
-    // add tag buttons
+    // Add tag buttons
     connect(ui->addTag, &QPushButton::clicked, this, &MainWindow::onAddTagButtonClicked);
-    // save Notes
+    // Save Notes
     connect(ui->saveBtn, &QPushButton::clicked, this, &MainWindow::saveNotes);
 
-    // temperture conversion
+    // Temperture conversion
     connect(ui->fahrenheitRadioButton, &QRadioButton::pressed, this, &MainWindow::onFahrenheitSelected);
     connect(ui->celsiusRadioButton, &QRadioButton::pressed, this, &MainWindow::onCelsiusSelected);
+
+    //debug
+    //DELETE LATER
+    connect(ui->result,&QPushButton::clicked,this,&MainWindow::processRyodorakuData);
 }
 
 MainWindow::~MainWindow()
@@ -60,14 +76,18 @@ MainWindow::~MainWindow()
 void MainWindow::handleCheckboxToggled(bool checked)
 {
     // last State is false (lift the device off the skin) and putting it back on the next point
-    if (checked && !lastState)
+    if (checked == true && lastState == false)
     {
         qDebug() << "Successive measurement.";
         ui->horizontalSlider->setEnabled(true);
         ui->dropdown->setEnabled(true);
     }
-    else if (!checked && lastState)
+    else if (checked == false && lastState == true )
     {
+        qDebug() << "Lift the device off the skin";
+        ui->horizontalSlider->setEnabled(false);
+    }
+    else if(checked == true && lastState == true){
         qDebug() << "Lift the device off the skin";
         ui->horizontalSlider->setEnabled(false);
     }
@@ -128,7 +148,7 @@ void MainWindow::saveNotes()
     // Add more tag buttons as needed
     QString tagsString = tags.join(", ");
 
-    // delete later
+    // DELETE LATER
     // Combine Data into a Structured Format
     QString data = QString(
                        "Body Temperature: %1 %2\n"
@@ -193,3 +213,38 @@ void MainWindow::onAddTagButtonClicked()
     }
     ui->addTag->setChecked(false);
 }
+
+int MainWindow::calculateAverage(){
+    int total = 0;
+    for(const int &value : spotValues){
+        total += value;
+    }
+    return total/spotValues.size();
+}
+
+void MainWindow::processRyodorakuData(){
+    int average = calculateAverage();
+    int below = average * 0.8;
+    int above = average * 1.2;
+
+    // Result container for classifications
+    QMap<QString, QString> results;
+
+    for (const QString &key : spotValues.keys()) {
+            int value = spotValues[key];
+            if (value < below) {
+                results[key] = "BelowNorm";
+            } else if (value > above) {
+                results[key] = "AboveNorm";
+            } else {
+                results[key] = "Normal";
+            }
+        }
+
+        // DELETE LATER
+        qDebug() << "Ryodoraku Data Results:";
+        for (const QString &key : results.keys()) {
+            qDebug() << key << ":" << results[key];
+        }
+}
+

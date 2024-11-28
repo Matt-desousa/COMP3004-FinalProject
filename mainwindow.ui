@@ -99,7 +99,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -283,6 +283,19 @@
         <string/>
        </property>
       </item>
+     </widget>
+     <widget class="QPushButton" name="result">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>380</y>
+        <width>83</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>result</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">
