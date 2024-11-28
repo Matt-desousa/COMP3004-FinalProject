@@ -19,13 +19,24 @@ MainWindow::MainWindow(QWidget *parent)
     battery->turn_on_or_off(true); // start using battery power
 
     tagButtonGroup = {ui->activeTag, ui->calmTag, ui->basisMorningTag};
-
     ranges = {
         {"H1 Left", {5, 190}}, {"H1 Right", {5, 190}}, {"H2 Left", {5, 170}}, {"H2 Right", {5, 170}}, {"H3 Left", {5, 140}}, {"H3 Right", {5, 140}}, {"H4 Left", {5, 170}}, {"H4 Right", {5, 170}}, {"H5 Left", {5, 200}}, {"H5 Right", {5, 200}}, {"H6 Left", {5, 200}}, {"H6 Right", {5, 200}}, {"F1 Left", {5, 160}}, {"F1 Right", {5, 160}}, {"F2 Left", {5, 130}}, {"F2 Right", {5, 130}}, {"F3 Left", {5, 150}}, {"F3 Right", {5, 150}}, {"F4 Left", {5, 150}}, {"F4 Right", {5, 150}}, {"F5 Left", {5, 130}}, {"F5 Right", {5, 130}}, {"F6 Left", {5, 150}}, {"F6 Right", {5, 150}}};
     // Initialize with default values
     for(const QString &spot: ranges.keys()){
         spotValues[spot] = ranges[spot].first;
     }
+    // Add all checkboxes to the list
+    scanCheckboxes = {
+            ui->checkboxH1Left, ui->checkboxH1Right, ui->checkboxH2Left, ui->checkboxH2Right,
+            ui->checkboxH3Left, ui->checkboxH3Right, ui->checkboxH4Left, ui->checkboxH4Right,
+            ui->checkboxH5Left, ui->checkboxH5Right, ui->checkboxH6Left, ui->checkboxH6Right,
+            ui->checkboxF1Left, ui->checkboxF1Right, ui->checkboxF2Left, ui->checkboxF2Right,
+            ui->checkboxF3Left, ui->checkboxF3Right, ui->checkboxF4Left, ui->checkboxF4Right,
+            ui->checkboxF5Left, ui->checkboxF5Right, ui->checkboxF6Left, ui->checkboxF6Right
+        };
+    for (QCheckBox *checkbox : scanCheckboxes) {
+            checkbox->setEnabled(false);
+        }
 
     // Connect dropdown to update the slider range and value
     connect(ui->dropdown, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index)
@@ -39,21 +50,19 @@ MainWindow::MainWindow(QWidget *parent)
             //reset slider to the minimum value of the range
             ui->horizontalSlider->setValue(range.first);
             ui->horizontalSlider->setEnabled(false);
+            qDebug()<<"Prepare for scanning the next point. Please lift the device off the skin and move to the next scanning point.";
     });
 
-    // Update slider value
-    connect(ui->horizontalSlider, &QSlider::valueChanged, this, [=](int value)
-            { ui->sliderValue->setText(QString::number(value)); });
+    // Update slider value and store data
+    connect(ui->horizontalSlider, &QSlider::valueChanged, this, [=](int value){
+        ui->sliderValue->setText(QString::number(value));
+        QString selectedSpot = ui->dropdown->currentText();
+        spotValues[selectedSpot] = value;
+    });
 
     // Disable slider and dropdown
     ui->horizontalSlider->setEnabled(false);
     ui->dropdown->setEnabled(false);
-
-    //Update values on slider changes
-    connect(ui->horizontalSlider,&QSlider::valueChanged,this,[=](int value){
-        QString selectedSpot = ui->dropdown->currentText();
-        spotValues[selectedSpot] = value;
-    });
 
     // Connect the checkbox to the handle function
     connect(ui->skinContactChecked, &QCheckBox::toggled, this, &MainWindow::handleCheckboxToggled);
@@ -63,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Save Notes
     connect(ui->saveBtn, &QPushButton::clicked, this, &MainWindow::saveNotes);
 
-    // Temperture conversion
+    // Temperature conversion
     connect(ui->fahrenheitRadioButton, &QRadioButton::pressed, this, &MainWindow::onFahrenheitSelected);
     connect(ui->celsiusRadioButton, &QRadioButton::pressed, this, &MainWindow::onCelsiusSelected);
 
@@ -71,8 +80,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onCreateProfile()));
     connect(device, SIGNAL(userCreated(int, string)), this, SLOT(updateProfiles(int, string)));
 
+
     //debug
     //DELETE LATER
+    ui->result->setEnabled(false);
     connect(ui->result,&QPushButton::clicked,this,&MainWindow::processRyodorakuData);
 }
 
@@ -82,6 +93,34 @@ MainWindow::~MainWindow()
     delete battery;
 }
 
+//helper function: Trackaing the process of scanning
+void MainWindow::trackScanning(){
+    QString selectedSpot = ui->dropdown->currentText();
+    // Find and check the corresponding checkbox by matching text
+        for (QCheckBox *checkbox : scanCheckboxes) {
+            if (checkbox->text() == selectedSpot) {
+                checkbox->setEnabled(true);
+                checkbox->setChecked(true);
+                checkbox->setEnabled(false);
+                break;
+            }
+        }
+        //check if all checkboxes are checked
+        checkAllScansCompleted();
+}
+
+void MainWindow::checkAllScansCompleted(){
+    bool allChecked = true;
+    for(QCheckBox *checkbox : scanCheckboxes){
+        if(!checkbox->isChecked()){
+            allChecked = false;
+            break;
+        }
+    }
+    if(allChecked){
+        ui->result->setEnabled(true);
+    }
+}
 // Skin contact
 void MainWindow::handleCheckboxToggled(bool checked)
 {
@@ -91,14 +130,15 @@ void MainWindow::handleCheckboxToggled(bool checked)
         qDebug() << "Successive measurement.";
         ui->horizontalSlider->setEnabled(true);
         ui->dropdown->setEnabled(true);
+        trackScanning();
     }
     else if (checked == false && lastState == true )
     {
-        qDebug() << "Lift the device off the skin";
+        qDebug() << "The device is off the skin";
         ui->horizontalSlider->setEnabled(false);
     }
     else if(checked == true && lastState == true){
-        qDebug() << "Lift the device off the skin";
+        qDebug() << "The device is off the skin";
         ui->horizontalSlider->setEnabled(false);
     }
     lastState = checked;

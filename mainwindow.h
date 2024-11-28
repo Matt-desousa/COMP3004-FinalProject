@@ -30,9 +30,12 @@ private:
     QMap<QString,QPair<int,int>> ranges; //ranges for each spot(min,max)
     bool lastState;
     void handleCheckboxToggled(bool checked);// skin contact
-    void saveNotes(); //data collection
+    void trackScanning(); //Keep track of the scanning
+    void checkAllScansCompleted(); //Check if scanning is completed
+    void saveNotes(); //Data collection
     int calculateAverage();
     void processRyodorakuData();
+    QList<QCheckBox*> scanCheckboxes; //List of all checkboxes
     QList<QPushButton*> tagButtonGroup; //data collections:tags
     QMap<QString,int> spotValues; // store scanned data
     ReadingStorage* test_storage; //DELETE LATER
