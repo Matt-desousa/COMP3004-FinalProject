@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     battery.cpp \
+    device.cpp \
     main.cpp \
     mainwindow.cpp \
     readingstorage.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 HEADERS += \
     battery.h \
     defs.h \
+    device.h \
     mainwindow.h \
     readingstorage.h \
     user.h

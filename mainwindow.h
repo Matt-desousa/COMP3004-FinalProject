@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "battery.h"
 #include "readingstorage.h"
+#include "device.h"
 #include <QMap>
 #include <QPair>
 #include <QDebug>
@@ -24,6 +25,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    Device* device;
     Battery* battery;
     QMap<QString,QPair<int,int>> ranges; //ranges for each spot(min,max)
     bool lastState;
@@ -39,5 +41,8 @@ private slots:
     void onFahrenheitSelected();//temp conversion
     void onCelsiusSelected();//temp convresion
     void onAddTagButtonClicked(); //add tag
+    void onCreateProfile(); // Creating a profile
+    void updateProfiles(int add, string name); // Update profile to login
+
 };
 #endif // MAINWINDOW_H

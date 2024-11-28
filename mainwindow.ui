@@ -115,7 +115,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -257,9 +257,15 @@
         <property name="autoFillBackground">
          <bool>false</bool>
         </property>
+        <property name="currentIndex">
+         <number>3</number>
+        </property>
+        <property name="minimumContentsLength">
+         <number>0</number>
+        </property>
         <item>
          <property name="text">
-          <string>-- Sex --</string>
+          <string>Female</string>
          </property>
         </item>
         <item>
@@ -269,12 +275,12 @@
         </item>
         <item>
          <property name="text">
-          <string>Female</string>
+          <string>Prefer Not to Say</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Prefer Not to Say</string>
+          <string>-- Sex --</string>
          </property>
         </item>
        </widget>

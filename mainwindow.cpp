@@ -1,12 +1,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <string>
+using namespace std;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
 
     // Setup UI
     ui->setupUi(this);
+
+    // Init the Device
+    device = new Device();
 
     // Setup Battery
     battery = new Battery(ui->isCharging, ui->ChargeIndicator);
@@ -60,6 +66,10 @@ MainWindow::MainWindow(QWidget *parent)
     // Temperture conversion
     connect(ui->fahrenheitRadioButton, &QRadioButton::pressed, this, &MainWindow::onFahrenheitSelected);
     connect(ui->celsiusRadioButton, &QRadioButton::pressed, this, &MainWindow::onCelsiusSelected);
+
+    // Create Profile
+    connect(ui->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onCreateProfile()));
+    connect(device, SIGNAL(userCreated(int, string)), this, SLOT(updateProfiles(int, string)));
 
     //debug
     //DELETE LATER
@@ -212,6 +222,33 @@ void MainWindow::onAddTagButtonClicked()
         tagButtonGroup.append(newTagButton);
     }
     ui->addTag->setChecked(false);
+}
+
+void MainWindow::onCreateProfile()
+{
+    string fName = ui->txtFName->text().toStdString();
+    string lName = ui->txtLName->text().toStdString();
+    SEX sex = (SEX) ui->cmbSex->currentIndex();
+    float weight = ui->dsbWeight->value();
+    float height = ui->dsbHeight->value();
+    QDate date = ui->datDOB->date();
+    string phoneNum = ui->txtPhoneNum->text().toStdString();
+    string email = ui->txtEmail->text().toStdString();
+    string password = ui->txtPass->text().toStdString();
+    string conPassword = ui->txtConPass->text().toStdString();
+
+    bool validUser = true;
+
+    if (password.compare(conPassword)) return;
+
+    device->createUser(fName, lName, sex, weight, height, date, phoneNum, email, password);
+}
+
+void MainWindow::updateProfiles(int add, string name)
+{
+    if (add){
+        ui->cmbProfile->addItem(QString::fromStdString(name));
+    }
 }
 
 int MainWindow::calculateAverage(){
