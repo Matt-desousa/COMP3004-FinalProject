@@ -7,6 +7,8 @@
 #include <QMap>
 #include <QPair>
 #include <QDebug>
+#include <QList>
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,7 +28,12 @@ private:
     QMap<QString,QPair<int,int>> ranges; //ranges for each spot(min,max)
     bool lastState;
     void handleCheckboxToggled(bool checked);// skin contact
-
+    void saveNotes(); //data collection
+    QList<QPushButton*> tagButtonGroup; //data collections:tags
     ReadingStorage* test_storage; //DELETE LATER
+
+private slots:
+    void onFahrenheitSelected();//temp conversion
+    void onCelsiusSelected();//temp convresion
 };
 #endif // MAINWINDOW_H
