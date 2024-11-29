@@ -13,6 +13,7 @@ SOURCES += \
     device.cpp \
     main.cpp \
     mainwindow.cpp \
+    note.cpp \
     readingstorage.cpp \
     user.cpp
 
@@ -21,6 +22,7 @@ HEADERS += \
     defs.h \
     device.h \
     mainwindow.h \
+    note.h \
     readingstorage.h \
     user.h
 

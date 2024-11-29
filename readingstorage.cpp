@@ -7,6 +7,7 @@ ReadingStorage::ReadingStorage(QMap<QString,QPair<int,int>>* body_parts)
        readings.insert((QString)p.first, QPair<int,int>(-1,-1)); //insert empty data point
     }
     body_parts_info = body_parts; //store ranges for percentage calculations
+    note = new Note(); //store a note page
 }
 
 
@@ -31,6 +32,16 @@ int  ReadingStorage::retrieve_data_point_percent(QString body_part){
     int average = retrieve_data_point_average(body_part);
     QPair<int,int> minmax = (*body_parts_info)[body_part];
     return 100 * ((float)(average - minmax.first) / (float)(minmax.second - minmax.first));
+}
+
+//average enntire reading
+int ReadingStorage::retrieve_session_average(){
+    int total = 0;
+    for ( const auto &p : *body_parts_info ) //for every body part...
+    {
+       total += retrieve_data_point_average((QString)p.first);
+    }
+    return total/body_parts_info->size(); //return average
 }
 
 //print a point for debugging

@@ -5,6 +5,7 @@
 #include "battery.h"
 #include "readingstorage.h"
 #include "device.h"
+#include "note.h"
 #include <QMap>
 #include <QPair>
 #include <QDebug>

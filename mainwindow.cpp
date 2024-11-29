@@ -147,43 +147,44 @@ void MainWindow::handleCheckboxToggled(bool checked)
 // Save notes(data collection)
 void MainWindow::saveNotes()
 {
+    //Note* new_note = current_user->get_latest_note(); //ACTIVATE LATER
+    Note* new_note = new Note(); //DELETE LATER
+
     // Retreive all the informations
-    double bodyTemp = ui->bodyTemp->value();
-    QString tempUnit = ui->celsiusRadioButton->isChecked() ? "°C" : "°F";
-    int bloodPressureLeftSystolic = ui->bloodPressureLeftSystolic->text().toInt();
-    int bloodPressureLeftDiastolic = ui->bloodPressureLeftDiastolic->text().toInt();
-    int bloodPressureRightSystolic = ui->bloodPressureRightSystolic->text().toInt();
-    int bloodPressureRightDiastolic = ui->bloodPressureRightDiastolic->text().toInt();
-    int heartRate = ui->heartRate->text().toInt();
-    int sleepHrs = ui->sleepHrs->text().toInt();
-    int sleepMins = ui->sleepMins->text().toInt();
-    double weight = ui->weight->text().toInt();
-    QString weightUnit = ui->lbsRadioButton->isChecked() ? "lb" : "kg";
-    QString notes = ui->notes->toPlainText();
+    new_note->bodyTemp = ui->bodyTemp->value();
+    new_note->tempUnit = ui->celsiusRadioButton->isChecked() ? C : F;
+    new_note->bloodPressureLeftSystolic = ui->bloodPressureLeftSystolic->text().toInt();
+    new_note->bloodPressureLeftDiastolic = ui->bloodPressureLeftDiastolic->text().toInt();
+    new_note->bloodPressureRightSystolic = ui->bloodPressureRightSystolic->text().toInt();
+    new_note->bloodPressureRightDiastolic = ui->bloodPressureRightDiastolic->text().toInt();
+    new_note->heartRate = ui->heartRate->text().toInt();
+    new_note->sleepHrs = ui->sleepHrs->text().toInt();
+    new_note->sleepMins = ui->sleepMins->text().toInt();
+    new_note->weight = ui->weight->text().toInt();
+    new_note->weightUnit = ui->lbsRadioButton->isChecked() ? LBS : KG;
+    new_note->notes = ui->notes->toPlainText();
 
-    QString emotionalState;
     if (ui->emoStateVerySad->isChecked())
-        emotionalState = "Very Sad";
+        new_note->emotionalState = "Very Sad";
     else if (ui->emoStateSad->isChecked())
-        emotionalState = "Sad";
+        new_note->emotionalState = "Sad";
     else if (ui->emoStateNeutral->isChecked())
-        emotionalState = "Neutral";
+        new_note->emotionalState = "Neutral";
     else if (ui->emoStateHappy->isChecked())
-        emotionalState = "Happy";
+        new_note->emotionalState = "Happy";
     else if (ui->emoStateVeryHappy->isChecked())
-        emotionalState = "Very Happy";
+        new_note->emotionalState = "Very Happy";
 
-    QString overallFeeling;
     if (ui->overallFeelingVerySad->isChecked())
-        overallFeeling = "Very Sad";
+        new_note->overallFeeling = "Very Sad";
     else if (ui->overallFeelingSad->isChecked())
-        overallFeeling = "Sad";
+        new_note->overallFeeling = "Sad";
     else if (ui->OverallFeelingNeutral->isChecked())
-        overallFeeling = "Neutral";
+        new_note->overallFeeling = "Neutral";
     else if (ui->overallFeelingHappy->isChecked())
-        overallFeeling = "Happy";
+        new_note->overallFeeling = "Happy";
     else if (ui->overallFeelingVeryHappy->isChecked())
-        overallFeeling = "Very Happy";
+        new_note->overallFeeling = "Very Happy";
 
     QStringList tags;
 
@@ -196,7 +197,7 @@ void MainWindow::saveNotes()
     }
 
     // Add more tag buttons as needed
-    QString tagsString = tags.join(", ");
+   new_note->tagsString = tags.join(", ");
 
     // DELETE LATER
     // Combine Data into a Structured Format
@@ -211,21 +212,21 @@ void MainWindow::saveNotes()
                        "Overall Feeling: %13\n"
                        "Tags: %14\n"
                        "Notes: %15\n")
-                       .arg(bodyTemp)
-                       .arg(tempUnit)
-                       .arg(bloodPressureLeftSystolic)
-                       .arg(bloodPressureLeftDiastolic)
-                       .arg(bloodPressureRightSystolic)
-                       .arg(bloodPressureRightDiastolic)
-                       .arg(heartRate)
-                       .arg(sleepHrs)
-                       .arg(sleepMins)
-                       .arg(weight)
-                       .arg(weightUnit)
-                       .arg(emotionalState)
-                       .arg(overallFeeling)
-                       .arg(tagsString)
-                       .arg(notes);
+                       .arg(new_note->bodyTemp)
+                       .arg(new_note->tempUnit)
+                       .arg(new_note->bloodPressureLeftSystolic)
+                       .arg(new_note->bloodPressureLeftDiastolic)
+                       .arg(new_note->bloodPressureRightSystolic)
+                       .arg(new_note->bloodPressureRightDiastolic)
+                       .arg(new_note->heartRate)
+                       .arg(new_note->sleepHrs)
+                       .arg(new_note->sleepMins)
+                       .arg(new_note->weight)
+                       .arg(new_note->weightUnit)
+                       .arg(new_note->emotionalState)
+                       .arg(new_note->overallFeeling)
+                       .arg(new_note->tagsString)
+                       .arg(new_note->notes);
 
     qDebug() << "DEBUG DATA: " << data;
 }
@@ -295,6 +296,7 @@ int MainWindow::calculateAverage(){
     int total = 0;
     for(const int &value : spotValues){
         total += value;
+
     }
     return total/spotValues.size();
 }

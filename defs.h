@@ -9,4 +9,19 @@ enum SEX{
     UNDEFINED
 };
 
+enum MASS{
+    MASS_UNIT_UNSPECIFIED,
+    KG,
+    LBS
+};
+
+enum TEMP{
+    TEMP_UNIT_UNSPECIFIED,
+    C,
+    F
+};
+
+#define CHARGE_RATE 3.0f; // %/sec charge
+#define DRAIN_RATE 1.0f;  // %/sec drain
+
 #endif // DEFS_H

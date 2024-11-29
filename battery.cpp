@@ -25,12 +25,12 @@ void Battery::turn_on_or_off(bool isOn){
 void Battery::battery_sim(){
 
     if(in_use){ //if device is in use, drain battery
-        charge_level -= drain_rate;
+        charge_level -= DRAIN_RATE;
     }
 
     //if device is plugged in, charge battery
     if(charging_port->isChecked()){
-        charge_level += charge_rate;
+        charge_level += CHARGE_RATE;
     }
 
     //run off excess charge
