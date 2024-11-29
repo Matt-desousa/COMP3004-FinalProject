@@ -15,6 +15,7 @@ SOURCES += \
     mainwindow.cpp \
     note.cpp \
     readingstorage.cpp \
+    recommendation.cpp \
     user.cpp
 
 HEADERS += \
@@ -24,6 +25,7 @@ HEADERS += \
     mainwindow.h \
     note.h \
     readingstorage.h \
+    recommendation.h \
     user.h
 
 FORMS += \

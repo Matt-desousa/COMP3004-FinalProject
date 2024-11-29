@@ -8,6 +8,9 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
 
+    //DELETE LATER
+
+
     // Setup UI
     ui->setupUi(this);
 
@@ -25,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     for(const QString &spot: ranges.keys()){
         spotValues[spot] = ranges[spot].first;
     }
+    test_storage = new ReadingStorage(&ranges);
     // Add all checkboxes to the list
     scanCheckboxes = {
             ui->checkboxH1Left, ui->checkboxH1Right, ui->checkboxH2Left, ui->checkboxH2Right,
@@ -58,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
         ui->sliderValue->setText(QString::number(value));
         QString selectedSpot = ui->dropdown->currentText();
         spotValues[selectedSpot] = value;
+        test_storage->log_data_point(selectedSpot, value);
     });
 
     // Disable slider and dropdown

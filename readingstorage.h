@@ -14,14 +14,14 @@ class ReadingStorage : public QObject
 public:
     explicit ReadingStorage(QMap<QString,QPair<int,int>>* body_parts);
 
-    void log_data_point(QString body_part, QPair<int,int> reading);
-    QPair<int,int>  retrieve_data_point(QString body_part);
-    int  retrieve_data_point_average(QString body_part);
+    void log_data_point(QString body_part, int reading);
+    int  retrieve_data_point(QString body_part);
     int  retrieve_data_point_percent(QString body_part);
+    int retrieve_data_point_average(QString body_part);
     int  retrieve_session_average();
 
 private:
-    QMap<QString,QPair<int,int>> readings; //all readings (bodypart:minmax)
+    QMap<QString,int> readings; //all readings (bodypart:value)
     Note* note;
     QMap<QString,QPair<int,int>>* body_parts_info; //used to reference body part names and recommended ranges
 
