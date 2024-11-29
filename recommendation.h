@@ -9,11 +9,12 @@ class Recommendation
 public:
     Recommendation();
     ~Recommendation();
-    void AddAbnormalPartinQ(QString body_part,ReadingStorage& storage);
+    void AddAbnormalPartinQ(QString left, QString Right,ReadingStorage& storage);
     int GetAverage(ReadingStorage& storage);
     int GetWrong_partSize();
     QString GetWrong_part();
     int Getresult();
+    QString Reorganize(QString left, QString right);
 
 private:
     int part_average;
