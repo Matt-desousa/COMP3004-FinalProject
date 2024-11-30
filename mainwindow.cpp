@@ -107,6 +107,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onCreateProfile()));
     connect(device, SIGNAL(userCreated(int, string)), this, SLOT(updateProfiles(int, string)));
 
+    //Print
+    connect(ui->Dia_button, &QRadioButton::pressed, this, &MainWindow::PrintDia);
+
 
     //debug
     //DELETE LATER
@@ -355,3 +358,97 @@ void MainWindow::processRyodorakuData(){
         }
 }
 
+
+//Print Diagnosis
+void MainWindow::PrintDia()
+{
+    recommend.AddAbnormalPartinQ("H1 Left","H1 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("H2 Left","H2 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("H3 Left","H3 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("H4 Left","H4 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("H5 Left","H5 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("H6 Left","H6 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("F1 Left","F1 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("F2 Left","F2 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("F3 Left","F3 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("F4 Left","F4 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("F5 Left","F5 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("F6 Left","F6 Right", *test_storage);
+    QString temp_body = "";
+    int temp_degree = 0;
+    if(recommend.GetWrong_partSize() == 0){
+        ui->Dia->append("Every part is healthy");
+    }
+    while(recommend.GetWrong_partSize() != 0)
+    {
+        temp_body = recommend.GetWrong_part();
+        temp_degree = recommend.Getresult();
+        if(temp_body == "H1" && temp_degree == 1)
+        {
+            ui->Dia->append("Stiff and painful sholder muscles, rush of blood to the head"
+                            "hot lfashes, piles, asthma");
+        }else if(temp_body == "H1" && temp_degree == -1){
+            ui->Dia->append("Cold feet or numbness, shortness of breath, coughing spells");
+        //H2
+        }else if(temp_body == "H2" && temp_degree == 1){
+            ui->Dia->append("Stiff and painful shoulder muscles, middle age level wrenched"
+                            " shoulders, brachical neuralgia.");
+        }else if(temp_body == "H2" && temp_degree == -1){
+            ui->Dia->append("Palpitation, heated sensation of the palms");
+        //H3
+        }else if(temp_body == "H3" && temp_degree == 1){
+            ui->Dia->append("Puffed sensation of the stomach, constipation");
+        }else if(temp_body == "H3" && temp_degree == -1){
+            ui->Dia->append("Palpitation");
+        //H4
+        }else if(temp_body == "H4" && temp_degree == 1){
+            ui->Dia->append("Headaches, abnormalities of the lower abdomen, joint pain");
+        }else if(temp_body == "H4" && temp_degree == -1){
+            ui->Dia->append("Headache, abnormalities of the lower abdomen");
+        //H5
+        }else if(temp_body == "H5" && temp_degree == 1){
+            ui->Dia->append("Ringing ears, difficulty in hearing");
+        }else if(temp_body == "H5" && temp_degree == -1){
+            ui->Dia->append("Tiredness or tendency to tire, the healthy glow disappears and body hairs"
+                            " increase in density");
+        //H6
+        }else if(temp_body == "H6" && temp_degree == 1){
+            ui->Dia->append("Stiff and painful shoulder muscles, tooth ache");
+        }else if(temp_body == "H6" && temp_degree == -1){
+            ui->Dia->append("Stiff and painful shoulder muscles");
+        //F1
+        }else if(temp_body == "F1" && temp_degree == 1){
+            ui->Dia->append("General weakness of the stomach, knee joint pain");
+        }else if(temp_body == "F1" && temp_degree == -1){
+            ui->Dia->append("General weakness of stomach,abnormalities of the knee joint, insomnia, glycosuria");
+        //F2
+        }else if(temp_body == "F2" && temp_degree == 1){
+            ui->Dia->append("Insomnia, readily provoked abnormalities in menstruation, lumbar pain" );
+        }else if(temp_body == "F2" && temp_degree == -1){
+            ui->Dia->append("Faintness or dizziness on abrupt standing up(orthostatic circulatory disorder)");
+        //F3
+        }else if(temp_body == "F3" && temp_degree == 1){
+            ui->Dia->append("Fretting and fuming, anxiety");
+        }else if(temp_body == "F3" && temp_degree == -1){
+            ui->Dia->append("Loss of willingness to concentrate and general tiredness, Coldness in hips and legs");
+        //F4
+        }else if(temp_body == "F4" && temp_degree == 1){
+            ui->Dia->append("Stiff neck muscles, headaches, sciatic neurities, lumbar pain");
+        }else if(temp_body == "F4" && temp_degree == -1){
+            ui->Dia->append("Stiffness and painful neck muscles, lumbar pain, dullness of the feet");
+        //F5
+        }else if(temp_body == "F5" && temp_degree == 1){
+            ui->Dia->append("Headaches");
+        }else if(temp_body == "F5" && temp_degree == -1){
+            ui->Dia->append("Abnormalities of eyes, dizziness (Meniere's disease)");
+        //F6
+        }else if(temp_body == "F6" && temp_degree == 1){
+            ui->Dia->append("Anomalies of the joints, middle age wrenched shoulder, elbow neuralgia");
+        }else if(temp_body == "F6" && temp_degree == -1){
+            ui->Dia->append("Stiff and painful shoulder muscles, distention of stomach, bloating of face, yawning");
+        }else{
+            ui->Dia->append("ERROR");
+        }
+
+    }
+}

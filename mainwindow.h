@@ -13,6 +13,7 @@
 #include <QList>
 #include <QPushButton>
 #include <QInputDialog>
+#include "recommendation.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -38,9 +39,11 @@ private:
     void saveNotes(); //Data collection
     int calculateAverage();
     void processRyodorakuData();
+    void PrintDia();
     QList<QCheckBox*> scanCheckboxes; //List of all checkboxes
     QList<QPushButton*> tagButtonGroup; //data collections:tags
     QMap<QString,int> spotValues; // store scanned data
+    Recommendation recommend;
 
     //testing stuff //DELETE LATER
     ReadingStorage* test_storage;
