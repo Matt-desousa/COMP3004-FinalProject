@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include "user.h"
 
 User::User(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent)
@@ -23,4 +25,19 @@ User::~User(){
 
 void User::update(){
 
+}
+
+bool User::verifyPassword(string password)
+{
+    if (!this->password.compare(password)){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+string User::getName()
+{
+    return fName + " " + lName;
 }

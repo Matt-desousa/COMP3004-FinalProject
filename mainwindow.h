@@ -13,6 +13,9 @@
 #include <QList>
 #include <QPushButton>
 #include <QInputDialog>
+
+#include "loginwindow.h"
+
 #include "recommendation.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,11 +26,12 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(Device* device, QWidget *parent = nullptr);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
+    LoginWindow* loginWindow;
     Device* device;
     Battery* battery;
     HistoryViewer* history_viewer;
@@ -54,8 +58,7 @@ private slots:
     void onFahrenheitSelected();//temp conversion
     void onCelsiusSelected();//temp convresion
     void onAddTagButtonClicked(); //add tag
-    void onCreateProfile(); // Creating a profile
-    void updateProfiles(int add, string name); // Update profile to login
-
+    void onUserLogin(string name);
+    void onUserLogout();
 };
 #endif // MAINWINDOW_H

@@ -4,22 +4,18 @@
 #include <string>
 using namespace std;
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(Device* device, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-
-    //DELETE LATER
-
-
 
     // Setup UI
     ui->setupUi(this);
 
     // Init the Device
-    device = new Device();
+    this->device = device;
 
-    //Create a test user.. maybe leave in? otehrwise its hard to test/demo data history
-    device->createUser("TestUser", ":)", UNDEFINED, 150, 160, QDate(), "911", "x@y.z", "test");
+    // Creating the login and profile creation windows
+    loginWindow = new LoginWindow(device);
 
     history_viewer = new HistoryViewer(ui->HistoryChart);
 
@@ -103,9 +99,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->fahrenheitRadioButton, &QRadioButton::pressed, this, &MainWindow::onFahrenheitSelected);
     connect(ui->celsiusRadioButton, &QRadioButton::pressed, this, &MainWindow::onCelsiusSelected);
 
-    // Create Profile
-    connect(ui->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onCreateProfile()));
-    connect(device, SIGNAL(userCreated(int, string)), this, SLOT(updateProfiles(int, string)));
+    // Login Profile
+    connect(device, SIGNAL(userLogin(string)), this, SLOT(onUserLogin(string)));
+
+    // Logout Profile
+    connect(ui->btnLogOut, SIGNAL(pressed()), this, SLOT(onUserLogout()));
 
     //Print
     connect(ui->Dia_button, &QRadioButton::pressed, this, &MainWindow::PrintDia);
@@ -296,31 +294,18 @@ void MainWindow::onAddTagButtonClicked()
     ui->addTag->setChecked(false);
 }
 
-void MainWindow::onCreateProfile()
+void MainWindow::onUserLogin(string name)
 {
-    string fName = ui->txtFName->text().toStdString();
-    string lName = ui->txtLName->text().toStdString();
-    SEX sex = (SEX) ui->cmbSex->currentIndex();
-    float weight = ui->dsbWeight->value();
-    float height = ui->dsbHeight->value();
-    QDate date = ui->datDOB->date();
-    string phoneNum = ui->txtPhoneNum->text().toStdString();
-    string email = ui->txtEmail->text().toStdString();
-    string password = ui->txtPass->text().toStdString();
-    string conPassword = ui->txtConPass->text().toStdString();
-
-    bool validUser = true;
-
-    if (password.compare(conPassword)) return;
-
-    device->createUser(fName, lName, sex, weight, height, date, phoneNum, email, password);
+    this->show();
+    ui->lblCurrentUser->setText(QString::fromStdString(name));
 }
 
-void MainWindow::updateProfiles(int add, string name)
+void MainWindow::onUserLogout()
 {
-    if (add){
-        ui->cmbProfile->addItem(QString::fromStdString(name));
-    }
+    this->hide();
+    ui->lblCurrentUser->setText(QString::fromStdString(""));
+
+    loginWindow->show();
 }
 
 int MainWindow::calculateAverage(){
@@ -452,3 +437,4 @@ void MainWindow::PrintDia()
 
     }
 }
+

@@ -10,8 +10,10 @@ CONFIG += c++11
 
 SOURCES += \
     battery.cpp \
+    createprofilewindow.cpp \
     device.cpp \
     historyviewer.cpp \
+    loginwindow.cpp \
     main.cpp \
     mainwindow.cpp \
     note.cpp \
@@ -21,9 +23,11 @@ SOURCES += \
 
 HEADERS += \
     battery.h \
+    createprofilewindow.h \
     defs.h \
     device.h \
     historyviewer.h \
+    loginwindow.h \
     mainwindow.h \
     note.h \
     readingstorage.h \
@@ -31,6 +35,8 @@ HEADERS += \
     user.h
 
 FORMS += \
+    createprofilewindow.ui \
+    loginwindow.ui \
     mainwindow.ui
 
 # Default rules for deployment.

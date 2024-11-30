@@ -15,6 +15,9 @@ public:
     explicit User(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent = nullptr);
     virtual ~User();
     void update();
+    bool verifyPassword(string password);
+
+    string getName();
 
 
 private:
