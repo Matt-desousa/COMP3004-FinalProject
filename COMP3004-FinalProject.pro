@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     battery.cpp \
     device.cpp \
+    historyviewer.cpp \
     main.cpp \
     mainwindow.cpp \
     note.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     battery.h \
     defs.h \
     device.h \
+    historyviewer.h \
     mainwindow.h \
     note.h \
     readingstorage.h \

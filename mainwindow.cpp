@@ -11,11 +11,17 @@ MainWindow::MainWindow(QWidget *parent)
     //DELETE LATER
 
 
+
     // Setup UI
     ui->setupUi(this);
 
     // Init the Device
     device = new Device();
+
+    //Create a test user.. maybe leave in? otehrwise its hard to test/demo data history
+    device->createUser("TestUser", ":)", UNDEFINED, 150, 160, QDate(), "911", "x@y.z", "test");
+
+    history_viewer = new HistoryViewer(ui->HistoryChart);
 
     // Setup Battery
     battery = new Battery(ui->isCharging, ui->ChargeIndicator);
@@ -28,7 +34,23 @@ MainWindow::MainWindow(QWidget *parent)
     for(const QString &spot: ranges.keys()){
         spotValues[spot] = ranges[spot].first;
     }
-    test_storage = new ReadingStorage(&ranges);
+
+    //test_readings
+    for (int i = 0; i < 15; i++){
+        ReadingStorage* new_test_reading = new ReadingStorage(&ranges);
+        new_test_reading->debug_populate_logs();
+        test_readings.append(new_test_reading);
+    }
+
+    for (int i = 0; i < 15; i++){
+        qDebug() << "Logged test session with average" << test_readings[i]->retrieve_session_average();
+    }
+
+    history_viewer->update_chart(test_readings);
+
+
+
+
     // Add all checkboxes to the list
     scanCheckboxes = {
             ui->checkboxH1Left, ui->checkboxH1Right, ui->checkboxH2Left, ui->checkboxH2Right,
@@ -96,6 +118,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete battery;
+    delete device;
 }
 
 //helper function: Trackaing the process of scanning

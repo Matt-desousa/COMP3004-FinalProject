@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "battery.h"
 #include "readingstorage.h"
+#include "historyviewer.h"
 #include "device.h"
 #include "note.h"
 #include <QMap>
@@ -28,6 +29,7 @@ private:
     Ui::MainWindow *ui;
     Device* device;
     Battery* battery;
+    HistoryViewer* history_viewer;
     QMap<QString,QPair<int,int>> ranges; //ranges for each spot(min,max)
     bool lastState;
     void handleCheckboxToggled(bool checked);// skin contact
@@ -39,7 +41,11 @@ private:
     QList<QCheckBox*> scanCheckboxes; //List of all checkboxes
     QList<QPushButton*> tagButtonGroup; //data collections:tags
     QMap<QString,int> spotValues; // store scanned data
-    ReadingStorage* test_storage; //DELETE LATER
+
+    //testing stuff //DELETE LATER
+    ReadingStorage* test_storage;
+    User* test_user;
+    QVector<ReadingStorage*> test_readings;
 
 private slots:
     void onFahrenheitSelected();//temp conversion
