@@ -17,6 +17,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     note.cpp \
+    profilewindow.cpp \
     readingstorage.cpp \
     recommendation.cpp \
     user.cpp
@@ -30,6 +31,7 @@ HEADERS += \
     loginwindow.h \
     mainwindow.h \
     note.h \
+    profilewindow.h \
     readingstorage.h \
     recommendation.h \
     user.h
@@ -37,7 +39,8 @@ HEADERS += \
 FORMS += \
     createprofilewindow.ui \
     loginwindow.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    profilewindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

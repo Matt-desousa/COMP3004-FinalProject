@@ -15,6 +15,7 @@
 #include <QInputDialog>
 
 #include "loginwindow.h"
+#include "profilewindow.h"
 
 #include "recommendation.h"
 QT_BEGIN_NAMESPACE
@@ -32,6 +33,7 @@ public:
 private:
     Ui::MainWindow *ui;
     LoginWindow* loginWindow;
+    ProfileWindow* profileWindow;
     Device* device;
     Battery* battery;
     HistoryViewer* history_viewer;

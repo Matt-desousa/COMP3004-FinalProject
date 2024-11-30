@@ -11,15 +11,11 @@ LoginWindow::LoginWindow(Device* device, QWidget *parent) :
 
     this->device = device;
 
-    createProfileWindow = new CreateProfileWindow(device);
-
-    // Switch between login and create profile windows
-    connect(this, SIGNAL(createProfile()), createProfileWindow, SLOT(show()));
-    connect(createProfileWindow, SIGNAL(closeCreateProfile()), this, SLOT(show()));
+    createProfileWindow = new CreateProfileWindow(device, this);
 
     // Login Profile
     connect(ui->btnLogin, SIGNAL(pressed()), this, SLOT(onLoginButtonPressed()));
-    connect(device, SIGNAL(userLogin(string)), this, SLOT(onUserLogin(string)));
+    connect(device, SIGNAL(userLogin(string)), this, SLOT(hide()));
 
     // Getting all the name of previously created profiles
     list<string> names;
@@ -48,11 +44,6 @@ void LoginWindow::onLoginButtonPressed()
     string password = ui->txtLoginPass->text().toStdString();
     int index = ui->cmbProfile->currentIndex();
     device->verifyUser(password, index);
-}
-
-void LoginWindow::onUserLogin()
-{
-    this->hide();
 }
 
 void LoginWindow::onProfileCreated(string name)

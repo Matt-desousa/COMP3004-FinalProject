@@ -26,7 +26,6 @@ private:
 
 private slots:
     void onLoginButtonPressed(); // Login in a user
-    void onUserLogin();
     void onProfileCreated(string name);
 
 };

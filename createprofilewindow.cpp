@@ -12,11 +12,14 @@ CreateProfileWindow::CreateProfileWindow(Device* device, QWidget *parent) :
     this->device = device;
 
     // Cancel button
-    connect(ui->btnCancel, SIGNAL(pressed()), this, SLOT(onCancelButtonPressed()));
+    connect(ui->btnCancel, SIGNAL(pressed()), parent, SLOT(show()));
 
     // Create Profile
-    connect(ui->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onCreateProfileButtonPressed()));
-    connect(device, SIGNAL(userCreated(string)), this, SLOT(onProfileCreated(string)));
+    connect(ui->btnCreateProfile, SIGNAL(pressed()), this, SLOT(hide()));
+    connect(device, SIGNAL(userCreated(string)), this, SLOT(hide()));
+
+    connect(ui->btnCreateProfile, SIGNAL(pressed()), parent, SLOT(show()));
+    connect(device, SIGNAL(userCreated(string)), parent, SLOT(show()));
 }
 
 CreateProfileWindow::~CreateProfileWindow()
@@ -82,17 +85,4 @@ void CreateProfileWindow::onCreateProfileButtonPressed()
         ui->txtPass->setStyleSheet("");
         ui->txtConPass->setStyleSheet("");
     }
-}
-
-void CreateProfileWindow::onProfileCreated(string name)
-{
-    this->hide();
-    emit closeCreateProfile();
-
-}
-
-void CreateProfileWindow::onCancelButtonPressed()
-{
-    this->hide();
-    emit closeCreateProfile();
 }

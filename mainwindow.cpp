@@ -15,7 +15,8 @@ MainWindow::MainWindow(Device* device, QWidget *parent)
     this->device = device;
 
     // Creating the login and profile creation windows
-    loginWindow = new LoginWindow(device);
+    loginWindow = new LoginWindow(device, this);
+    profileWindow = new ProfileWindow(device, this);
 
     history_viewer = new HistoryViewer(ui->HistoryChart);
 
@@ -104,6 +105,10 @@ MainWindow::MainWindow(Device* device, QWidget *parent)
 
     // Logout Profile
     connect(ui->btnLogOut, SIGNAL(pressed()), this, SLOT(onUserLogout()));
+
+    // Profile
+    connect(ui->btnProfile, SIGNAL(pressed()), this, SLOT(hide()));
+    connect(ui->btnProfile, SIGNAL(pressed()), profileWindow, SLOT(show()));
 
     //Print
     connect(ui->Dia_button, &QRadioButton::pressed, this, &MainWindow::PrintDia);
