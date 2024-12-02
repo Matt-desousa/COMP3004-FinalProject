@@ -13,13 +13,14 @@ CreateProfileWindow::CreateProfileWindow(Device* device, QWidget *parent) :
 
     // Cancel button
     connect(ui->btnCancel, SIGNAL(pressed()), parent, SLOT(show()));
+    connect(ui->btnCancel, SIGNAL(pressed()), this, SLOT(hide()));
 
     // Create Profile
-    connect(ui->btnCreateProfile, SIGNAL(pressed()), this, SLOT(hide()));
+    connect(ui->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onCreateProfileButtonPressed()));
     connect(device, SIGNAL(userCreated(string)), this, SLOT(hide()));
 
-    connect(ui->btnCreateProfile, SIGNAL(pressed()), parent, SLOT(show()));
-    connect(device, SIGNAL(userCreated(string)), parent, SLOT(show()));
+//    connect(ui->btnCreateProfile, SIGNAL(pressed()), parent, SLOT(show()));
+//    connect(device, SIGNAL(userCreated(string)), parent, SLOT(show()));
 }
 
 CreateProfileWindow::~CreateProfileWindow()

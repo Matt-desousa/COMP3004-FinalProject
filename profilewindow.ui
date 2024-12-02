@@ -324,19 +324,6 @@ Password</string>
      <double>1000.000000000000000</double>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnCancel">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>350</y>
-      <width>81</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Cancel</string>
-    </property>
-   </widget>
    <widget class="QRadioButton" name="rbtnFemale">
     <property name="geometry">
      <rect>
@@ -422,14 +409,27 @@ of Birth</string>
    <widget class="QPushButton" name="btnConfirm">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>350</y>
-      <width>81</width>
+      <x>380</x>
+      <y>300</y>
+      <width>121</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>Confirm</string>
+     <string>Confirm Changes</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnDeleteProfile">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>340</y>
+      <width>121</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Delete Profile</string>
     </property>
    </widget>
   </widget>

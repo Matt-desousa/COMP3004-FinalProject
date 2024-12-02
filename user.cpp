@@ -1,10 +1,14 @@
 #include <QDebug>
+#include <iostream>
+using namespace std;
 
 #include "user.h"
 
 User::User(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent)
     : QObject{parent}
 {
+    profileWindow = new ProfileWindow(fName, lName, sex, weight, height, date, phoneNum, email, password);
+    popup = new ConfirmDeletePopup;
 
     this->userID = userID;
     this->fName = fName;
@@ -17,14 +21,61 @@ User::User(int userID, string fName, string lName, SEX sex, float weight, float 
     this->email = email;
     this->password = password;
 
+    connect(profileWindow, SIGNAL(updateProfile(string, string, SEX, float, float, QDate, string, string, string)), this, SLOT(updateProfile(string, string, SEX, float, float, QDate, string, string, string)));
+
+    // Delete Profile button
+    connect(profileWindow, SIGNAL(onDeleteUserPressed()), popup, SLOT(exec()));
+
+    // Popup Confirm Delete Button Pressed
+    connect(popup, SIGNAL(verifyUser(string)), this, SLOT(verifyUserForDelete(string)));
 }
 
 User::~User(){
 
 }
 
-void User::update(){
+void User::updateProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password)
+{
+    if (this->fName.compare(fName)){
+        this->fName = fName;
+    }
+    if (this->lName.compare(lName)){
+        this->lName = lName;
+    }
+    if (this->dob != date){
+        this->dob = date;
+    }
+    if (this->height != height){
+        this->height = height;
+    }
+    if (this->weight != weight){
+        this->weight = weight;
+    }
+    if (this->phoneNumber.compare(phoneNum)){
+        this->phoneNumber = phoneNum;
+    }
+    if (this->email.compare(email)){
+        this->email = email;
+    }
+    if (this->password.compare(password)){
+        this->password = password;
+    }
+    if (this->sex != sex) {
+        this->sex = sex;
+    }
 
+    emit userUpdated(this->fName + " " + this->lName);
+}
+
+void User::verifyUserForDelete(string password)
+{
+    if (verifyPassword(password)){
+        popup->onUserVerified(true);
+        emit userDeleted();
+        profileWindow->hide();
+    }
+    else
+        popup->onUserVerified(false);
 }
 
 bool User::verifyPassword(string password)
@@ -35,6 +86,11 @@ bool User::verifyPassword(string password)
     else {
         return false;
     }
+}
+
+void User::showProfile()
+{
+    profileWindow->show();
 }
 
 string User::getName()

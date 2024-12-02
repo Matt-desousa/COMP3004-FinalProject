@@ -15,7 +15,6 @@ LoginWindow::LoginWindow(Device* device, QWidget *parent) :
 
     // Login Profile
     connect(ui->btnLogin, SIGNAL(pressed()), this, SLOT(onLoginButtonPressed()));
-    connect(device, SIGNAL(userLogin(string)), this, SLOT(hide()));
 
     // Getting all the name of previously created profiles
     list<string> names;
@@ -29,7 +28,14 @@ LoginWindow::LoginWindow(Device* device, QWidget *parent) :
     connect(ui->btnCreateProfile, SIGNAL(pressed()), this, SLOT(hide()));
 
     // Profile Created
+    connect(device, SIGNAL(userCreated(string)), this, SLOT(show()));
     connect(device, SIGNAL(userCreated(string)), this, SLOT(onProfileCreated(string)));
+
+    // Profile Updated
+    connect(device, SIGNAL(userUpdated(string)), this, SLOT(onProfileUpdate(string)));
+
+    // Profile Deleted
+    connect(device, SIGNAL(userDeleted()), this, SLOT(onProfileDelete()));
 
     this->show();
 }
@@ -43,10 +49,34 @@ void LoginWindow::onLoginButtonPressed()
 {
     string password = ui->txtLoginPass->text().toStdString();
     int index = ui->cmbProfile->currentIndex();
-    device->verifyUser(password, index);
+    bool loggedIn = device->verifyUser(password, index);
+
+    if (loggedIn){
+        this->hide();
+        ui->txtLoginPass->setStyleSheet("");
+    }
+    else{
+        ui->txtLoginPass->setStyleSheet("border-style: solid;border-width: 2px;border-color: red");
+    }
+
+    ui->txtLoginPass->setText("");
 }
 
 void LoginWindow::onProfileCreated(string name)
 {
     ui->cmbProfile->addItem(QString::fromStdString(name));
+}
+
+void LoginWindow::onProfileUpdate(string name)
+{
+    qDebug() << "User Updated.";
+    int index = ui->cmbProfile->currentIndex();
+    ui->cmbProfile->setItemText(index, QString::fromStdString(name));
+}
+
+void LoginWindow::onProfileDelete()
+{
+    qDebug() << "User Deleted.";
+    int index = ui->cmbProfile->currentIndex();
+    ui->cmbProfile->removeItem(index);
 }

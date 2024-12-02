@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     battery.cpp \
+    confirmdeletepopup.cpp \
     createprofilewindow.cpp \
     device.cpp \
     historyviewer.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
 
 HEADERS += \
     battery.h \
+    confirmdeletepopup.h \
     createprofilewindow.h \
     defs.h \
     device.h \
@@ -37,6 +39,7 @@ HEADERS += \
     user.h
 
 FORMS += \
+    confirmdeletepopup.ui \
     createprofilewindow.ui \
     loginwindow.ui \
     mainwindow.ui \

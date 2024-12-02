@@ -6,13 +6,12 @@
 Device::Device(QObject *parent)
     : QObject{parent}
 {
-//    mainWindow = new MainWindow;
-//    loginWindow = new LoginWindow;
-//    createProfileWindow = new CreateProfileWindow;
-
-
     currentUser = NULL;
     createUser("Test", "User", UNDEFINED, 50, 175, QDate(), "911", "x@y.z", "test");
+}
+
+void Device::start()
+{
 }
 
 bool Device::createUser(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password)
@@ -36,7 +35,7 @@ bool Device::createUser(string fName, string lName, SEX sex, float weight, float
     }
 }
 
-void Device::verifyUser(string password, int index)
+bool Device::verifyUser(string password, int index)
 {
     list<User*>::iterator it;
     it = users.begin();
@@ -46,16 +45,26 @@ void Device::verifyUser(string password, int index)
 
     if ((*it)->verifyPassword(password)){
         qDebug() << "User verified.";
+
         currentUser = *it;
+        connect(currentUser, SIGNAL(userUpdated(string)), this, SIGNAL(userUpdated(string)));
+        connect(currentUser, SIGNAL(userDeleted()), this, SLOT(onUserDeleted()));
+
         emit userLogin(currentUser->getName());
+        return true;
     }
     else {
         qDebug() << "Incorrect password.";
+        return false;
     }
 }
 
 void Device::userLogout()
 {
+    if (currentUser != NULL){
+        disconnect(currentUser, SIGNAL(userUpdated(string)), this, SIGNAL(userUpdated(string)));
+        disconnect(currentUser, SIGNAL(userDeleted()), this, SLOT(onUserDeleted()));
+    }
     currentUser = NULL;
 }
 
@@ -64,4 +73,35 @@ void Device::getUserNames(list<string> *names)
     for (User* user : users){
         names->push_back(user->getName());
     }
+}
+
+void Device::printUsers()
+{
+    list<User*>::iterator it;
+    it = users.begin();
+    for (it; it != users.end(); it++){
+        qDebug() << QString::fromStdString((*it)->getName());
+    }
+}
+
+void Device::showCurrentUserProfile()
+{
+    currentUser->showProfile();
+}
+
+void Device::onUserDeleted()
+{
+    printUsers();
+
+    list<User*>::iterator it;
+    it = users.begin();
+    for (it; it != users.end(); it++){
+        if ((*it) == currentUser){
+            users.remove(currentUser);
+            emit userDeleted();
+            break;
+        }
+    }
+
+    printUsers();
 }

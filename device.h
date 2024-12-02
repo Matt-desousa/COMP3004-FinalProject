@@ -12,11 +12,14 @@ class Device : public QObject
     Q_OBJECT
 public:
     explicit Device(QObject *parent = nullptr);
+    void start();
     bool createUser(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password);
-    void verifyUser(string password, int index);
+    bool verifyUser(string password, int index);
     void userLogout();
 
     void getUserNames(list<string>* names);
+
+    void printUsers();
 
 private:
     list<User*> users;
@@ -26,6 +29,12 @@ private:
 signals:
     void userCreated(string name);
     void userLogin(string name);
+    void userUpdated(string name);
+    void userDeleted();
+
+private slots:
+    void showCurrentUserProfile();
+    void onUserDeleted();
 };
 
 #endif // DEVICE_H

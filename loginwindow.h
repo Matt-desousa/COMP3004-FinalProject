@@ -27,7 +27,8 @@ private:
 private slots:
     void onLoginButtonPressed(); // Login in a user
     void onProfileCreated(string name);
-
+    void onProfileUpdate(string name);
+    void onProfileDelete();
 };
 
 #endif // LOGINWINDOW_H
