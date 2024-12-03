@@ -1,5 +1,5 @@
-#ifndef USER_H
-#define USER_H
+#ifndef PROFILE_H
+#define PROFILE_H
 
 #include <QObject>
 #include <QDate>
@@ -15,12 +15,12 @@ using namespace std;
 
 class ProfileWindow;
 
-class User : public QObject
+class Profile : public QObject
 {
     Q_OBJECT
 public:
-    explicit User(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent = nullptr);
-    virtual ~User();
+    explicit Profile(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent = nullptr);
+    virtual ~Profile();
     bool verifyPassword(string password);
     void showProfile();
 
@@ -56,4 +56,4 @@ signals:
 
 };
 
-#endif // USER_H
+#endif // PROFILE_H

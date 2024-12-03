@@ -32,7 +32,6 @@ public:
 private:
     Ui::MainWindow *ui;
     LoginWindow* loginWindow;
-    ProfileWindow* profileWindow;
     Device* device;
     HistoryViewer* history_viewer;
     QMap<QString,QPair<int,int>> ranges; //ranges for each spot(min,max)
@@ -51,7 +50,7 @@ private:
 
     //testing stuff //DELETE LATER
     ReadingStorage* test_storage;
-    User* test_user;
+    Profile* test_user;
     QVector<ReadingStorage*> test_readings;
 
 private slots:

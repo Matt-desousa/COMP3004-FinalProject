@@ -5,7 +5,7 @@
 #include <list>
 
 #include "defs.h"
-#include "user.h"
+#include "profile.h"
 #include "battery.h"
 #include "readingstorage.h"
 
@@ -23,11 +23,11 @@ public:
 
     void printUsers();
 
-    User* currentUser; //moved this to test access -Evan
+    Profile* currentUser; //moved this to test access -Evan
 
 private:
     Battery* battery;
-    list<User*> users;
+    list<Profile*> users;
     int nextID = 0;
 
 signals:

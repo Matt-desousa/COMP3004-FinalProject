@@ -2,9 +2,9 @@
 #include <iostream>
 using namespace std;
 
-#include "user.h"
+#include "profile.h"
 
-User::User(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent)
+Profile::Profile(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent)
     : QObject{parent}
 {
     profileWindow = new ProfileWindow(fName, lName, sex, weight, height, date, phoneNum, email, password);
@@ -30,11 +30,11 @@ User::User(int userID, string fName, string lName, SEX sex, float weight, float 
     connect(popup, SIGNAL(verifyUser(string)), this, SLOT(verifyUserForDelete(string)));
 }
 
-User::~User(){
+Profile::~Profile(){
 
 }
 
-void User::updateProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password)
+void Profile::updateProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password)
 {
     if (this->fName.compare(fName)){
         this->fName = fName;
@@ -67,7 +67,7 @@ void User::updateProfile(string fName, string lName, SEX sex, float weight, floa
     emit userUpdated(this->fName + " " + this->lName);
 }
 
-void User::verifyUserForDelete(string password)
+void Profile::verifyUserForDelete(string password)
 {
     if (verifyPassword(password)){
         popup->onUserVerified(true);
@@ -78,7 +78,7 @@ void User::verifyUserForDelete(string password)
         popup->onUserVerified(false);
 }
 
-bool User::verifyPassword(string password)
+bool Profile::verifyPassword(string password)
 {
     if (!this->password.compare(password)){
         return true;
@@ -88,12 +88,12 @@ bool User::verifyPassword(string password)
     }
 }
 
-void User::showProfile()
+void Profile::showProfile()
 {
     profileWindow->show();
 }
 
-string User::getName()
+string Profile::getName()
 {
     return fName + " " + lName;
 }

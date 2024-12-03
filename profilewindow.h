@@ -6,9 +6,9 @@
 using namespace std;
 
 #include "defs.h"
-#include "user.h"
+#include "profile.h"
 
-class User;
+class Profile;
 
 namespace Ui {
 class ProfileWindow;
@@ -24,7 +24,7 @@ public:
 
 private:
     Ui::ProfileWindow *ui;
-    User* parent;
+    Profile* parent;
 
 private slots:
     void onConfirmButtonPressed();

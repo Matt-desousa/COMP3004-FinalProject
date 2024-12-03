@@ -18,10 +18,10 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     note.cpp \
+    profile.cpp \
     profilewindow.cpp \
     readingstorage.cpp \
-    recommendation.cpp \
-    user.cpp
+    recommendation.cpp
 
 HEADERS += \
     battery.h \
@@ -33,10 +33,10 @@ HEADERS += \
     loginwindow.h \
     mainwindow.h \
     note.h \
+    profile.h \
     profilewindow.h \
     readingstorage.h \
-    recommendation.h \
-    user.h
+    recommendation.h
 
 FORMS += \
     confirmdeletepopup.ui \

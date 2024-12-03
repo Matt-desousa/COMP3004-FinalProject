@@ -9,7 +9,7 @@ ProfileWindow::ProfileWindow(string fName, string lName, SEX sex, float weight, 
     QMainWindow(parent),
     ui(new Ui::ProfileWindow)
 {
-    this->parent = (User*) parent;
+    this->parent = (Profile*) parent;
 
     ui->setupUi(this);
 

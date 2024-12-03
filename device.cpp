@@ -26,7 +26,7 @@ bool Device::createUser(string fName, string lName, SEX sex, float weight, float
 
     qDebug() << users.size();
     if (users.size() < NUM_USERS){
-        users.push_back(new User(nextID++, fName, lName, sex, weight, height, date, phoneNum, email, password));
+        users.push_back(new Profile(nextID++, fName, lName, sex, weight, height, date, phoneNum, email, password));
         qDebug() << "User created.";
         emit userCreated(fName + " " + lName);
         return true;
@@ -39,7 +39,7 @@ bool Device::createUser(string fName, string lName, SEX sex, float weight, float
 
 bool Device::verifyUser(string password, int index)
 {
-    list<User*>::iterator it;
+    list<Profile*>::iterator it;
     it = users.begin();
     for (int i = 0; i < index; i++){
         it++;
@@ -72,14 +72,14 @@ void Device::userLogout()
 
 void Device::getUserNames(list<string> *names)
 {
-    for (User* user : users){
+    for (Profile* user : users){
         names->push_back(user->getName());
     }
 }
 
 void Device::printUsers()
 {
-    list<User*>::iterator it;
+    list<Profile*>::iterator it;
     it = users.begin();
     for (it; it != users.end(); it++){
         qDebug() << QString::fromStdString((*it)->getName());
@@ -95,7 +95,7 @@ void Device::onUserDeleted()
 {
     printUsers();
 
-    list<User*>::iterator it;
+    list<Profile*>::iterator it;
     it = users.begin();
     for (it; it != users.end(); it++){
         if ((*it) == currentUser){
