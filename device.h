@@ -9,6 +9,10 @@
 #include "battery.h"
 #include "readingstorage.h"
 
+#include "mainwindow.h"
+#include "loginwindow.h"
+#include "createprofilewindow.h"
+
 class Device : public QObject
 {
     Q_OBJECT
@@ -26,6 +30,13 @@ public:
     Profile* currentProfile; //moved this to test access -Evan
 
 private:
+    MainWindow* mainWindow;
+    Ui::MainWindow* mwUI;
+    LoginWindow* loginWindow;
+    Ui::LoginWindow* lwUI;
+    CreateProfileWindow* createWindow;
+    Ui::CreateProfileWindow* cwUI;
+
     Battery* battery;
     list<Profile*> profiles;
     int nextID = 0;
@@ -37,8 +48,15 @@ signals:
     void profileDeleted();
 
 private slots:
+    void onProfileCreated();
+    void onProfileLogin();
+    void onProfileLogout();
+    void onProfileUpdate(string name);
     void showCurrentProfile();
     void onProfileDeleted();
+
+    void processRyodorakuData();
+    void saveNotes();
 };
 
 #endif // DEVICE_H

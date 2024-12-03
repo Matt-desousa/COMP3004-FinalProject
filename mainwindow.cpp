@@ -4,23 +4,13 @@
 #include <string>
 using namespace std;
 
-MainWindow::MainWindow(Device* device, QWidget *parent)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-
     // Setup UI
     ui->setupUi(this);
 
-    // Init the Device
-    this->device = device;
-
-    // Creating the login and profile creation windows
-    loginWindow = new LoginWindow(device);
-
     history_viewer = new HistoryViewer(ui->HistoryChart);
-
-    // Setup Battery
-    device->startBattery(ui->isCharging, ui->ChargeIndicator);
 
     tagButtonGroup = {ui->activeTag, ui->calmTag, ui->basisMorningTag};
     ranges = {
@@ -29,11 +19,6 @@ MainWindow::MainWindow(Device* device, QWidget *parent)
     for(const QString &spot: ranges.keys()){
         spotValues[spot] = ranges[spot].first;
     }
-
-
-
-
-
 
 
     // Add all checkboxes to the list
@@ -80,40 +65,19 @@ MainWindow::MainWindow(Device* device, QWidget *parent)
 
     // Add tag buttons
     connect(ui->addTag, &QPushButton::clicked, this, &MainWindow::onAddTagButtonClicked);
-    // Save Notes
-    connect(ui->saveBtn, &QPushButton::clicked, this, &MainWindow::saveNotes);
 
     // Temperature conversion
     connect(ui->fahrenheitRadioButton, &QRadioButton::pressed, this, &MainWindow::onFahrenheitSelected);
     connect(ui->celsiusRadioButton, &QRadioButton::pressed, this, &MainWindow::onCelsiusSelected);
 
-    // Login Profile
-    connect(device, SIGNAL(profileLogin(string)), this, SLOT(onUserLogin(string)));
-
-    // Logout Profile
-    connect(ui->btnLogOut, SIGNAL(pressed()), this, SLOT(onUserLogout()));
-
-    // Profile button
-    connect(ui->btnProfile, SIGNAL(pressed()), device, SLOT(showCurrentProfile()));
-
-    // Profile deleted
-    connect(device, SIGNAL(profileDeleted()), this, SLOT(hide()));
-    connect(device, SIGNAL(profileDeleted()), loginWindow, SLOT(show()));
-
     //Print
     connect(ui->Dia_button, &QRadioButton::pressed, this, &MainWindow::PrintDia);
 
-
-    //debug
-    //DELETE LATER
-    ui->result->setEnabled(false);
-    connect(ui->result,&QPushButton::clicked,this,&MainWindow::processRyodorakuData);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete device;
 }
 
 //helper function: Trackaing the process of scanning
@@ -168,9 +132,9 @@ void MainWindow::handleCheckboxToggled(bool checked)
 }
 
 // Save notes(data collection)
-void MainWindow::saveNotes()
+void MainWindow::saveNotes(Profile* currentProfile)
 {
-    Note* new_note = device->currentProfile->getSessions()->back()->get_note();
+    Note* new_note = currentProfile->getSessions()->back()->get_note();
     // Retreive all the informations
     new_note->bodyTemp = ui->bodyTemp->value();
     new_note->tempUnit = ui->celsiusRadioButton->isChecked() ? C : F;
@@ -286,27 +250,16 @@ void MainWindow::onAddTagButtonClicked()
     ui->addTag->setChecked(false);
 }
 
-void MainWindow::onUserLogin(string name)
+void MainWindow::addRandomData(Profile* currentProfile)
 {
-    this->show();
-    ui->lblCurrentUser->setText(QString::fromStdString(name));
-
     //insert some random readings just to show graph history
     for (int i = 0; i < 15; i++){
         ReadingStorage* new_test_reading = new ReadingStorage(&ranges);
         new_test_reading->debug_populate_logs();
-        device->currentProfile->getSessions()->append(new_test_reading);
+        currentProfile->getSessions()->append(new_test_reading);
 
     }
-    history_viewer->update_chart(*device->currentProfile->getSessions()); //update graph
-}
-
-void MainWindow::onUserLogout()
-{
-    this->hide();
-    ui->lblCurrentUser->setText(QString::fromStdString(""));
-
-    loginWindow->show();
+    history_viewer->update_chart(*currentProfile->getSessions()); //update graph
 }
 
 int MainWindow::calculateAverage(){
@@ -318,7 +271,7 @@ int MainWindow::calculateAverage(){
     return total/spotValues.size();
 }
 
-void MainWindow::processRyodorakuData(){
+void MainWindow::processRyodorakuData(Profile* currentProfile){
 
 
     ReadingStorage* new_results = new ReadingStorage(&ranges); //make new empty session
@@ -326,8 +279,8 @@ void MainWindow::processRyodorakuData(){
         new_results->log_data_point(key,  spotValues[key]); //fill it with the results
         //do this all at once here to avoid partial logging if therre's an incomplete shutdown
     }
-    device->currentProfile->getSessions()->append(new_results); //add to the currentuser
-    history_viewer->update_chart(*device->currentProfile->getSessions()); //update graph
+    currentProfile->getSessions()->append(new_results); //add to the currentuser
+    history_viewer->update_chart(*currentProfile->getSessions()); //update graph
 
     int average = calculateAverage();
     int below = average * 0.8;

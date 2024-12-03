@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "readingstorage.h"
 #include "historyviewer.h"
-#include "device.h"
+#include "profile.h"
 #include "note.h"
 #include <QMap>
 #include <QPair>
@@ -12,11 +12,10 @@
 #include <QList>
 #include <QPushButton>
 #include <QInputDialog>
-
-#include "loginwindow.h"
-#include "profilewindow.h"
+#include <QCheckBox>
 
 #include "recommendation.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -26,22 +25,24 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(Device* device, QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    inline void getUI(Ui::MainWindow** ui){*ui=this->ui;}
+
+    void addRandomData(Profile* currentProfile);
+
+    void processRyodorakuData(Profile* currentProfile);
+    void saveNotes(Profile* currentProfile); //Data collection
 
 private:
     Ui::MainWindow *ui;
-    LoginWindow* loginWindow;
-    Device* device;
     HistoryViewer* history_viewer;
     QMap<QString,QPair<int,int>> ranges; //ranges for each spot(min,max)
     bool lastState;
     void handleCheckboxToggled(bool checked);// skin contact
     void trackScanning(); //Keep track of the scanning
     void checkAllScansCompleted(); //Check if scanning is completed
-    void saveNotes(); //Data collection
     int calculateAverage();
-    void processRyodorakuData();
     void PrintDia();
     QList<QCheckBox*> scanCheckboxes; //List of all checkboxes
     QList<QPushButton*> tagButtonGroup; //data collections:tags
@@ -57,7 +58,5 @@ private slots:
     void onFahrenheitSelected();//temp conversion
     void onCelsiusSelected();//temp convresion
     void onAddTagButtonClicked(); //add tag
-    void onUserLogin(string name);
-    void onUserLogout();
 };
 #endif // MAINWINDOW_H

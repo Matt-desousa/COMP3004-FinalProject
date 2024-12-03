@@ -24,7 +24,7 @@ Profile::Profile(int userID, string fName, string lName, SEX sex, float weight, 
     connect(profileWindow, SIGNAL(updateProfile(string, string, SEX, float, float, QDate, string, string, string)), this, SLOT(updateProfile(string, string, SEX, float, float, QDate, string, string, string)));
 
     // Delete Profile button
-    connect(profileWindow, SIGNAL(onDeleteUserPressed()), popup, SLOT(exec()));
+    connect(profileWindow, SIGNAL(onDeleteProfilePressed()), popup, SLOT(exec()));
 
     // Popup Confirm Delete Button Pressed
     connect(popup, SIGNAL(verifyUser(string)), this, SLOT(verifyProfileForDelete(string)));

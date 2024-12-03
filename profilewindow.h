@@ -31,7 +31,7 @@ private slots:
 
 signals:
     void updateProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password);
-    void onDeleteUserPressed();
+    void onDeleteProfilePressed();
     void userVerified(bool);
 };
 

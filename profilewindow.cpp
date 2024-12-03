@@ -29,7 +29,7 @@ ProfileWindow::ProfileWindow(string fName, string lName, SEX sex, float weight, 
     connect(ui->btnConfirm, SIGNAL(pressed()), this, SLOT(onConfirmButtonPressed()));
 
     // Delete Profile button
-    connect(ui->btnDeleteProfile, SIGNAL(pressed()), this, SIGNAL(onDeleteUserPressed()));
+    connect(ui->btnDeleteProfile, SIGNAL(pressed()), this, SIGNAL(onDeleteProfilePressed()));
 }
 
 ProfileWindow::~ProfileWindow()
