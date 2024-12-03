@@ -29,7 +29,7 @@ public:
     ~MainWindow();
     inline void getUI(Ui::MainWindow** ui){*ui=this->ui;}
 
-    void addRandomData(Profile* currentProfile);
+    void addData(Profile* currentProfile);
 
     void processRyodorakuData(Profile* currentProfile);
     void saveNotes(Profile* currentProfile); //Data collection

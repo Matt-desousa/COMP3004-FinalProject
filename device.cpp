@@ -219,7 +219,7 @@ void Device::onProfileLogin()
         mainWindow->show();
         mwUI->lblCurrentUser->setText(QString::fromStdString(currentProfile->getName()));
 
-        mainWindow->addRandomData(currentProfile);
+        mainWindow->addData(currentProfile);
 
         loginWindow->hide();
         lwUI->txtLoginPass->setStyleSheet("");

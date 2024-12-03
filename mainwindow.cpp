@@ -250,7 +250,7 @@ void MainWindow::onAddTagButtonClicked()
     ui->addTag->setChecked(false);
 }
 
-void MainWindow::addRandomData(Profile* currentProfile)
+void MainWindow::addData(Profile* currentProfile)
 {
     //insert some random readings just to show graph history
     for (int i = 0; i < 15; i++){
