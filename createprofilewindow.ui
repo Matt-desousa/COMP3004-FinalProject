@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>511</width>
-    <height>429</height>
+    <height>394</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -178,9 +178,9 @@ Password</string>
    <widget class="QPushButton" name="btnCreateProfile">
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>120</y>
-      <width>141</width>
+      <x>290</x>
+      <y>310</y>
+      <width>111</width>
       <height>25</height>
      </rect>
     </property>
@@ -344,7 +344,7 @@ Number</string>
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>350</y>
+      <y>310</y>
       <width>81</width>
       <height>25</height>
      </rect>
@@ -364,81 +364,6 @@ Number</string>
     </property>
     <property name="text">
      <string>123 456 7890</string>
-    </property>
-   </widget>
-   <widget class="QProgressBar" name="ChargeIndicator">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>360</y>
-      <width>61</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="palette">
-     <palette>
-      <active>
-       <colorrole role="Highlight">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>192</red>
-          <green>97</green>
-          <blue>203</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </active>
-      <inactive>
-       <colorrole role="Highlight">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>192</red>
-          <green>97</green>
-          <blue>203</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </inactive>
-      <disabled>
-       <colorrole role="Highlight">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>145</red>
-          <green>145</green>
-          <blue>145</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </disabled>
-     </palette>
-    </property>
-    <property name="value">
-     <number>90</number>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-    </property>
-    <property name="textVisible">
-     <bool>true</bool>
-    </property>
-    <property name="invertedAppearance">
-     <bool>false</bool>
-    </property>
-    <property name="textDirection">
-     <enum>QProgressBar::TopToBottom</enum>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="isCharging">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>360</y>
-      <width>90</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Plugged In</string>
     </property>
    </widget>
   </widget>

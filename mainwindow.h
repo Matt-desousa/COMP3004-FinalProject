@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "battery.h"
 #include "readingstorage.h"
 #include "historyviewer.h"
 #include "device.h"
@@ -35,7 +34,6 @@ private:
     LoginWindow* loginWindow;
     ProfileWindow* profileWindow;
     Device* device;
-    Battery* battery;
     HistoryViewer* history_viewer;
     QMap<QString,QPair<int,int>> ranges; //ranges for each spot(min,max)
     bool lastState;

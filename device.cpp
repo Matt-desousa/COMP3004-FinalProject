@@ -10,8 +10,10 @@ Device::Device(QObject *parent)
     createUser("Test", "User", UNDEFINED, 50, 175, QDate(), "911", "x@y.z", "test");
 }
 
-void Device::start()
+void Device::startBattery(QCheckBox* charging_port_UI, QProgressBar* charging_indicator_UI)
 {
+    battery = new Battery(charging_port_UI, charging_indicator_UI);
+    battery->turn_on_or_off(true); // start using battery power
 }
 
 bool Device::createUser(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password)

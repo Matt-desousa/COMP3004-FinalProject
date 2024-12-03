@@ -6,6 +6,7 @@
 
 #include "defs.h"
 #include "user.h"
+#include "battery.h"
 #include "readingstorage.h"
 
 class Device : public QObject
@@ -13,7 +14,7 @@ class Device : public QObject
     Q_OBJECT
 public:
     explicit Device(QObject *parent = nullptr);
-    void start();
+    void startBattery(QCheckBox* charging_port_UI, QProgressBar* charging_indicator_UI);
     bool createUser(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password);
     bool verifyUser(string password, int index);
     void userLogout();
@@ -25,6 +26,7 @@ public:
     User* currentUser; //moved this to test access -Evan
 
 private:
+    Battery* battery;
     list<User*> users;
     int nextID = 0;
 

@@ -20,8 +20,7 @@ MainWindow::MainWindow(Device* device, QWidget *parent)
     history_viewer = new HistoryViewer(ui->HistoryChart);
 
     // Setup Battery
-    battery = new Battery(ui->isCharging, ui->ChargeIndicator);
-    battery->turn_on_or_off(true); // start using battery power
+    device->startBattery(ui->isCharging, ui->ChargeIndicator);
 
     tagButtonGroup = {ui->activeTag, ui->calmTag, ui->basisMorningTag};
     ranges = {
@@ -114,7 +113,6 @@ MainWindow::MainWindow(Device* device, QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete battery;
     delete device;
 }
 
