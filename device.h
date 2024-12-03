@@ -6,6 +6,7 @@
 
 #include "defs.h"
 #include "user.h"
+#include "readingstorage.h"
 
 class Device : public QObject
 {
@@ -21,10 +22,11 @@ public:
 
     void printUsers();
 
+    User* currentUser; //moved this to test access -Evan
+
 private:
     list<User*> users;
     int nextID = 0;
-    User* currentUser;
 
 signals:
     void userCreated(string name);

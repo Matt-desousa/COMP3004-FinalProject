@@ -11,6 +11,8 @@ using namespace std;
 #include "profilewindow.h"
 #include "confirmdeletepopup.h"
 
+#include "readingstorage.h"
+
 class ProfileWindow;
 
 class User : public QObject
@@ -23,6 +25,9 @@ public:
     void showProfile();
 
     string getName();
+
+    inline QVector<ReadingStorage*>* getSessions(){return &sessions;}
+
 
 
 private:
@@ -38,6 +43,8 @@ private:
     string phoneNumber;
     string email;
     string password;
+
+    QVector<ReadingStorage*> sessions;
 
 private slots:
     void updateProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password);

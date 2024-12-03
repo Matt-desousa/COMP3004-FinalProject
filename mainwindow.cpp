@@ -31,18 +31,8 @@ MainWindow::MainWindow(Device* device, QWidget *parent)
         spotValues[spot] = ranges[spot].first;
     }
 
-    //test_readings
-    for (int i = 0; i < 15; i++){
-        ReadingStorage* new_test_reading = new ReadingStorage(&ranges);
-        new_test_reading->debug_populate_logs();
-        test_readings.append(new_test_reading);
-    }
 
-    for (int i = 0; i < 15; i++){
-        qDebug() << "Logged test session with average" << test_readings[i]->retrieve_session_average();
-    }
 
-    history_viewer->update_chart(test_readings);
 
 
 
@@ -80,7 +70,6 @@ MainWindow::MainWindow(Device* device, QWidget *parent)
         ui->sliderValue->setText(QString::number(value));
         QString selectedSpot = ui->dropdown->currentText();
         spotValues[selectedSpot] = value;
-        test_storage->log_data_point(selectedSpot, value);
     });
 
     // Disable slider and dropdown
@@ -183,9 +172,7 @@ void MainWindow::handleCheckboxToggled(bool checked)
 // Save notes(data collection)
 void MainWindow::saveNotes()
 {
-    //Note* new_note = current_user->get_latest_note(); //ACTIVATE LATER
-    Note* new_note = new Note(); //DELETE LATER
-
+    Note* new_note = device->currentUser->getSessions()->back()->get_note();
     // Retreive all the informations
     new_note->bodyTemp = ui->bodyTemp->value();
     new_note->tempUnit = ui->celsiusRadioButton->isChecked() ? C : F;
@@ -305,6 +292,15 @@ void MainWindow::onUserLogin(string name)
 {
     this->show();
     ui->lblCurrentUser->setText(QString::fromStdString(name));
+
+    //insert some random readings just to show graph history
+    for (int i = 0; i < 15; i++){
+        ReadingStorage* new_test_reading = new ReadingStorage(&ranges);
+        new_test_reading->debug_populate_logs();
+        device->currentUser->getSessions()->append(new_test_reading);
+
+    }
+    history_viewer->update_chart(*device->currentUser->getSessions()); //update graph
 }
 
 void MainWindow::onUserLogout()
@@ -325,6 +321,16 @@ int MainWindow::calculateAverage(){
 }
 
 void MainWindow::processRyodorakuData(){
+
+
+    ReadingStorage* new_results = new ReadingStorage(&ranges); //make new empty session
+    for (const QString &key : spotValues.keys()) {
+        new_results->log_data_point(key,  spotValues[key]); //fill it with the results
+        //do this all at once here to avoid partial logging if therre's an incomplete shutdown
+    }
+    device->currentUser->getSessions()->append(new_results); //add to the currentuser
+    history_viewer->update_chart(*device->currentUser->getSessions()); //update graph
+
     int average = calculateAverage();
     int below = average * 0.8;
     int above = average * 1.2;
