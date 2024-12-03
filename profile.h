@@ -48,11 +48,11 @@ private:
 
 private slots:
     void updateProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password);
-    void verifyUserForDelete(string);
+    void verifyProfileForDelete(string);
 
 signals:
-    void userUpdated(string);
-    void userDeleted();
+    void profileUpdated(string);
+    void profileDeleted();
 
 };
 

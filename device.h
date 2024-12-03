@@ -15,30 +15,30 @@ class Device : public QObject
 public:
     explicit Device(QObject *parent = nullptr);
     void startBattery(QCheckBox* charging_port_UI, QProgressBar* charging_indicator_UI);
-    bool createUser(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password);
-    bool verifyUser(string password, int index);
-    void userLogout();
+    bool createProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password);
+    bool verifyProfile(string password, int index);
+    void logoutProfile();
 
-    void getUserNames(list<string>* names);
+    void getProfileNames(list<string>* names);
 
-    void printUsers();
+    void printProfiles();
 
-    Profile* currentUser; //moved this to test access -Evan
+    Profile* currentProfile; //moved this to test access -Evan
 
 private:
     Battery* battery;
-    list<Profile*> users;
+    list<Profile*> profiles;
     int nextID = 0;
 
 signals:
-    void userCreated(string name);
-    void userLogin(string name);
-    void userUpdated(string name);
-    void userDeleted();
+    void profileCreated(string name);
+    void profileLogin(string name);
+    void profileUpdated(string name);
+    void profileDeleted();
 
 private slots:
-    void showCurrentUserProfile();
-    void onUserDeleted();
+    void showCurrentProfile();
+    void onProfileDeleted();
 };
 
 #endif // DEVICE_H

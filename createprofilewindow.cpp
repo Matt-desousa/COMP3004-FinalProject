@@ -17,7 +17,7 @@ CreateProfileWindow::CreateProfileWindow(Device* device, QWidget *parent) :
 
     // Create Profile
     connect(ui->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onCreateProfileButtonPressed()));
-    connect(device, SIGNAL(userCreated(string)), this, SLOT(hide()));
+    connect(device, SIGNAL(profileCreated(string)), this, SLOT(hide()));
 
 //    connect(ui->btnCreateProfile, SIGNAL(pressed()), parent, SLOT(show()));
 //    connect(device, SIGNAL(userCreated(string)), parent, SLOT(show()));
@@ -56,7 +56,7 @@ void CreateProfileWindow::onCreateProfileButtonPressed()
         return;
     }
 
-    bool validUser = device->createUser(fName, lName, sex, weight, height, date, phoneNum, email, password);
+    bool validUser = device->createProfile(fName, lName, sex, weight, height, date, phoneNum, email, password);
 
     if (!validUser){
         if (fName == "") ui->txtFName->setStyleSheet("border-style: solid;border-width: 2px;border-color: red");

@@ -27,7 +27,7 @@ Profile::Profile(int userID, string fName, string lName, SEX sex, float weight, 
     connect(profileWindow, SIGNAL(onDeleteUserPressed()), popup, SLOT(exec()));
 
     // Popup Confirm Delete Button Pressed
-    connect(popup, SIGNAL(verifyUser(string)), this, SLOT(verifyUserForDelete(string)));
+    connect(popup, SIGNAL(verifyUser(string)), this, SLOT(verifyProfileForDelete(string)));
 }
 
 Profile::~Profile(){
@@ -64,14 +64,14 @@ void Profile::updateProfile(string fName, string lName, SEX sex, float weight, f
         this->sex = sex;
     }
 
-    emit userUpdated(this->fName + " " + this->lName);
+    emit profileUpdated(this->fName + " " + this->lName);
 }
 
-void Profile::verifyUserForDelete(string password)
+void Profile::verifyProfileForDelete(string password)
 {
     if (verifyPassword(password)){
         popup->onUserVerified(true);
-        emit userDeleted();
+        emit profileDeleted();
         profileWindow->hide();
     }
     else

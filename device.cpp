@@ -6,8 +6,8 @@
 Device::Device(QObject *parent)
     : QObject{parent}
 {
-    currentUser = NULL;
-    createUser("Test", "User", UNDEFINED, 50, 175, QDate(), "911", "x@y.z", "test");
+    currentProfile = NULL;
+    createProfile("Test", "User", UNDEFINED, 50, 175, QDate(), "911", "x@y.z", "test");
 }
 
 void Device::startBattery(QCheckBox* charging_port_UI, QProgressBar* charging_indicator_UI)
@@ -16,7 +16,7 @@ void Device::startBattery(QCheckBox* charging_port_UI, QProgressBar* charging_in
     battery->turn_on_or_off(true); // start using battery power
 }
 
-bool Device::createUser(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password)
+bool Device::createProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password)
 {
 
     if (fName == "" || lName == "" || weight <= 0 || height <= 0 || phoneNum == "" || email == "" || password == ""){
@@ -24,11 +24,11 @@ bool Device::createUser(string fName, string lName, SEX sex, float weight, float
         return false;
     }
 
-    qDebug() << users.size();
-    if (users.size() < NUM_USERS){
-        users.push_back(new Profile(nextID++, fName, lName, sex, weight, height, date, phoneNum, email, password));
+    qDebug() << profiles.size();
+    if (profiles.size() < NUM_USERS){
+        profiles.push_back(new Profile(nextID++, fName, lName, sex, weight, height, date, phoneNum, email, password));
         qDebug() << "User created.";
-        emit userCreated(fName + " " + lName);
+        emit profileCreated(fName + " " + lName);
         return true;
     }
     else {
@@ -37,10 +37,10 @@ bool Device::createUser(string fName, string lName, SEX sex, float weight, float
     }
 }
 
-bool Device::verifyUser(string password, int index)
+bool Device::verifyProfile(string password, int index)
 {
     list<Profile*>::iterator it;
-    it = users.begin();
+    it = profiles.begin();
     for (int i = 0; i < index; i++){
         it++;
     }
@@ -48,11 +48,11 @@ bool Device::verifyUser(string password, int index)
     if ((*it)->verifyPassword(password)){
         qDebug() << "User verified.";
 
-        currentUser = *it;
-        connect(currentUser, SIGNAL(userUpdated(string)), this, SIGNAL(userUpdated(string)));
-        connect(currentUser, SIGNAL(userDeleted()), this, SLOT(onUserDeleted()));
+        currentProfile = *it;
+        connect(currentProfile, SIGNAL(profileUpdated(string)), this, SIGNAL(profileUpdated(string)));
+        connect(currentProfile, SIGNAL(profileDeleted()), this, SLOT(onProfileDeleted()));
 
-        emit userLogin(currentUser->getName());
+        emit profileLogin(currentProfile->getName());
         return true;
     }
     else {
@@ -61,49 +61,49 @@ bool Device::verifyUser(string password, int index)
     }
 }
 
-void Device::userLogout()
+void Device::logoutProfile()
 {
-    if (currentUser != NULL){
-        disconnect(currentUser, SIGNAL(userUpdated(string)), this, SIGNAL(userUpdated(string)));
-        disconnect(currentUser, SIGNAL(userDeleted()), this, SLOT(onUserDeleted()));
+    if (currentProfile != NULL){
+        disconnect(currentProfile, SIGNAL(profileUpdated(string)), this, SIGNAL(profileUpdated(string)));
+        disconnect(currentProfile, SIGNAL(profileDeleted()), this, SLOT(onProfileDeleted()));
     }
-    currentUser = NULL;
+    currentProfile = NULL;
 }
 
-void Device::getUserNames(list<string> *names)
+void Device::getProfileNames(list<string> *names)
 {
-    for (Profile* user : users){
+    for (Profile* user : profiles){
         names->push_back(user->getName());
     }
 }
 
-void Device::printUsers()
+void Device::printProfiles()
 {
     list<Profile*>::iterator it;
-    it = users.begin();
-    for (it; it != users.end(); it++){
+    it = profiles.begin();
+    for (it; it != profiles.end(); it++){
         qDebug() << QString::fromStdString((*it)->getName());
     }
 }
 
-void Device::showCurrentUserProfile()
+void Device::showCurrentProfile()
 {
-    currentUser->showProfile();
+    currentProfile->showProfile();
 }
 
-void Device::onUserDeleted()
+void Device::onProfileDeleted()
 {
-    printUsers();
+    printProfiles();
 
     list<Profile*>::iterator it;
-    it = users.begin();
-    for (it; it != users.end(); it++){
-        if ((*it) == currentUser){
-            users.remove(currentUser);
-            emit userDeleted();
+    it = profiles.begin();
+    for (it; it != profiles.end(); it++){
+        if ((*it) == currentProfile){
+            profiles.remove(currentProfile);
+            emit profileDeleted();
             break;
         }
     }
 
-    printUsers();
+    printProfiles();
 }
