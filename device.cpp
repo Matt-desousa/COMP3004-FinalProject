@@ -30,6 +30,10 @@ Device::Device(QObject *parent)
     // Save Notes
     connect(mwUI->saveBtn, SIGNAL(pressed()), this, SLOT(saveNotes()));
 
+    connect(mwUI->note_next, &QRadioButton::released, this, &Device::updateNotes);
+    connect(mwUI->note_previous, &QRadioButton::released, this, &Device::updateNotes);
+
+
     //debug
     //DELETE LATER
     mwUI->result->setEnabled(false);
@@ -63,6 +67,7 @@ Device::Device(QObject *parent)
     // Create Profile Button
     connect(cwUI->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onProfileCreated()));
 
+    startBattery(mwUI->isCharging, mwUI->ChargeIndicator);
 
     currentProfile = NULL;
     createProfile("Test", "User", UNDEFINED, 50, 175, QDate(), "911", "x@y.z", "test");
@@ -220,6 +225,7 @@ void Device::onProfileLogin()
         mwUI->lblCurrentUser->setText(QString::fromStdString(currentProfile->getName()));
 
         mainWindow->addData(currentProfile);
+        mainWindow->display_note(currentProfile);
 
         loginWindow->hide();
         lwUI->txtLoginPass->setStyleSheet("");
@@ -282,4 +288,9 @@ void Device::processRyodorakuData()
 void Device::saveNotes()
 {
     mainWindow->saveNotes(currentProfile);
+}
+
+void Device::updateNotes()
+{
+    mainWindow->display_note(currentProfile);
 }

@@ -56,6 +56,7 @@ private slots:
     void onProfileDeleted();
 
     void processRyodorakuData();
+    void updateNotes();
     void saveNotes();
 };
 

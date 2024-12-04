@@ -33,6 +33,7 @@ public:
 
     void processRyodorakuData(Profile* currentProfile);
     void saveNotes(Profile* currentProfile); //Data collection
+    void display_note(Profile* currentProfile);
 
 private:
     Ui::MainWindow *ui;
@@ -44,6 +45,10 @@ private:
     void checkAllScansCompleted(); //Check if scanning is completed
     int calculateAverage();
     void PrintDia();
+
+
+
+
     QList<QCheckBox*> scanCheckboxes; //List of all checkboxes
     QList<QPushButton*> tagButtonGroup; //data collections:tags
     QMap<QString,int> spotValues; // store scanned data

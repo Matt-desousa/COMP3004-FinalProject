@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Setup UI
     ui->setupUi(this);
 
-    history_viewer = new HistoryViewer(ui->HistoryChart);
+    history_viewer = new HistoryViewer(ui->HistoryChart, ui->note_controls);
 
     tagButtonGroup = {ui->activeTag, ui->calmTag, ui->basisMorningTag};
     ranges = {
@@ -73,6 +73,9 @@ MainWindow::MainWindow(QWidget *parent)
     //Print
     connect(ui->Dia_button, &QRadioButton::pressed, this, &MainWindow::PrintDia);
 
+    //connect(ui->note_next, &QRadioButton::released, this, &MainWindow::display_note);
+    //connect(ui->note_previous, &QRadioButton::released, this, &MainWindow::display_note);
+
 }
 
 MainWindow::~MainWindow()
@@ -134,7 +137,8 @@ void MainWindow::handleCheckboxToggled(bool checked)
 // Save notes(data collection)
 void MainWindow::saveNotes(Profile* currentProfile)
 {
-    Note* new_note = currentProfile->getSessions()->back()->get_note();
+    Note* new_note = history_viewer->get_note(currentProfile);
+
     // Retreive all the informations
     new_note->bodyTemp = ui->bodyTemp->value();
     new_note->tempUnit = ui->celsiusRadioButton->isChecked() ? C : F;
@@ -402,3 +406,46 @@ void MainWindow::PrintDia()
     }
 }
 
+
+
+void MainWindow::display_note(Profile* currentProfile){
+    qDebug("OK1");
+    Note* n = history_viewer->get_note(currentProfile);
+    qDebug("OK2");
+
+    ui->bodyTemp->setValue(n->bodyTemp);
+    ui->celsiusRadioButton->setChecked(n->tempUnit == C);
+    ui->bloodPressureLeftSystolic->setText(QString("%1").arg(n->bloodPressureRightDiastolic));
+    ui->bloodPressureLeftDiastolic->setText(QString("%1").arg(n->bloodPressureLeftDiastolic));
+    ui->bloodPressureRightSystolic->setText(QString("%1").arg(n->bloodPressureRightSystolic));
+    ui->bloodPressureRightDiastolic->setText(QString("%1").arg(n->bloodPressureLeftSystolic));
+    ui->heartRate->setText(QString("%1").arg(n->heartRate));
+    ui->sleepHrs->setText(QString("%1").arg(n->sleepHrs));
+    ui->sleepMins->setText(QString("%1").arg(n->sleepMins));
+    ui->weight->setText(QString("%1").arg(n->weight));
+    ui->lbsRadioButton->setChecked(n->weightUnit == LBS);
+    ui->notes->setText(n->notes);
+/*
+    if (ui->emoStateVerySad->isChecked())
+        new_note->emotionalState = "Very Sad";
+    else if (ui->emoStateSad->isChecked())
+        new_note->emotionalState = "Sad";
+    else if (ui->emoStateNeutral->isChecked())
+        new_note->emotionalState = "Neutral";
+    else if (ui->emoStateHappy->isChecked())
+        new_note->emotionalState = "Happy";
+    else if (ui->emoStateVeryHappy->isChecked())
+        new_note->emotionalState = "Very Happy";
+
+    if (ui->overallFeelingVerySad->isChecked())
+        new_note->overallFeeling = "Very Sad";
+    else if (ui->overallFeelingSad->isChecked())
+        new_note->overallFeeling = "Sad";
+    else if (ui->OverallFeelingNeutral->isChecked())
+        new_note->overallFeeling = "Neutral";
+    else if (ui->overallFeelingHappy->isChecked())
+        new_note->overallFeeling = "Happy";
+    else if (ui->overallFeelingVeryHappy->isChecked())
+        new_note->overallFeeling = "Very Happy";
+        */
+}

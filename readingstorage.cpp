@@ -65,5 +65,16 @@ void ReadingStorage::debug_populate_logs(){
         int random_val = QRandomGenerator::global()->bounded(val_range.first, val_range.second);
         log_data_point(body_part,  random_val);
     }
+
+    int r1 = QRandomGenerator::global()->bounded(0, 100);
+    int r2 = QRandomGenerator::global()->bounded(0, 100);
+    int r3 = QRandomGenerator::global()->bounded(0, 100);
+    note->notes = QString("%1 %2 %3").arg(QString((char)r1+r2),QString((char)r2+r3),QString((char)r3+r1));
+    note->sleepHrs = r1/2;
+    note->sleepMins = r2/2;
+    note->weightUnit = LBS;
+    note->tempUnit = C;
+    note->weight = r1*2;
+    note->bodyTemp = r1+r2-r3;
 }
 
