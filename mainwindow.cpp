@@ -324,22 +324,24 @@ void MainWindow::processRyodorakuData(Profile* currentProfile){
 //Print Diagnosis
 void MainWindow::PrintDia()
 {
-    recommend.AddAbnormalPartinQ("H1 Left","H1 Right", *test_storage);
-    recommend.AddAbnormalPartinQ("H2 Left","H2 Right", *test_storage);
-    recommend.AddAbnormalPartinQ("H3 Left","H3 Right", *test_storage);
-    recommend.AddAbnormalPartinQ("H4 Left","H4 Right", *test_storage);
-    recommend.AddAbnormalPartinQ("H5 Left","H5 Right", *test_storage);
-    recommend.AddAbnormalPartinQ("H6 Left","H6 Right", *test_storage);
-    recommend.AddAbnormalPartinQ("F1 Left","F1 Right", *test_storage);
-    recommend.AddAbnormalPartinQ("F2 Left","F2 Right", *test_storage);
-    recommend.AddAbnormalPartinQ("F3 Left","F3 Right", *test_storage);
-    recommend.AddAbnormalPartinQ("F4 Left","F4 Right", *test_storage);
-    recommend.AddAbnormalPartinQ("F5 Left","F5 Right", *test_storage);
-    recommend.AddAbnormalPartinQ("F6 Left","F6 Right", *test_storage);
+    recommend.AddAbnormalPartinQ("H1 Left","H1 Right", spotValues);
+    recommend.AddAbnormalPartinQ("H2 Left","H2 Right", spotValues);
+    recommend.AddAbnormalPartinQ("H3 Left","H3 Right", spotValues);
+    recommend.AddAbnormalPartinQ("H4 Left","H4 Right", spotValues);
+    recommend.AddAbnormalPartinQ("H5 Left","H5 Right", spotValues);
+    recommend.AddAbnormalPartinQ("H6 Left","H6 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F1 Left","F1 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F2 Left","F2 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F3 Left","F3 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F4 Left","F4 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F5 Left","F5 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F6 Left","F6 Right", spotValues);
     QString temp_body = "";
     int temp_degree = 0;
     if(recommend.GetWrong_partSize() == 0){
         ui->Dia->append("Every part is healthy");
+        ui->Organ->append("None");
+        ui->Supp->append("None");
     }
     while(recommend.GetWrong_partSize() != 0)
     {
@@ -349,65 +351,128 @@ void MainWindow::PrintDia()
         {
             ui->Dia->append("Stiff and painful sholder muscles, rush of blood to the head"
                             "hot lfashes, piles, asthma");
+            ui->Organ->append("Lung");
+            ui->Supp->append("Propolis - Improve immune defense");
         }else if(temp_body == "H1" && temp_degree == -1){
             ui->Dia->append("Cold feet or numbness, shortness of breath, coughing spells");
+            ui->Organ->append("Lung");
+            ui->Supp->append("Propolis - Improve immune defense");
         //H2
         }else if(temp_body == "H2" && temp_degree == 1){
             ui->Dia->append("Stiff and painful shoulder muscles, middle age level wrenched"
                             " shoulders, brachical neuralgia.");
+            ui->Organ->append("Pericardium");
+            ui->Supp->append("Veino Tune - Improves venous blood flow");
+
         }else if(temp_body == "H2" && temp_degree == -1){
             ui->Dia->append("Palpitation, heated sensation of the palms");
+            ui->Organ->append("Pericardium");
+            ui->Supp->append("Veino Tune - Improves venous blood flow");
         //H3
         }else if(temp_body == "H3" && temp_degree == 1){
             ui->Dia->append("Puffed sensation of the stomach, constipation");
+            ui->Organ->append("Heart");
+            ui->Supp->append("AntimeGrin Hyper - Helps with high blood pressure relief and optimization");
         }else if(temp_body == "H3" && temp_degree == -1){
             ui->Dia->append("Palpitation");
+            ui->Organ->append("Heart");
+            ui->Supp->append("Migrenol Hypo - Helps raise low blood pressure and optimization");
+            ui->Supp->append("Immuno Tune - Spports immune health function");
         //H4
         }else if(temp_body == "H4" && temp_degree == 1){
             ui->Dia->append("Headaches, abnormalities of the lower abdomen, joint pain");
+            ui->Organ->append("Small intestine");
+            ui->Supp->append("Intesti San - helps maintain intestinal health");
+            ui->Supp->append("Immuno Tune - Spports immune health function");
         }else if(temp_body == "H4" && temp_degree == -1){
             ui->Dia->append("Headache, abnormalities of the lower abdomen");
+            ui->Organ->append("Small intestine");
+            ui->Supp->append("Intesti San - helps maintain intestinal health");
         //H5
         }else if(temp_body == "H5" && temp_degree == 1){
             ui->Dia->append("Ringing ears, difficulty in hearing");
+            ui->Organ->append("Lymph vessel");
+            ui->Supp->append("Edmea Relieve - Promotes proper response to inflammation");
+            ui->Supp->append("Immuno Tune - Spports immune health function");
         }else if(temp_body == "H5" && temp_degree == -1){
             ui->Dia->append("Tiredness or tendency to tire, the healthy glow disappears and body hairs"
                             " increase in density");
+            ui->Organ->append("Lymph vessel");
+            ui->Supp->append("Edmea Relieve - Promotes proper response to inflammation");
+            ui->Supp->append("Immuno Tune - Spports immune health function");
         //H6
         }else if(temp_body == "H6" && temp_degree == 1){
             ui->Dia->append("Stiff and painful shoulder muscles, tooth ache");
+            ui->Organ->append("Large intestine");
+            ui->Supp->append("Edmea Relieve - Promotes proper response to inflammation");
         }else if(temp_body == "H6" && temp_degree == -1){
             ui->Dia->append("Stiff and painful shoulder muscles");
+            ui->Organ->append("Large intestine");
+            ui->Supp->append("Edmea Relieve - Promotes proper response to inflammation");
         //F1
         }else if(temp_body == "F1" && temp_degree == 1){
             ui->Dia->append("General weakness of the stomach, knee joint pain");
+            ui->Organ->append("Spleen / Pancrease");
+            ui->Supp->append("Immuno Tune - Supports immune health function");
+            ui->Supp->append("Pancre Norm - Normalizes blood sugar levels");
         }else if(temp_body == "F1" && temp_degree == -1){
             ui->Dia->append("General weakness of stomach,abnormalities of the knee joint, insomnia, glycosuria");
+            ui->Organ->append("Spleen / Pancrease");
+            ui->Supp->append("Immuno Tune - supports immune health function");
+            ui->Supp->append("Pancre Norm - Normalizes blood sugar levels");
         //F2
         }else if(temp_body == "F2" && temp_degree == 1){
             ui->Dia->append("Insomnia, readily provoked abnormalities in menstruation, lumbar pain" );
+            ui->Organ->append("Liver");
+            ui->Supp->append("Hepa Gugull - support for liver function & recovery");
         }else if(temp_body == "F2" && temp_degree == -1){
             ui->Dia->append("Faintness or dizziness on abrupt standing up(orthostatic circulatory disorder)");
+            ui->Organ->append("Liver");
+            ui->Supp->append("Hepa Gugull - support for liver function & recovery");
         //F3
         }else if(temp_body == "F3" && temp_degree == 1){
             ui->Dia->append("Fretting and fuming, anxiety");
+            ui->Organ->append("Kidney and Adrenal galnds");
+            ui->Supp->append("RenActive - Kidney Health Support");
+            ui->Supp->append("Edma Relieve - Promotes preper response to inflammation");
         }else if(temp_body == "F3" && temp_degree == -1){
             ui->Dia->append("Loss of willingness to concentrate and general tiredness, Coldness in hips and legs");
+            ui->Organ->append("Kidney and Adrenal galnds");
+            ui->Supp->append("RenActive - Kidney Health Support");
+            ui->Supp->append("Edma Relieve - Promotes preper response to inflammation");
         //F4
         }else if(temp_body == "F4" && temp_degree == 1){
             ui->Dia->append("Stiff neck muscles, headaches, sciatic neurities, lumbar pain");
+            ui->Organ->append("Bladder");
+            ui->Supp->append("RenoSan - Regulates disorders including kidney stone issues");
         }else if(temp_body == "F4" && temp_degree == -1){
             ui->Dia->append("Stiffness and painful neck muscles, lumbar pain, dullness of the feet");
+            ui->Organ->append("Bladder");
+            ui->Supp->append("RenoSan - Regulates disorders including kidney stone issues");
         //F5
         }else if(temp_body == "F5" && temp_degree == 1){
             ui->Dia->append("Headaches");
+            ui->Organ->append("GallBladder");
+            ui->Supp->append("EnergyTune - Improves metabolic activation");
+            ui->Supp->append("Digest Active - Digestive system support");
+            ui->Supp->append("CalmBelly - Optimize your digestive process");
         }else if(temp_body == "F5" && temp_degree == -1){
             ui->Dia->append("Abnormalities of eyes, dizziness (Meniere's disease)");
+            ui->Organ->append("GallBladder");
+            ui->Supp->append("EnergyTune - Improves metabolic activation");
+            ui->Supp->append("Digest Active - Digestive system support");
+            ui->Supp->append("CalmBelly - Optimize your digestive process");
         //F6
         }else if(temp_body == "F6" && temp_degree == 1){
             ui->Dia->append("Anomalies of the joints, middle age wrenched shoulder, elbow neuralgia");
+            ui->Organ->append("Stomach");
+            ui->Supp->append("Digest Active - Digestive system support");
+            ui->Supp->append("CalmBelly - Optimize your digestive process");
         }else if(temp_body == "F6" && temp_degree == -1){
             ui->Dia->append("Stiff and painful shoulder muscles, distention of stomach, bloating of face, yawning");
+            ui->Organ->append("Stomach");
+            ui->Supp->append("Digest Active - Digestive system support");
+            ui->Supp->append("CalmBelly - Optimize your digestive process");
         }else{
             ui->Dia->append("ERROR");
         }

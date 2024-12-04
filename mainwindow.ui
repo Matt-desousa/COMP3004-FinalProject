@@ -93,13 +93,13 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>90</y>
       <width>801</width>
       <height>491</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -1380,7 +1380,7 @@
         <rect>
          <x>630</x>
          <y>40</y>
-         <width>101</width>
+         <width>86</width>
          <height>25</height>
         </rect>
        </property>
@@ -1420,7 +1420,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Treatment</string>
+       <string>Failed organs</string>
       </property>
      </widget>
      <widget class="QTextEdit" name="Dia">
@@ -1433,13 +1433,13 @@
        </rect>
       </property>
      </widget>
-     <widget class="QTextEdit" name="Tre">
+     <widget class="QTextEdit" name="Organ">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>270</y>
         <width>391</width>
-        <height>181</height>
+        <height>71</height>
        </rect>
       </property>
      </widget>
@@ -1453,7 +1453,30 @@
        </rect>
       </property>
       <property name="text">
-       <string>PushButton</string>
+       <string>Result</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_28">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>230</y>
+        <width>120</width>
+        <height>49</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Suppliements</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="Supp">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>270</y>
+        <width>391</width>
+        <height>71</height>
+       </rect>
       </property>
      </widget>
     </widget>

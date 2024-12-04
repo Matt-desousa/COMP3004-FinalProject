@@ -9,8 +9,8 @@ class Recommendation
 public:
     Recommendation();
     ~Recommendation();
-    void AddAbnormalPartinQ(QString left, QString Right,ReadingStorage& storage);
-    int GetAverage(ReadingStorage& storage);
+    void AddAbnormalPartinQ(QString left, QString Right,QMap<QString,int>& data);
+    int GetAverage(QMap<QString,int>& data);
     int GetWrong_partSize();
     QString GetWrong_part();
     int Getresult();

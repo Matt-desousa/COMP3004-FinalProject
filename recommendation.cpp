@@ -13,70 +13,24 @@ Recommendation::~Recommendation()
 
 }
 
-int Recommendation::GetAverage(ReadingStorage& storage)
+int Recommendation::GetAverage(QMap<QString,int>& data)
 {
     int average = 0;
-    int sum = 0;
-    sum = storage.retrieve_data_point_average("H1 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("H1 Left");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("H2 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("H2 Left");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("H3 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("H3 Left");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("H4 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("H4 Left");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("H5 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("H5 Left");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("H6 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("H6 Left");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F1 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F1 Left");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F2 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F2 Left");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F3 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F3 Left");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F4 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F4 Left");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F5 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F5 Left");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F6 Right");
-    average = average + sum;
-    sum = storage.retrieve_data_point_average("F6 Left");
-    average = average + sum;
+    for (int& temp : data){
+        average += temp;
+    }
     return average/24;
 
 
 
 }
 //add abnormal part in body_part & higher or lower
-void Recommendation::AddAbnormalPartinQ(QString left,QString right, ReadingStorage& storage)
+void Recommendation::AddAbnormalPartinQ(QString left,QString right, QMap<QString,int>& data)
 {
     QString temp = Reorganize(left,right);
-    int average = GetAverage(storage);
-    int leftaverage = storage.retrieve_data_point_average(left);
-    int rightaverage = storage.retrieve_data_point_average(right);
+    int average = GetAverage(data);
+    int leftaverage = data[left];
+    int rightaverage = data[right];
 
     //if part_average is higher than the average zone
     if(leftaverage > average * 1.2 || rightaverage > average * 1.2 )

@@ -22,7 +22,8 @@ void ReadingStorage::log_data_point(QString body_part, int  reading){
 }
 
 //get a reading
-int  ReadingStorage::retrieve_data_point(QString body_part){
+int  ReadingStorage::retrieve_data_point(QString body_part){\
+    //debug_print(body_part);
     return readings[body_part];
 }
 
