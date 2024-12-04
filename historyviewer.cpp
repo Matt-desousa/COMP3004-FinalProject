@@ -11,40 +11,50 @@ HistoryViewer::HistoryViewer(QGroupBox* chart, QGroupBox* note_viewer)
     connect(note_next_button, &QPushButton::pressed, this, &HistoryViewer::next_note);
     note_counter = note_viewer->findChild<QLabel*>("note_counter");
 
-    num_bars = chart->children().size();
+    num_bars = 20;
     for(int i = 1; i <= num_bars; i++){
         const QString bar_name =  QString("col%1").arg(i);
         chart_bars.append(chart->findChild<QProgressBar*>(bar_name));
     }
 
     note_index = 0;
+
+    chart_selector = chart->findChild<QComboBox*>("ChartSelection");
+
 }
 
 void HistoryViewer::update_chart(QVector<ReadingStorage*>& data){
 
-    if(data.size()  == 0){return;}
+    if(data.size()  == 0){return;} //no readings to display
+
+    QString body_part = chart_selector->currentText();
 
     QVector<int> values;
-    int max_val = -10000;
-    int min_val = 10000;
+
 
     for(int i = 0; i < data.size(); i++){
+        int val;
+        if(chart_selector->currentIndex() == 0){
+            val = (float)data[i]->retrieve_session_average() / 162.0f * 100;
 
-        int val = data[i]->retrieve_session_average();
 
-        if(val < min_val){min_val = val;}
-        if(val > max_val){max_val = val;}
+        }
+        else{
+            val = data[i]->retrieve_data_point_percent(body_part);
+        }
+
         values.append(val);
     }
 
-    max_val += (max_val / 10); //gap on top of graph
 
     int final_index = data.size() - 1;
     for(int i = 0; i < num_bars; i++){
         int data_index = final_index - i;
-        int bar_value = (data_index < 0) ? 0 : ((float)values[data_index] / max_val  * 100);
+        int bar_value = (data_index < 0) ? 0 : values[data_index];
         chart_bars[i]->setValue(bar_value);
     }
+
+    qDebug("chart update complete");
 }
 
 Note* HistoryViewer::get_note(Profile* user){

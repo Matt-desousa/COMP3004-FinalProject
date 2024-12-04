@@ -7,6 +7,7 @@
 #include <QVector>
 #include <QLabel>
 #include <QDebug>
+#include <QComboBox>
 
 #include "defs.h"
 #include "readingstorage.h"
@@ -32,6 +33,7 @@ private:
     QPushButton* note_previous_button;
     QPushButton* note_next_button;
     QLabel* note_counter;
+    QComboBox* chart_selector;
 
     int note_index;
 

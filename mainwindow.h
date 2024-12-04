@@ -34,6 +34,7 @@ public:
     void processRyodorakuData(Profile* currentProfile);
     void saveNotes(Profile* currentProfile); //Data collection
     void display_note(Profile* currentProfile);
+    void update_chart(Profile* currentProfile);
 
 private:
     Ui::MainWindow *ui;

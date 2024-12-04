@@ -73,9 +73,18 @@ MainWindow::MainWindow(QWidget *parent)
     //Print
     connect(ui->Dia_button, &QRadioButton::pressed, this, &MainWindow::PrintDia);
 
-    //connect(ui->note_next, &QRadioButton::released, this, &MainWindow::display_note);
-    //connect(ui->note_previous, &QRadioButton::released, this, &MainWindow::display_note);
 
+    //create history chart dropdown
+    int a = 0;
+    int b = 0;
+    ui->ChartSelection->addItem("Average");
+    for(const QString &body_part: ranges.keys()){
+a += ranges[body_part].first;
+b += ranges[body_part].second;
+        ui->ChartSelection->addItem(body_part);
+    }
+
+    qDebug() << a/24 <<  "" << b/24;
 }
 
 MainWindow::~MainWindow()
@@ -409,9 +418,7 @@ void MainWindow::PrintDia()
 
 
 void MainWindow::display_note(Profile* currentProfile){
-    qDebug("OK1");
     Note* n = history_viewer->get_note(currentProfile);
-    qDebug("OK2");
 
     ui->bodyTemp->setValue(n->bodyTemp);
     ui->celsiusRadioButton->setChecked(n->tempUnit == C);
@@ -448,4 +455,8 @@ void MainWindow::display_note(Profile* currentProfile){
     else if (ui->overallFeelingVeryHappy->isChecked())
         new_note->overallFeeling = "Very Happy";
         */
+}
+
+void MainWindow::update_chart(Profile* currentProfile){
+    history_viewer->update_chart(*currentProfile->getSessions());
 }

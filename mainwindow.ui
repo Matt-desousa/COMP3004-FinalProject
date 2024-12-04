@@ -99,7 +99,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -1009,11 +1009,16 @@
          <x>70</x>
          <y>20</y>
          <width>71</width>
-         <height>41</height>
+         <height>51</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>27</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>ERROR</string>
+        <string>E</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1036,27 +1041,14 @@
     </widget>
     <widget class="QWidget" name="HistoryTab">
      <attribute name="title">
-      <string>Page</string>
+      <string>Charts</string>
      </attribute>
-     <widget class="QComboBox" name="comboBox">
-      <property name="geometry">
-       <rect>
-        <x>640</x>
-        <y>80</y>
-        <width>86</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="editable">
-       <bool>false</bool>
-      </property>
-     </widget>
      <widget class="QGroupBox" name="HistoryChart">
       <property name="geometry">
        <rect>
         <x>20</x>
         <y>30</y>
-        <width>601</width>
+        <width>751</width>
         <height>411</height>
        </rect>
       </property>
@@ -1383,11 +1375,27 @@
         <enum>Qt::Vertical</enum>
        </property>
       </widget>
+      <widget class="QComboBox" name="ChartSelection">
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>40</y>
+         <width>101</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToContents</enum>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
-      <string>Page</string>
+      <string>Recommendations</string>
      </attribute>
      <widget class="QLabel" name="label_26">
       <property name="geometry">

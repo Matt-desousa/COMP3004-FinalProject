@@ -58,6 +58,7 @@ private slots:
     void processRyodorakuData();
     void updateNotes();
     void saveNotes();
+    void updateChart();
 };
 
 #endif // DEVICE_H

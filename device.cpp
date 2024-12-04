@@ -33,6 +33,8 @@ Device::Device(QObject *parent)
     connect(mwUI->note_next, &QRadioButton::released, this, &Device::updateNotes);
     connect(mwUI->note_previous, &QRadioButton::released, this, &Device::updateNotes);
 
+    connect(mwUI->ChartSelection, &QComboBox::currentTextChanged, this, &Device::updateChart);
+
 
     //debug
     //DELETE LATER
@@ -293,4 +295,8 @@ void Device::saveNotes()
 void Device::updateNotes()
 {
     mainWindow->display_note(currentProfile);
+}
+
+void Device::updateChart(){
+    mainWindow->update_chart(currentProfile);
 }
