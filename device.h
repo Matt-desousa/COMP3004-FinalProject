@@ -52,8 +52,8 @@ private slots:
     void onProfileLogin();
     void onProfileLogout();
     void onProfileUpdate(string name);
-    void showCurrentProfile();
     void onProfileDeleted();
+    void onProfileShow();
 
     void processRyodorakuData();
     void updateNotes();

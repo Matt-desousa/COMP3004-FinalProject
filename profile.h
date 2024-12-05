@@ -22,17 +22,19 @@ public:
     explicit Profile(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent = nullptr);
     virtual ~Profile();
     bool verifyPassword(string password);
-    void showProfile();
 
     string getName();
 
     inline QVector<ReadingStorage*>* getSessions(){return &sessions;}
 
+    void showProfile();
 
 
 private:
     ProfileWindow* profileWindow;
+    Ui::ProfileWindow* pwUI;
     ConfirmDeletePopup* popup;
+    Ui::ConfirmDeletePopup* cdUI;
     int userID;
     string fName;
     string lName;
@@ -47,7 +49,8 @@ private:
     QVector<ReadingStorage*> sessions;
 
 private slots:
-    void updateProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password);
+    void onProfileUpdate();
+    void onProfileDelete();
     void verifyProfileForDelete(string);
 
 signals:

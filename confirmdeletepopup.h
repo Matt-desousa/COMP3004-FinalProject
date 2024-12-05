@@ -16,17 +16,10 @@ class ConfirmDeletePopup : public QDialog
 public:
     explicit ConfirmDeletePopup(QWidget *parent = nullptr);
     ~ConfirmDeletePopup();
-    void onUserVerified(bool);
+    inline void getUI(Ui::ConfirmDeletePopup** ui){*ui=this->ui;}
 
 private:
     Ui::ConfirmDeletePopup *ui;
-
-private slots:
-    void onOKButtonPressed();
-
-signals:
-    void verifyUser(string);
-    void userDeleted();
 };
 
 #endif // CONFIRMDELETEPOPUP_H

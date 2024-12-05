@@ -21,11 +21,11 @@ Device::Device(QObject *parent)
     /*
         Main Window Signals and Slots
     */
-    // Logout Profile
+    // Logout Button
     connect(mwUI->btnLogOut, SIGNAL(pressed()), this, SLOT(onProfileLogout()));
 
-    // Profile button
-    connect(mwUI->btnProfile, SIGNAL(pressed()), this, SLOT(showCurrentProfile()));
+    // Profile Button Pressed
+    connect(mwUI->btnProfile, SIGNAL(pressed()), this, SLOT(onProfileShow()));
 
     // Save Notes
     connect(mwUI->saveBtn, SIGNAL(pressed()), this, SLOT(saveNotes()));
@@ -34,7 +34,6 @@ Device::Device(QObject *parent)
     connect(mwUI->note_previous, &QRadioButton::released, this, &Device::updateNotes);
 
     connect(mwUI->ChartSelection, &QComboBox::currentTextChanged, this, &Device::updateChart);
-
 
     //debug
     //DELETE LATER
@@ -51,12 +50,6 @@ Device::Device(QObject *parent)
     // Create Profile Button
     connect(lwUI->btnCreateProfile, SIGNAL(pressed()), createWindow, SLOT(show()));
     connect(lwUI->btnCreateProfile, SIGNAL(pressed()), loginWindow, SLOT(hide()));
-
-    // Profile Updated
-    connect(this, SIGNAL(profileUpdated(string)), this, SLOT(onProfileUpdate(string)));
-
-    // Profile Deleted
-    connect(this, SIGNAL(profileDeleted()), this, SLOT(onProfileDeleted()));
 
 
     /*
@@ -119,7 +112,11 @@ bool Device::verifyProfile(string password, int index)
         qDebug() << "User verified.";
 
         currentProfile = *it;
-        connect(currentProfile, SIGNAL(profileUpdated(string)), this, SIGNAL(profileUpdated(string)));
+
+        // On Profile Updated
+        connect(currentProfile, SIGNAL(profileUpdated(string)), this, SLOT(onProfileUpdate(string)));
+
+        // On Profile Deleted
         connect(currentProfile, SIGNAL(profileDeleted()), this, SLOT(onProfileDeleted()));
 
         emit profileLogin(currentProfile->getName());
@@ -134,9 +131,8 @@ bool Device::verifyProfile(string password, int index)
 void Device::logoutProfile()
 {
     if (currentProfile != NULL){
-        disconnect(currentProfile, SIGNAL(profileUpdated(string)), this, SIGNAL(profileUpdated(string)));
+        disconnect(currentProfile, SIGNAL(profileUpdated(string)), this, SLOT(onProfileUpdate(string)));
         disconnect(currentProfile, SIGNAL(profileDeleted()), this, SLOT(onProfileDeleted()));
-    }
     currentProfile = NULL;
 }
 
@@ -220,6 +216,9 @@ void Device::onProfileLogin()
 {
     string password = lwUI->txtLoginPass->text().toStdString();
     int index = lwUI->cmbProfile->currentIndex();
+
+    if (index == -1) return;
+
     bool loggedIn = verifyProfile(password, index);
 
     if (loggedIn){
@@ -253,15 +252,8 @@ void Device::onProfileUpdate(string name)
     lwUI->cmbProfile->setItemText(index, QString::fromStdString(name));
 }
 
-void Device::showCurrentProfile()
-{
-    currentProfile->showProfile();
-}
-
 void Device::onProfileDeleted()
 {
-    printProfiles();
-
     list<Profile*>::iterator it;
     it = profiles.begin();
     for (;it != profiles.end(); it++){
@@ -271,15 +263,24 @@ void Device::onProfileDeleted()
             qDebug() << "User Deleted.";
             int index = lwUI->cmbProfile->currentIndex();
             lwUI->cmbProfile->removeItem(index);
-            loginWindow->show();
+
+            if (profiles.size() == 0){
+                createWindow->show();
+            }
+            else
+                loginWindow->show();
 
             mainWindow->hide();
 
             break;
         }
     }
+}
 
-    printProfiles();
+void Device::onProfileShow()
+{
+    if (currentProfile != NULL)
+        currentProfile->showProfile();
 }
 
 void Device::processRyodorakuData()

@@ -6,7 +6,6 @@
 using namespace std;
 
 #include "defs.h"
-#include "profile.h"
 
 class Profile;
 
@@ -21,18 +20,10 @@ class ProfileWindow : public QMainWindow
 public:
     explicit ProfileWindow(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QWidget *parent = nullptr);
     ~ProfileWindow();
+    inline void getUI(Ui::ProfileWindow** ui){*ui=this->ui;}
 
 private:
     Ui::ProfileWindow *ui;
-    Profile* parent;
-
-private slots:
-    void onConfirmButtonPressed();
-
-signals:
-    void updateProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password);
-    void onDeleteProfilePressed();
-    void userVerified(bool);
 };
 
 #endif // PROFILEWINDOW_H
