@@ -487,6 +487,7 @@ void MainWindow::display_note(Profile* currentProfile){
 
     ui->bodyTemp->setValue(n->bodyTemp);
     ui->celsiusRadioButton->setChecked(n->tempUnit == C);
+    ui->fahrenheitRadioButton->setChecked(n->tempUnit == F);
     ui->bloodPressureLeftSystolic->setText(QString("%1").arg(n->bloodPressureRightDiastolic));
     ui->bloodPressureLeftDiastolic->setText(QString("%1").arg(n->bloodPressureLeftDiastolic));
     ui->bloodPressureRightSystolic->setText(QString("%1").arg(n->bloodPressureRightSystolic));
@@ -496,6 +497,7 @@ void MainWindow::display_note(Profile* currentProfile){
     ui->sleepMins->setText(QString("%1").arg(n->sleepMins));
     ui->weight->setText(QString("%1").arg(n->weight));
     ui->lbsRadioButton->setChecked(n->weightUnit == LBS);
+    ui->kgRadioButton->setChecked(n->weightUnit == KG);
     ui->notes->setText(n->notes);
 /*
     if (ui->emoStateVerySad->isChecked())

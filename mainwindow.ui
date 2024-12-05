@@ -99,7 +99,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -758,7 +758,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_4">
+        <widget class="QRadioButton" name="kgRadioButton">
          <property name="text">
           <string>kg</string>
          </property>
