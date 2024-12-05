@@ -22,8 +22,8 @@ public:
     int sleepMins;
     float weight;
     MASS weightUnit;
-    QString emotionalState;
-    QString overallFeeling;
+    MOOD emotionalState;
+    MOOD overallFeeling;
     QString tagsString;
     QString notes;
 };

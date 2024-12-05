@@ -14,8 +14,8 @@ Note::Note()
      sleepMins = -1;
      weight = -1;
      weightUnit = MASS_UNIT_UNSPECIFIED;
-     emotionalState = "NONE";
-     overallFeeling = "NONE";
+     emotionalState = NEUTRAL;
+     overallFeeling = NEUTRAL;
      tagsString = "NONE";
      notes = "NONE";
 

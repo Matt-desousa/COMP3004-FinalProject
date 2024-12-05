@@ -163,26 +163,26 @@ void MainWindow::saveNotes(Profile* currentProfile)
     new_note->notes = ui->notes->toPlainText();
 
     if (ui->emoStateVerySad->isChecked())
-        new_note->emotionalState = "Very Sad";
+        new_note->emotionalState = VERY_SAD;
     else if (ui->emoStateSad->isChecked())
-        new_note->emotionalState = "Sad";
+        new_note->emotionalState = SAD;
     else if (ui->emoStateNeutral->isChecked())
-        new_note->emotionalState = "Neutral";
+        new_note->emotionalState = NEUTRAL;
     else if (ui->emoStateHappy->isChecked())
-        new_note->emotionalState = "Happy";
+        new_note->emotionalState = HAPPY;
     else if (ui->emoStateVeryHappy->isChecked())
-        new_note->emotionalState = "Very Happy";
+        new_note->emotionalState = VERY_HAPPY;
 
     if (ui->overallFeelingVerySad->isChecked())
-        new_note->overallFeeling = "Very Sad";
+        new_note->overallFeeling = VERY_SAD;
     else if (ui->overallFeelingSad->isChecked())
-        new_note->overallFeeling = "Sad";
+        new_note->overallFeeling = SAD;
     else if (ui->OverallFeelingNeutral->isChecked())
-        new_note->overallFeeling = "Neutral";
+        new_note->overallFeeling = NEUTRAL;
     else if (ui->overallFeelingHappy->isChecked())
-        new_note->overallFeeling = "Happy";
+        new_note->overallFeeling = HAPPY;
     else if (ui->overallFeelingVeryHappy->isChecked())
-        new_note->overallFeeling = "Very Happy";
+        new_note->overallFeeling = VERY_HAPPY;
 
     QStringList tags;
 
@@ -499,28 +499,36 @@ void MainWindow::display_note(Profile* currentProfile){
     ui->lbsRadioButton->setChecked(n->weightUnit == LBS);
     ui->kgRadioButton->setChecked(n->weightUnit == KG);
     ui->notes->setText(n->notes);
+
+    QVector<QRadioButton*> emoRadios = {ui->emoStateVerySad, ui->overallFeelingSad, ui->emoStateNeutral, ui->emoStateHappy, ui->emoStateVeryHappy};
+    QVector<QRadioButton*> overallRadios = {ui->overallFeelingVerySad, ui->overallFeelingSad, ui->OverallFeelingNeutral, ui->overallFeelingHappy, ui->overallFeelingVeryHappy};
+    emoRadios[n->emotionalState]->setChecked(true);
+    overallRadios[n->overallFeeling]->setChecked(true);
+
+
 /*
+ *
     if (ui->emoStateVerySad->isChecked())
-        new_note->emotionalState = "Very Sad";
+        new_note->emotionalState = VERY_SAD;
     else if (ui->emoStateSad->isChecked())
-        new_note->emotionalState = "Sad";
+        new_note->emotionalState = SAD;
     else if (ui->emoStateNeutral->isChecked())
-        new_note->emotionalState = "Neutral";
+        new_note->emotionalState = NEUTRAL;
     else if (ui->emoStateHappy->isChecked())
-        new_note->emotionalState = "Happy";
+        new_note->emotionalState = HAPPY;
     else if (ui->emoStateVeryHappy->isChecked())
-        new_note->emotionalState = "Very Happy";
+        new_note->emotionalState = VERY_HAPPY;
 
     if (ui->overallFeelingVerySad->isChecked())
-        new_note->overallFeeling = "Very Sad";
+        new_note->overallFeeling = VERY_SAD;
     else if (ui->overallFeelingSad->isChecked())
-        new_note->overallFeeling = "Sad";
+        new_note->overallFeeling = SAD;
     else if (ui->OverallFeelingNeutral->isChecked())
-        new_note->overallFeeling = "Neutral";
+        new_note->overallFeeling = NEUTRAL;
     else if (ui->overallFeelingHappy->isChecked())
-        new_note->overallFeeling = "Happy";
+        new_note->overallFeeling = HAPPY;
     else if (ui->overallFeelingVeryHappy->isChecked())
-        new_note->overallFeeling = "Very Happy";
+        new_note->overallFeeling = VERY_HAPPY;
         */
 }
 

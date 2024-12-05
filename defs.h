@@ -21,6 +21,14 @@ enum TEMP{
     F
 };
 
+enum MOOD{
+    VERY_SAD,
+    SAD,
+    NEUTRAL,
+    HAPPY,
+    VERY_HAPPY
+};
+
 #define CHARGE_RATE 3.0f; // %/sec charge
 #define DRAIN_RATE 1.0f;  // %/sec drain
 
