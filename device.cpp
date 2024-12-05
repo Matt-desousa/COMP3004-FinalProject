@@ -133,6 +133,7 @@ void Device::logoutProfile()
     if (currentProfile != NULL){
         disconnect(currentProfile, SIGNAL(profileUpdated(string)), this, SLOT(onProfileUpdate(string)));
         disconnect(currentProfile, SIGNAL(profileDeleted()), this, SLOT(onProfileDeleted()));
+    }
     currentProfile = NULL;
 }
 
