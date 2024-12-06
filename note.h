@@ -24,7 +24,7 @@ public:
     MASS weightUnit;
     MOOD emotionalState;
     MOOD overallFeeling;
-    QString tagsString;
+    QStringList tags;
     QString notes;
 };
 

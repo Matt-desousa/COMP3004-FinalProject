@@ -16,7 +16,7 @@ Note::Note()
      weightUnit = MASS_UNIT_UNSPECIFIED;
      emotionalState = NEUTRAL;
      overallFeeling = NEUTRAL;
-     tagsString = "NONE";
+     tags = QStringList();
      notes = "NONE";
 
 }

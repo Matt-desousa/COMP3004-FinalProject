@@ -190,7 +190,7 @@ void MainWindow::saveNotes(Profile* currentProfile)
     }
 
     // Add more tag buttons as needed
-   new_note->tagsString = tags.join(", ");
+    new_note->tags = tags;
 
     // DELETE LATER
     // Combine Data into a Structured Format
@@ -218,7 +218,7 @@ void MainWindow::saveNotes(Profile* currentProfile)
                        .arg(new_note->weightUnit)
                        .arg(new_note->emotionalState)
                        .arg(new_note->overallFeeling)
-                       .arg(new_note->tagsString)
+                       .arg(new_note->tags.join(", "))
                        .arg(new_note->notes);
 
     qDebug() << "DEBUG DATA: " << data;
@@ -501,30 +501,17 @@ void MainWindow::display_note(Profile* currentProfile){
     overallRadios[n->overallFeeling]->setChecked(true);
 
 
-/*
- *
-    if (ui->emoStateVerySad->isChecked())
-        new_note->emotionalState = VERY_SAD;
-    else if (ui->emoStateSad->isChecked())
-        new_note->emotionalState = SAD;
-    else if (ui->emoStateNeutral->isChecked())
-        new_note->emotionalState = NEUTRAL;
-    else if (ui->emoStateHappy->isChecked())
-        new_note->emotionalState = HAPPY;
-    else if (ui->emoStateVeryHappy->isChecked())
-        new_note->emotionalState = VERY_HAPPY;
 
-    if (ui->overallFeelingVerySad->isChecked())
-        new_note->overallFeeling = VERY_SAD;
-    else if (ui->overallFeelingSad->isChecked())
-        new_note->overallFeeling = SAD;
-    else if (ui->OverallFeelingNeutral->isChecked())
-        new_note->overallFeeling = NEUTRAL;
-    else if (ui->overallFeelingHappy->isChecked())
-        new_note->overallFeeling = HAPPY;
-    else if (ui->overallFeelingVeryHappy->isChecked())
-        new_note->overallFeeling = VERY_HAPPY;
-        */
+    for (QPushButton *button : tagButtonGroup)
+    {
+        button->setChecked(false);
+        for(QString tag_name : n->tags){
+            if(button->text() == tag_name){
+              button->setChecked(true);
+            }
+        }
+    }
+
 }
 
 void MainWindow::update_chart(Profile* currentProfile){
