@@ -63,12 +63,13 @@ Device::Device(QObject *parent)
     // Create Profile Button
     connect(cwUI->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onProfileCreated()));
 
-
+    //battery setup
     battery = new Battery();
     battery->add_battery_UI(mwUI->isCharging, mwUI->ChargeIndicator);
     battery->add_battery_UI(lwUI->isCharging, lwUI->ChargeIndicator);
     battery->add_battery_UI(cwUI->isCharging, cwUI->ChargeIndicator);
     battery->update_battery_UIs();
+    connect(battery, &Battery::die, this, &Device::shutdown);
     battery->turn_on_or_off(true); // start using battery power
 
     currentProfile = NULL;
@@ -302,4 +303,14 @@ void Device::updateNotes()
 
 void Device::updateChart(){
     mainWindow->update_chart(currentProfile);
+}
+
+void Device::shutdown(){
+    QMessageBox msgBox;
+    msgBox.setText("Battery Exhausted, Shutting Down");
+    msgBox.exec();
+    if(mainWindow){mainWindow->close(); delete mainWindow;}
+    if(loginWindow){loginWindow->close(); delete loginWindow;}
+    if(createWindow){createWindow->close(); delete createWindow;}
+    delete this;
 }

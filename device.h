@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <list>
+#include <QMessageBox>
 
 #include "defs.h"
 #include "profile.h"
@@ -27,7 +28,7 @@ public:
 
     void printProfiles();
 
-    Profile* currentProfile; //moved this to test access -Evan
+    Profile* currentProfile;
 
 private:
     MainWindow* mainWindow;
@@ -36,6 +37,8 @@ private:
     Ui::LoginWindow* lwUI;
     CreateProfileWindow* createWindow;
     Ui::CreateProfileWindow* cwUI;
+
+    void shutdown();
 
     Battery* battery;
     list<Profile*> profiles;

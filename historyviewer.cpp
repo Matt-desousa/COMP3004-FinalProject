@@ -28,30 +28,39 @@ HistoryViewer::HistoryViewer(QGroupBox* chart, QGroupBox* note_viewer)
 }
 
 void HistoryViewer::update_chart(QVector<ReadingStorage*>& data){
-
     if(data.size()  == 0){return;} //no readings to display
 
     QString body_part = chart_selector->currentText();
 
-    QVector<int> values;
+
+    bool is_average_chart_selected = chart_selector->currentIndex() == 0;
 
     int min = -1;
     int max = -1;
 
+    if(is_average_chart_selected){ //set hard coded max and min of session average
+        min = 5;
+        max = 162;
+    }
+    else{
+        QPair<int,int> minmax = data[0]->retrieve_data_point_range(body_part); //query arbitrary session to get body part range
+        min = minmax.first;
+        max = minmax.second;
+    }
+
+    QVector<int> values;
+
     //COLLECT DATA
     for(int i = 0; i < data.size(); i++){
         int val;
-        if(chart_selector->currentIndex() == 0){ //item zero is the session average chart
-            val = (float)data[i]->retrieve_session_average();
-            //set hard coded max and min of session average
-            min = 5;
-            max = 162;
+
+        if(is_average_chart_selected){
+            val = data[i]->retrieve_session_average();
+
         }
         else{ //the rest are each individual body part
             val = data[i]->retrieve_data_point(body_part);
-            QPair<int,int> minmax = data[i]->retrieve_data_point_range(body_part);
-            min = minmax.first;
-            max = minmax.second;
+
         }
         values.append(val);
     }
@@ -60,17 +69,15 @@ void HistoryViewer::update_chart(QVector<ReadingStorage*>& data){
     //DRAW BARS
     int chart_sum = 0;
     int num_used_bars = 0;
-    int final_index = data.size() - 1;
     for(int i = 0; i < num_bars; i++){
-        int data_index = final_index - i;
         int bar_value;
-        if(data_index < 0){ //no more data (empty bar)
+        if(i >= values.size()){ //no more data (empty bar)
             bar_value = min; //set to bottom
             chart_bars[i]->setToolTip("No Data");
             chart_bars[i]->setEnabled(false); //grey out
         }
          else{ //draw a bar
-            bar_value = values[data_index];
+            bar_value = values[i];
             chart_bars[i]->setToolTip(QString("%1").arg(bar_value)); //set hover text
             chart_bars[i]->setEnabled(true);
             num_used_bars++;

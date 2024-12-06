@@ -26,6 +26,7 @@ public:
     string getName();
 
     inline QVector<ReadingStorage*>* getSessions(){return &sessions;}
+    inline void log_session(ReadingStorage* reading){sessions.push_front(reading);}
 
     void showProfile();
 

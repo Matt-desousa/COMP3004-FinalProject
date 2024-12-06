@@ -23,6 +23,7 @@ public:
     void update_battery_UIs(); //update the UI indicator
 
 signals:
+    void die();
 
 private:
 

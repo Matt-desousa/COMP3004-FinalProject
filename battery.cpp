@@ -43,9 +43,10 @@ void Battery::battery_sim(){
     }
 
     //if the battery is dead
-    if(charge_level < 0){
+    if(charge_level <= 0){
         charge_level = 0;
-        //TODO power off machine
+        qDebug("battery dead");
+        emit die();
     }
 
     update_battery_UIs(); //update charge indicator

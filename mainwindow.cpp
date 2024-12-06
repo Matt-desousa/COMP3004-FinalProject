@@ -259,15 +259,19 @@ void MainWindow::onAddTagButtonClicked()
 }
 
 void MainWindow::addData(Profile* currentProfile)
-{
-    //insert some random readings just to show graph history
-    for (int i = 0; i < 15; i++){
-        ReadingStorage* new_test_reading = new ReadingStorage(&ranges);
-        new_test_reading->debug_populate_logs();
-        currentProfile->getSessions()->append(new_test_reading);
+{qDebug("aaaa");
+    if(currentProfile->getSessions()->size() == 0){ //if user has no sessions
+        //insert some random readings just to show graph history
+        for (int i = 0; i < 15; i++){
+            ReadingStorage* new_test_reading = new ReadingStorage(&ranges);
+            new_test_reading->debug_populate_logs();
+            currentProfile->log_session(new_test_reading);
 
+        }
     }
+qDebug("aaaa");
     history_viewer->update_chart(*currentProfile->getSessions()); //update graph
+    qDebug("aaaa");
 }
 
 int MainWindow::calculateAverage(){
@@ -287,7 +291,7 @@ void MainWindow::processRyodorakuData(Profile* currentProfile){
         new_results->log_data_point(key,  spotValues[key]); //fill it with the results
         //do this all at once here to avoid partial logging if therre's an incomplete shutdown
     }
-    currentProfile->getSessions()->append(new_results); //add to the currentuser
+    currentProfile->log_session(new_results); //add to the currentuser
     history_viewer->update_chart(*currentProfile->getSessions()); //update graph
 
     int average = calculateAverage();
