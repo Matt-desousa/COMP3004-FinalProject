@@ -34,6 +34,9 @@ private:
     QPushButton* note_next_button;
     QLabel* note_counter;
     QComboBox* chart_selector;
+    QLabel* chart_avg;
+    QLabel* chart_max;
+    QLabel* chart_min;
 
     int note_index;
 

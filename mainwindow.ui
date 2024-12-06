@@ -99,7 +99,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -1088,6 +1088,9 @@
        </property>
       </widget>
       <widget class="QProgressBar" name="col18">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>60</x>
@@ -1101,6 +1104,9 @@
        </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
+       </property>
+       <property name="invertedAppearance">
+        <bool>false</bool>
        </property>
       </widget>
       <widget class="QProgressBar" name="col17">
@@ -1379,7 +1385,7 @@
        <property name="geometry">
         <rect>
          <x>630</x>
-         <y>40</y>
+         <y>120</y>
          <width>86</width>
          <height>25</height>
         </rect>
@@ -1389,6 +1395,64 @@
        </property>
        <property name="sizeAdjustPolicy">
         <enum>QComboBox::AdjustToContents</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_max">
+       <property name="geometry">
+        <rect>
+         <x>610</x>
+         <y>30</y>
+         <width>62</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ERROR</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_min">
+       <property name="geometry">
+        <rect>
+         <x>610</x>
+         <y>390</y>
+         <width>62</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ERROR</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_avg">
+       <property name="geometry">
+        <rect>
+         <x>640</x>
+         <y>180</y>
+         <width>62</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ERROR</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_avg_2">
+       <property name="geometry">
+        <rect>
+         <x>621</x>
+         <y>160</y>
+         <width>101</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Chart Average:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </widget>

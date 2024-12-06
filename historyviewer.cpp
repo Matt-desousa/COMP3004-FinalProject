@@ -15,11 +15,15 @@ HistoryViewer::HistoryViewer(QGroupBox* chart, QGroupBox* note_viewer)
     for(int i = 1; i <= num_bars; i++){
         const QString bar_name =  QString("col%1").arg(i);
         chart_bars.append(chart->findChild<QProgressBar*>(bar_name));
+        chart_bars.back()->setToolTip("ERROR");
     }
 
     note_index = 0;
 
     chart_selector = chart->findChild<QComboBox*>("ChartSelection");
+    chart_avg = chart->findChild<QLabel*>("label_avg");
+    chart_max = chart->findChild<QLabel*>("label_max");
+    chart_min = chart->findChild<QLabel*>("label_min");
 
 }
 
@@ -31,48 +35,74 @@ void HistoryViewer::update_chart(QVector<ReadingStorage*>& data){
 
     QVector<int> values;
 
+    int min = -1;
+    int max = -1;
 
+    //COLLECT DATA
     for(int i = 0; i < data.size(); i++){
         int val;
-        if(chart_selector->currentIndex() == 0){
-            val = (float)data[i]->retrieve_session_average() / 162.0f * 100;
-
-
+        if(chart_selector->currentIndex() == 0){ //item zero is the session average chart
+            val = (float)data[i]->retrieve_session_average();
+            //set hard coded max and min of session average
+            min = 5;
+            max = 162;
         }
-        else{
-            val = data[i]->retrieve_data_point_percent(body_part);
+        else{ //the rest are each individual body part
+            val = data[i]->retrieve_data_point(body_part);
+            QPair<int,int> minmax = data[i]->retrieve_data_point_range(body_part);
+            min = minmax.first;
+            max = minmax.second;
         }
-
         values.append(val);
     }
 
 
+    //DRAW BARS
+    int chart_sum = 0;
+    int num_used_bars = 0;
     int final_index = data.size() - 1;
     for(int i = 0; i < num_bars; i++){
         int data_index = final_index - i;
-        int bar_value = (data_index < 0) ? 0 : values[data_index];
-        chart_bars[i]->setValue(bar_value);
+        int bar_value;
+        if(data_index < 0){ //no more data (empty bar)
+            bar_value = min; //set to bottom
+            chart_bars[i]->setToolTip("No Data");
+            chart_bars[i]->setEnabled(false); //grey out
+        }
+         else{ //draw a bar
+            bar_value = values[data_index];
+            chart_bars[i]->setToolTip(QString("%1").arg(bar_value)); //set hover text
+            chart_bars[i]->setEnabled(true);
+            num_used_bars++;
+            chart_sum += bar_value;
+        }
+
+        if(max - min == 0){return;} //won't ever happen but stops compiler x/0 warning on next line
+        int bar_percent = ((bar_value - min) * 100) / (max - min); //get percent
+        chart_bars[i]->setValue(bar_percent); //draw bar
     }
 
-    qDebug("chart update complete");
+    chart_max->setText(QString("%1").arg(max));
+    chart_min->setText(QString("%1").arg(min));
+    if(num_used_bars == 0){return;} //won't ever happen but stops compiler x/0 warning on next line
+    chart_avg->setText(QString("%1").arg(chart_sum / num_used_bars));
+
 }
 
+//retrieve a note  from a user
 Note* HistoryViewer::get_note(Profile* user){
-
         int total_note_count = user->getSessions()->size();
-        if(note_index >= total_note_count){note_index = total_note_count - 1;}
-        qDebug() << QString("getting ref to note %1").arg(note_index + 1);
-        int index = total_note_count - 1  - note_index;
-        note_counter->setText(QString("%1").arg(index + 1));
+        if(note_index >= total_note_count){note_index = total_note_count - 1;} //cap index to avoid IOOB
+        int index = total_note_count - 1 - note_index; //note_index uses 0 to represent the newest note, so it has to be reversed to get the actual array index
+        note_counter->setText(QString("%1").arg(index + 1)); //update note counter label
         Note* n = user->getSessions()->at(index)->get_note();
         return n;
-
 }
 
 void HistoryViewer::next_note(){
     if(note_index == 0){return;}
     note_index--;
-    qDebug() << QString("Note %1").arg(note_index);
+    //qDebug() << QString("Note %1").arg(note_index);
     //display_note();
 }
 

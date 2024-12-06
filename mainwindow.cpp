@@ -75,21 +75,16 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     //create history chart dropdown
-    int a = 0;
-    int b = 0;
     ui->ChartSelection->addItem("Average");
     for(const QString &body_part: ranges.keys()){
-a += ranges[body_part].first;
-b += ranges[body_part].second;
         ui->ChartSelection->addItem(body_part);
     }
-
-    qDebug() << a/24 <<  "" << b/24;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete history_viewer;
 }
 
 //helper function: Trackaing the process of scanning

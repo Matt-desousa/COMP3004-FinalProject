@@ -27,11 +27,6 @@ int  ReadingStorage::retrieve_data_point(QString body_part){\
     return readings[body_part];
 }
 
-int ReadingStorage::retrieve_data_point_average(QString body_part){
-    return readings[body_part];//sort out later
-}
-
-
 //get a reading percentage (percent of the way between the recommended max and min)
 int  ReadingStorage::retrieve_data_point_percent(QString body_part){
     QPair<int,int> minmax = (*body_parts_info)[body_part];
@@ -39,7 +34,11 @@ int  ReadingStorage::retrieve_data_point_percent(QString body_part){
     return 100 * ((float)(retrieve_data_point(body_part) - minmax.first) / (float)(minmax.second - minmax.first));
 }
 
-//average enntire reading
+QPair<int,int> ReadingStorage::retrieve_data_point_range(QString body_part){
+    return (*body_parts_info)[body_part];
+}
+
+//average entire reading
 int ReadingStorage::retrieve_session_average(){
     int total = 0;
     for (QString &p : (*body_parts_info).keys() ) //for every body part...

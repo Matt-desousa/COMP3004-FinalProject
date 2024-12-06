@@ -19,7 +19,7 @@ public:
     void log_data_point(QString body_part, int reading);
     int  retrieve_data_point(QString body_part);
     int  retrieve_data_point_percent(QString body_part);
-    int  retrieve_data_point_average(QString body_part);
+    QPair<int,int>  retrieve_data_point_range(QString body_part);
     int  retrieve_session_average();
 
     inline Note* get_note(){return note;}
