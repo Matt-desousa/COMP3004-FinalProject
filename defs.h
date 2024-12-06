@@ -29,6 +29,7 @@ enum MOOD{
     VERY_HAPPY
 };
 
+#define CHARGE_LEVEL_START 45 //%starting charge
 #define CHARGE_RATE 3.0f; // %/sec charge
 #define DRAIN_RATE 1.0f;  // %/sec drain
 

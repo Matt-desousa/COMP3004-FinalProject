@@ -18,6 +18,7 @@ Device::Device(QObject *parent)
     loginWindow->getUI(&lwUI);
     createWindow->getUI(&cwUI);
 
+
     /*
         Main Window Signals and Slots
     */
@@ -62,18 +63,18 @@ Device::Device(QObject *parent)
     // Create Profile Button
     connect(cwUI->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onProfileCreated()));
 
-    startBattery(mwUI->isCharging, mwUI->ChargeIndicator);
+
+    battery = new Battery();
+    battery->add_battery_UI(mwUI->isCharging, mwUI->ChargeIndicator);
+    battery->add_battery_UI(lwUI->isCharging, lwUI->ChargeIndicator);
+    battery->add_battery_UI(cwUI->isCharging, cwUI->ChargeIndicator);
+    battery->update_battery_UIs();
+    battery->turn_on_or_off(true); // start using battery power
 
     currentProfile = NULL;
     createProfile("Test", "User", UNDEFINED, 50, 175, QDate(), "911", "x@y.z", "test");
 
     loginWindow->show();
-}
-
-void Device::startBattery(QCheckBox* charging_port_UI, QProgressBar* charging_indicator_UI)
-{
-    battery = new Battery(charging_port_UI, charging_indicator_UI);
-    battery->turn_on_or_off(true); // start using battery power
 }
 
 bool Device::createProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password)

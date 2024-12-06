@@ -15,25 +15,29 @@ class Battery : public QObject
 
 public:
 
-    explicit Battery(QCheckBox* charging_port_UI, QProgressBar* charging_indicator_UI);
+    explicit Battery();
 
     void turn_on_or_off(bool isOn); //start or stop using battery power
     inline double get_battery_percent(){return charge_level;}
+    void add_battery_UI(QCheckBox* charging_port_UI, QProgressBar* charging_indicator_UI);
+    void update_battery_UIs(); //update the UI indicator
 
 signals:
 
 private:
 
-    QCheckBox* charging_port; //checkbox whhich represents being plugged in
-    QProgressBar* charging_indicator; //charging indicator on UI that displays percentage left
+    QVector<QCheckBox*> charging_ports; //checkboxes whhich represents being plugged in
+    QVector<QProgressBar*> charging_indicators; //charging indicator on UI that displays percentage left
     QPalette charge_indicator_palette; //colour palette for the charge indicator
 
-    bool in_use; //whether power is aactively being drained
+    bool in_use; //whether power is actively being drained
+    bool plugged_in;
     double charge_level; //battery percent
 
     void battery_sim(); //simulate battery use
-    void update_charge_UI(); //update the UI indicator
 
+public slots:
+    void plug_change(bool);
 
 
 };
