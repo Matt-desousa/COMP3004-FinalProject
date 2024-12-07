@@ -119,6 +119,9 @@
       </property>
      </widget>
      <widget class="QSlider" name="horizontalSlider">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>160</x>
@@ -145,6 +148,9 @@
       </property>
      </widget>
      <widget class="QComboBox" name="dropdown">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -152,6 +158,9 @@
         <width>111</width>
         <height>51</height>
        </rect>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
       </property>
       <item>
        <property name="text">
@@ -273,13 +282,11 @@
         <string>F6 Right</string>
        </property>
       </item>
-      <item>
-       <property name="text">
-        <string/>
-       </property>
-      </item>
      </widget>
      <widget class="QPushButton" name="result">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -307,6 +314,9 @@
       <layout class="QFormLayout" name="formLayout_2">
        <item row="5" column="1">
         <widget class="QCheckBox" name="checkboxH5Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H5 Right</string>
          </property>
@@ -320,6 +330,9 @@
        </item>
        <item row="4" column="1">
         <widget class="QCheckBox" name="checkboxH4Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H4 Right</string>
          </property>
@@ -330,6 +343,9 @@
        </item>
        <item row="4" column="0">
         <widget class="QCheckBox" name="checkboxH4Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H4 Left</string>
          </property>
@@ -340,6 +356,9 @@
        </item>
        <item row="1" column="0">
         <widget class="QCheckBox" name="checkboxH1Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H1 Left</string>
          </property>
@@ -350,6 +369,9 @@
        </item>
        <item row="3" column="0">
         <widget class="QCheckBox" name="checkboxH3Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H3 Left</string>
          </property>
@@ -360,6 +382,9 @@
        </item>
        <item row="1" column="1">
         <widget class="QCheckBox" name="checkboxH1Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H1 Right</string>
          </property>
@@ -373,6 +398,9 @@
        </item>
        <item row="3" column="1">
         <widget class="QCheckBox" name="checkboxH3Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H3 Right</string>
          </property>
@@ -383,6 +411,9 @@
        </item>
        <item row="2" column="0">
         <widget class="QCheckBox" name="checkboxH2Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H2 Left</string>
          </property>
@@ -393,6 +424,9 @@
        </item>
        <item row="2" column="1">
         <widget class="QCheckBox" name="checkboxH2Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H2 Right</string>
          </property>
@@ -403,6 +437,9 @@
        </item>
        <item row="5" column="0">
         <widget class="QCheckBox" name="checkboxH5Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H5 Left</string>
          </property>
@@ -413,6 +450,9 @@
        </item>
        <item row="6" column="0">
         <widget class="QCheckBox" name="checkboxH6Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H6 Left</string>
          </property>
@@ -423,6 +463,9 @@
        </item>
        <item row="6" column="1">
         <widget class="QCheckBox" name="checkboxH6Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>H6 Right</string>
          </property>
@@ -433,6 +476,9 @@
        </item>
        <item row="7" column="0">
         <widget class="QCheckBox" name="checkboxF1Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F1 Left</string>
          </property>
@@ -443,6 +489,9 @@
        </item>
        <item row="7" column="1">
         <widget class="QCheckBox" name="checkboxF1Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F1 Right</string>
          </property>
@@ -453,6 +502,9 @@
        </item>
        <item row="8" column="0">
         <widget class="QCheckBox" name="checkboxF2Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F2 Left</string>
          </property>
@@ -463,6 +515,9 @@
        </item>
        <item row="8" column="1">
         <widget class="QCheckBox" name="checkboxF2Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F2 Right</string>
          </property>
@@ -473,6 +528,9 @@
        </item>
        <item row="12" column="0">
         <widget class="QCheckBox" name="checkboxF6Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F6 Left</string>
          </property>
@@ -483,6 +541,9 @@
        </item>
        <item row="11" column="0">
         <widget class="QCheckBox" name="checkboxF5Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F5 Left</string>
          </property>
@@ -493,6 +554,9 @@
        </item>
        <item row="10" column="0">
         <widget class="QCheckBox" name="checkboxF4Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F4 Left</string>
          </property>
@@ -503,6 +567,9 @@
        </item>
        <item row="9" column="0">
         <widget class="QCheckBox" name="checkboxF3Left">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F3 Left</string>
          </property>
@@ -513,6 +580,9 @@
        </item>
        <item row="9" column="1">
         <widget class="QCheckBox" name="checkboxF3Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F3 Right</string>
          </property>
@@ -523,6 +593,9 @@
        </item>
        <item row="10" column="1">
         <widget class="QCheckBox" name="checkboxF4Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F4 Right</string>
          </property>
@@ -533,6 +606,9 @@
        </item>
        <item row="11" column="1">
         <widget class="QCheckBox" name="checkboxF5Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F5 Right</string>
          </property>
@@ -543,6 +619,9 @@
        </item>
        <item row="12" column="1">
         <widget class="QCheckBox" name="checkboxF6Right">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>F6 Right</string>
          </property>
@@ -1394,22 +1473,6 @@
         <enum>Qt::Vertical</enum>
        </property>
       </widget>
-      <widget class="QComboBox" name="ChartSelection">
-       <property name="geometry">
-        <rect>
-         <x>630</x>
-         <y>120</y>
-         <width>86</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="editable">
-        <bool>false</bool>
-       </property>
-       <property name="sizeAdjustPolicy">
-        <enum>QComboBox::AdjustToContents</enum>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_max">
        <property name="geometry">
         <rect>
@@ -1467,6 +1530,147 @@
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
+      </widget>
+      <widget class="QComboBox" name="ChartSelection">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>120</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Average</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H1 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H1 Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H2 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H2 Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H3 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H3 Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H4 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H4 Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H5 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H5 Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H6 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H6 Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F1 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F1 Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F2 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F2 Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F3 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F3 Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F4 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F4 Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F5 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F5 Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F6 Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F6 Right</string>
+        </property>
+       </item>
       </widget>
      </widget>
     </widget>

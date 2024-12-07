@@ -2,6 +2,8 @@
 #include <QDate>
 #include <iostream>
 #include <QDebug>
+#include <QInputDialog>
+#include <QComboBox>
 
 #include "ui_createprofilewindow.h"
 #include "ui_loginwindow.h"
@@ -18,6 +20,25 @@ Device::Device(QObject *parent)
     loginWindow->getUI(&lwUI);
     createWindow->getUI(&cwUI);
 
+    history_viewer = new HistoryViewer(mwUI->HistoryChart, mwUI->note_controls);
+
+    tagButtonGroup = {mwUI->activeTag, mwUI->calmTag, mwUI->basisMorningTag};
+    ranges = {
+        {"H1 Left", {5, 190}}, {"H1 Right", {5, 190}}, {"H2 Left", {5, 170}}, {"H2 Right", {5, 170}}, {"H3 Left", {5, 140}}, {"H3 Right", {5, 140}}, {"H4 Left", {5, 170}}, {"H4 Right", {5, 170}}, {"H5 Left", {5, 200}}, {"H5 Right", {5, 200}}, {"H6 Left", {5, 200}}, {"H6 Right", {5, 200}}, {"F1 Left", {5, 160}}, {"F1 Right", {5, 160}}, {"F2 Left", {5, 130}}, {"F2 Right", {5, 130}}, {"F3 Left", {5, 150}}, {"F3 Right", {5, 150}}, {"F4 Left", {5, 150}}, {"F4 Right", {5, 150}}, {"F5 Left", {5, 130}}, {"F5 Right", {5, 130}}, {"F6 Left", {5, 150}}, {"F6 Right", {5, 150}}};
+    // Initialize with default values
+    for(const QString &spot: ranges.keys()){
+        spotValues[spot] = ranges[spot].first;
+    }
+
+    // Add all checkboxes to the list
+    scanCheckboxes = {
+            mwUI->checkboxH1Left, mwUI->checkboxH1Right, mwUI->checkboxH2Left, mwUI->checkboxH2Right,
+            mwUI->checkboxH3Left, mwUI->checkboxH3Right, mwUI->checkboxH4Left, mwUI->checkboxH4Right,
+            mwUI->checkboxH5Left, mwUI->checkboxH5Right, mwUI->checkboxH6Left, mwUI->checkboxH6Right,
+            mwUI->checkboxF1Left, mwUI->checkboxF1Right, mwUI->checkboxF2Left, mwUI->checkboxF2Right,
+            mwUI->checkboxF3Left, mwUI->checkboxF3Right, mwUI->checkboxF4Left, mwUI->checkboxF4Right,
+            mwUI->checkboxF5Left, mwUI->checkboxF5Right, mwUI->checkboxF6Left, mwUI->checkboxF6Right
+        };
 
     /*
         Main Window Signals and Slots
@@ -28,17 +49,54 @@ Device::Device(QObject *parent)
     // Profile Button Pressed
     connect(mwUI->btnProfile, SIGNAL(pressed()), this, SLOT(onProfileShow()));
 
+    // Auto Scan Button
+    connect(mwUI->btnScan, SIGNAL(pressed()), this, SLOT(onAutoScanPressed()));
+
     // Save Notes
-    connect(mwUI->saveBtn, SIGNAL(pressed()), this, SLOT(saveNotes()));
+    connect(mwUI->saveBtn, SIGNAL(pressed()), this, SLOT(onSaveNotesPressed()));
 
-    connect(mwUI->note_next, &QRadioButton::released, this, &Device::updateNotes);
-    connect(mwUI->note_previous, &QRadioButton::released, this, &Device::updateNotes);
+    connect(mwUI->note_next, &QRadioButton::released, this, &Device::display_note);
+    connect(mwUI->note_previous, &QRadioButton::released, this, &Device::display_note);
 
-    connect(mwUI->ChartSelection, &QComboBox::currentTextChanged, this, &Device::updateChart);
+    connect(mwUI->ChartSelection, &QComboBox::currentTextChanged, this, &Device::update_chart);
+
+    // Connect dropdown to update the slider range and value
+    connect(mwUI->dropdown, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index)
+            {
+            QString selectedOption = mwUI->dropdown->currentText();
+            QPair<int,int> range = ranges[selectedOption];
+
+            //update range
+            mwUI->horizontalSlider->setRange(range.first,range.second);
+
+            //reset slider to the minimum value of the range
+            mwUI->horizontalSlider->setValue(range.first);
+            mwUI->horizontalSlider->setEnabled(false);
+            qDebug()<<"Prepare for scanning the next point. Please lift the device off the skin and move to the next scanning point.";
+    });
+
+    // Update slider value and store data
+    connect(mwUI->horizontalSlider, &QSlider::valueChanged, this, [=](int value){
+        mwUI->sliderValue->setText(QString::number(value));
+        QString selectedSpot = mwUI->dropdown->currentText();
+        spotValues[selectedSpot] = value;
+    });
+
+    // Skin Contact Checkbox Toggled
+    connect(mwUI->skinContactChecked, &QCheckBox::toggled, this, &Device::handleCheckboxToggled);
+
+    // Add tag buttons
+    connect(mwUI->addTag, &QPushButton::clicked, this, &Device::onAddTagButtonClicked);
+
+    // Temperature conversion
+    connect(mwUI->fahrenheitRadioButton, &QRadioButton::pressed, this, &Device::onFahrenheitSelected);
+    connect(mwUI->celsiusRadioButton, &QRadioButton::pressed, this, &Device::onCelsiusSelected);
+
+    //Print
+    connect(mwUI->Dia_button, &QRadioButton::pressed, this, &Device::PrintDia);
 
     //debug
     //DELETE LATER
-    mwUI->result->setEnabled(false);
     connect(mwUI->result,SIGNAL(pressed()),this,SLOT(processRyodorakuData()));
 
 
@@ -139,6 +197,293 @@ void Device::logoutProfile()
     currentProfile = NULL;
 }
 
+void Device::addData()
+{qDebug("aaaa");
+    if(currentProfile->getSessions()->size() == 0){ //if user has no sessions
+        //insert some random readings just to show graph history
+        for (int i = 0; i < 15; i++){
+            ReadingStorage* new_test_reading = new ReadingStorage(&ranges);
+            new_test_reading->debug_populate_logs();
+            currentProfile->log_session(new_test_reading);
+
+        }
+    }
+qDebug("aaaa");
+    history_viewer->update_chart(*currentProfile->getSessions()); //update graph
+    qDebug("aaaa");
+}
+
+
+void Device::display_note()
+{
+    Note* n = history_viewer->get_note(currentProfile);
+
+    mwUI->bodyTemp->setValue(n->bodyTemp);
+    mwUI->celsiusRadioButton->setChecked(n->tempUnit == C);
+    mwUI->fahrenheitRadioButton->setChecked(n->tempUnit == F);
+    mwUI->bloodPressureLeftSystolic->setText(QString("%1").arg(n->bloodPressureRightDiastolic));
+    mwUI->bloodPressureLeftDiastolic->setText(QString("%1").arg(n->bloodPressureLeftDiastolic));
+    mwUI->bloodPressureRightSystolic->setText(QString("%1").arg(n->bloodPressureRightSystolic));
+    mwUI->bloodPressureRightDiastolic->setText(QString("%1").arg(n->bloodPressureLeftSystolic));
+    mwUI->heartRate->setText(QString("%1").arg(n->heartRate));
+    mwUI->sleepHrs->setText(QString("%1").arg(n->sleepHrs));
+    mwUI->sleepMins->setText(QString("%1").arg(n->sleepMins));
+    mwUI->weight->setText(QString("%1").arg(n->weight));
+    mwUI->lbsRadioButton->setChecked(n->weightUnit == LBS);
+    mwUI->kgRadioButton->setChecked(n->weightUnit == KG);
+    mwUI->notes->setText(n->notes);
+
+    QVector<QRadioButton*> emoRadios = {mwUI->emoStateVerySad, mwUI->overallFeelingSad, mwUI->emoStateNeutral, mwUI->emoStateHappy, mwUI->emoStateVeryHappy};
+    QVector<QRadioButton*> overallRadios = {mwUI->overallFeelingVerySad, mwUI->overallFeelingSad, mwUI->OverallFeelingNeutral, mwUI->overallFeelingHappy, mwUI->overallFeelingVeryHappy};
+    emoRadios[n->emotionalState]->setChecked(true);
+    overallRadios[n->overallFeeling]->setChecked(true);
+
+    for (QPushButton *button : tagButtonGroup)
+    {
+        button->setChecked(false);
+        for(QString tag_name : n->tags){
+            if(button->text() == tag_name){
+              button->setChecked(true);
+            }
+        }
+    }
+}
+
+void Device::update_chart()
+{
+    history_viewer->update_chart(*currentProfile->getSessions());
+}
+
+void Device::shutdown(){
+    QMessageBox msgBox;
+    msgBox.setText("Battery Exhausted, Shutting Down");
+    msgBox.exec();
+    if(mainWindow){mainWindow->close(); delete mainWindow;}
+    if(loginWindow){loginWindow->close(); delete loginWindow;}
+    if(createWindow){createWindow->close(); delete createWindow;}
+    exit(0);
+}
+
+void Device::handleCheckboxToggled(bool checked)
+{
+    // last State is false (lift the device off the skin) and putting it back on the next point
+    if (checked == true && lastState == false)
+    {
+        qDebug() << "Successive measurement.";
+        mwUI->horizontalSlider->setEnabled(true);
+        mwUI->dropdown->setEnabled(true);
+        trackScanning();
+    }
+    else if (checked == false && lastState == true )
+    {
+        qDebug() << "The device is off the skin";
+        mwUI->horizontalSlider->setEnabled(false);
+    }
+    else if(checked == true && lastState == true){
+        qDebug() << "The device is off the skin";
+        mwUI->horizontalSlider->setEnabled(false);
+    }
+    lastState = checked;
+}
+
+void Device::trackScanning()
+{
+    QString selectedSpot = mwUI->dropdown->currentText();
+    // Find and check the corresponding checkbox by matching text
+        for (QCheckBox *checkbox : scanCheckboxes) {
+            if (checkbox->text() == selectedSpot) {
+                checkbox->setEnabled(true);
+                checkbox->setChecked(true);
+                checkbox->setEnabled(false);
+                break;
+            }
+        }
+        //check if all checkboxes are checked
+        checkAllScansCompleted();
+}
+
+void Device::checkAllScansCompleted()
+{
+    bool allChecked = true;
+    for(QCheckBox *checkbox : scanCheckboxes){
+        if(!checkbox->isChecked()){
+            allChecked = false;
+            break;
+        }
+    }
+    if(allChecked){
+        mwUI->result->setEnabled(true);
+    }
+}
+
+int Device::calculateAverage()
+{
+    int total = 0;
+    for(const int &value : spotValues){
+        total += value;
+
+    }
+    return total/spotValues.size();
+}
+
+void Device::PrintDia()
+{
+    recommend.AddAbnormalPartinQ("H1 Left","H1 Right", spotValues);
+    recommend.AddAbnormalPartinQ("H2 Left","H2 Right", spotValues);
+    recommend.AddAbnormalPartinQ("H3 Left","H3 Right", spotValues);
+    recommend.AddAbnormalPartinQ("H4 Left","H4 Right", spotValues);
+    recommend.AddAbnormalPartinQ("H5 Left","H5 Right", spotValues);
+    recommend.AddAbnormalPartinQ("H6 Left","H6 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F1 Left","F1 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F2 Left","F2 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F3 Left","F3 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F4 Left","F4 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F5 Left","F5 Right", spotValues);
+    recommend.AddAbnormalPartinQ("F6 Left","F6 Right", spotValues);
+    QString temp_body = "";
+    int temp_degree = 0;
+    if(recommend.GetWrong_partSize() == 0){
+        mwUI->Dia->append("Every part is healthy");
+        mwUI->Organ->append("None");
+        mwUI->Supp->append("None");
+    }
+    while(recommend.GetWrong_partSize() != 0)
+    {
+        temp_body = recommend.GetWrong_part();
+        temp_degree = recommend.Getresult();
+        if(temp_body == "H1" && temp_degree == 1)
+        {
+            mwUI->Dia->append("Stiff and painful sholder muscles, rush of blood to the head"
+                            "hot lfashes, piles, asthma");
+            mwUI->Organ->append("Lung");
+            mwUI->Supp->append("Propolis - Improve immune defense");
+        }else if(temp_body == "H1" && temp_degree == -1){
+            mwUI->Dia->append("Cold feet or numbness, shortness of breath, coughing spells");
+            mwUI->Organ->append("Lung");
+            mwUI->Supp->append("Propolis - Improve immune defense");
+        //H2
+        }else if(temp_body == "H2" && temp_degree == 1){
+            mwUI->Dia->append("Stiff and painful shoulder muscles, middle age level wrenched"
+                            " shoulders, brachical neuralgia.");
+            mwUI->Organ->append("Pericardium");
+            mwUI->Supp->append("Veino Tune - Improves venous blood flow");
+
+        }else if(temp_body == "H2" && temp_degree == -1){
+            mwUI->Dia->append("Palpitation, heated sensation of the palms");
+            mwUI->Organ->append("Pericardium");
+            mwUI->Supp->append("Veino Tune - Improves venous blood flow");
+        //H3
+        }else if(temp_body == "H3" && temp_degree == 1){
+            mwUI->Dia->append("Puffed sensation of the stomach, constipation");
+            mwUI->Organ->append("Heart");
+            mwUI->Supp->append("AntimeGrin Hyper - Helps with high blood pressure relief and optimization");
+        }else if(temp_body == "H3" && temp_degree == -1){
+            mwUI->Dia->append("Palpitation");
+            mwUI->Organ->append("Heart");
+            mwUI->Supp->append("Migrenol Hypo - Helps raise low blood pressure and optimization");
+            mwUI->Supp->append("Immuno Tune - Spports immune health function");
+        //H4
+        }else if(temp_body == "H4" && temp_degree == 1){
+            mwUI->Dia->append("Headaches, abnormalities of the lower abdomen, joint pain");
+            mwUI->Organ->append("Small intestine");
+            mwUI->Supp->append("Intesti San - helps maintain intestinal health");
+            mwUI->Supp->append("Immuno Tune - Spports immune health function");
+        }else if(temp_body == "H4" && temp_degree == -1){
+            mwUI->Dia->append("Headache, abnormalities of the lower abdomen");
+            mwUI->Organ->append("Small intestine");
+            mwUI->Supp->append("Intesti San - helps maintain intestinal health");
+        //H5
+        }else if(temp_body == "H5" && temp_degree == 1){
+            mwUI->Dia->append("Ringing ears, difficulty in hearing");
+            mwUI->Organ->append("Lymph vessel");
+            mwUI->Supp->append("Edmea Relieve - Promotes proper response to inflammation");
+            mwUI->Supp->append("Immuno Tune - Spports immune health function");
+        }else if(temp_body == "H5" && temp_degree == -1){
+            mwUI->Dia->append("Tiredness or tendency to tire, the healthy glow disappears and body hairs"
+                            " increase in density");
+            mwUI->Organ->append("Lymph vessel");
+            mwUI->Supp->append("Edmea Relieve - Promotes proper response to inflammation");
+            mwUI->Supp->append("Immuno Tune - Spports immune health function");
+        //H6
+        }else if(temp_body == "H6" && temp_degree == 1){
+            mwUI->Dia->append("Stiff and painful shoulder muscles, tooth ache");
+            mwUI->Organ->append("Large intestine");
+            mwUI->Supp->append("Edmea Relieve - Promotes proper response to inflammation");
+        }else if(temp_body == "H6" && temp_degree == -1){
+            mwUI->Dia->append("Stiff and painful shoulder muscles");
+            mwUI->Organ->append("Large intestine");
+            mwUI->Supp->append("Edmea Relieve - Promotes proper response to inflammation");
+        //F1
+        }else if(temp_body == "F1" && temp_degree == 1){
+            mwUI->Dia->append("General weakness of the stomach, knee joint pain");
+            mwUI->Organ->append("Spleen / Pancrease");
+            mwUI->Supp->append("Immuno Tune - Supports immune health function");
+            mwUI->Supp->append("Pancre Norm - Normalizes blood sugar levels");
+        }else if(temp_body == "F1" && temp_degree == -1){
+            mwUI->Dia->append("General weakness of stomach,abnormalities of the knee joint, insomnia, glycosuria");
+            mwUI->Organ->append("Spleen / Pancrease");
+            mwUI->Supp->append("Immuno Tune - supports immune health function");
+            mwUI->Supp->append("Pancre Norm - Normalizes blood sugar levels");
+        //F2
+        }else if(temp_body == "F2" && temp_degree == 1){
+            mwUI->Dia->append("Insomnia, readily provoked abnormalities in menstruation, lumbar pain" );
+            mwUI->Organ->append("Liver");
+            mwUI->Supp->append("Hepa Gugull - support for liver function & recovery");
+        }else if(temp_body == "F2" && temp_degree == -1){
+            mwUI->Dia->append("Faintness or dizziness on abrupt standing up(orthostatic circulatory disorder)");
+            mwUI->Organ->append("Liver");
+            mwUI->Supp->append("Hepa Gugull - support for liver function & recovery");
+        //F3
+        }else if(temp_body == "F3" && temp_degree == 1){
+            mwUI->Dia->append("Fretting and fuming, anxiety");
+            mwUI->Organ->append("Kidney and Adrenal galnds");
+            mwUI->Supp->append("RenActive - Kidney Health Support");
+            mwUI->Supp->append("Edma Relieve - Promotes preper response to inflammation");
+        }else if(temp_body == "F3" && temp_degree == -1){
+            mwUI->Dia->append("Loss of willingness to concentrate and general tiredness, Coldness in hips and legs");
+            mwUI->Organ->append("Kidney and Adrenal galnds");
+            mwUI->Supp->append("RenActive - Kidney Health Support");
+            mwUI->Supp->append("Edma Relieve - Promotes preper response to inflammation");
+        //F4
+        }else if(temp_body == "F4" && temp_degree == 1){
+            mwUI->Dia->append("Stiff neck muscles, headaches, sciatic neurities, lumbar pain");
+            mwUI->Organ->append("Bladder");
+            mwUI->Supp->append("RenoSan - Regulates disorders including kidney stone issues");
+        }else if(temp_body == "F4" && temp_degree == -1){
+            mwUI->Dia->append("Stiffness and painful neck muscles, lumbar pain, dullness of the feet");
+            mwUI->Organ->append("Bladder");
+            mwUI->Supp->append("RenoSan - Regulates disorders including kidney stone issues");
+        //F5
+        }else if(temp_body == "F5" && temp_degree == 1){
+            mwUI->Dia->append("Headaches");
+            mwUI->Organ->append("GallBladder");
+            mwUI->Supp->append("EnergyTune - Improves metabolic activation");
+            mwUI->Supp->append("Digest Active - Digestive system support");
+            mwUI->Supp->append("CalmBelly - Optimize your digestive process");
+        }else if(temp_body == "F5" && temp_degree == -1){
+            mwUI->Dia->append("Abnormalities of eyes, dizziness (Meniere's disease)");
+            mwUI->Organ->append("GallBladder");
+            mwUI->Supp->append("EnergyTune - Improves metabolic activation");
+            mwUI->Supp->append("Digest Active - Digestive system support");
+            mwUI->Supp->append("CalmBelly - Optimize your digestive process");
+        //F6
+        }else if(temp_body == "F6" && temp_degree == 1){
+            mwUI->Dia->append("Anomalies of the joints, middle age wrenched shoulder, elbow neuralgia");
+            mwUI->Organ->append("Stomach");
+            mwUI->Supp->append("Digest Active - Digestive system support");
+            mwUI->Supp->append("CalmBelly - Optimize your digestive process");
+        }else if(temp_body == "F6" && temp_degree == -1){
+            mwUI->Dia->append("Stiff and painful shoulder muscles, distention of stomach, bloating of face, yawning");
+            mwUI->Organ->append("Stomach");
+            mwUI->Supp->append("Digest Active - Digestive system support");
+            mwUI->Supp->append("CalmBelly - Optimize your digestive process");
+        }else{
+            mwUI->Dia->append("ERROR");
+        }
+
+    }
+}
+
 void Device::onProfileCreated()
 {
     string fName = cwUI->txtFName->text().toStdString();
@@ -212,8 +557,8 @@ void Device::onProfileLogin()
         mainWindow->show();
         mwUI->lblCurrentUser->setText(QString::fromStdString(currentProfile->getName()));
 
-        mainWindow->addData(currentProfile);
-        mainWindow->display_note(currentProfile);
+        addData();
+        display_note();
 
         loginWindow->hide();
         lwUI->txtLoginPass->setStyleSheet("");
@@ -270,31 +615,170 @@ void Device::onProfileShow()
         currentProfile->showProfile();
 }
 
+void Device::onAutoScanPressed()
+{
+    srand(time(0));
+    int i = 0;
+    for (QCheckBox *checkbox : scanCheckboxes) {
+        mwUI->dropdown->setCurrentIndex(i++);
+        mwUI->skinContactChecked->toggle();
+        QString selectedOption = mwUI->dropdown->currentText();
+        QPair<int,int> range = ranges[selectedOption];
+        mwUI->horizontalSlider->setValue((rand()%(range.second-range.first+1))+range.first);
+        mwUI->skinContactChecked->toggle();
+    }
+}
+
+void Device::onFahrenheitSelected()
+{
+    mwUI->bodyTemp->setRange(32.0, 212.0);
+    mwUI->bodyTemp->setValue(32.0);
+}
+
+void Device::onCelsiusSelected()
+{
+    mwUI->bodyTemp->setRange(0.0, 100.0);
+    mwUI->bodyTemp->setValue(0.0);
+}
+
+void Device::onAddTagButtonClicked()
+{
+    bool ok;
+    QString tagName = QInputDialog::getText(mainWindow, "Add Tag", "Enter Tag Name:", QLineEdit::Normal, "", &ok);
+
+    // If the user clicks "OK" and enters a name, create the tag button
+    if (ok && !tagName.isEmpty())
+    {
+        QPushButton *newTagButton = new QPushButton("+" + tagName, mainWindow);
+        newTagButton->setCheckable(true);
+
+        // Add the button to the layout
+        mwUI->formLayout->addWidget(newTagButton);
+
+        // add the button to the tagButtonGroup
+        tagButtonGroup.append(newTagButton);
+    }
+    mwUI->addTag->setChecked(false);
+}
+
+void Device::onSaveNotesPressed()
+{
+    Note* new_note = history_viewer->get_note(currentProfile);
+
+    // Retreive all the informations
+    new_note->bodyTemp = mwUI->bodyTemp->value();
+    new_note->tempUnit = mwUI->celsiusRadioButton->isChecked() ? C : F;
+    new_note->bloodPressureLeftSystolic = mwUI->bloodPressureLeftSystolic->text().toInt();
+    new_note->bloodPressureLeftDiastolic = mwUI->bloodPressureLeftDiastolic->text().toInt();
+    new_note->bloodPressureRightSystolic = mwUI->bloodPressureRightSystolic->text().toInt();
+    new_note->bloodPressureRightDiastolic = mwUI->bloodPressureRightDiastolic->text().toInt();
+    new_note->heartRate = mwUI->heartRate->text().toInt();
+    new_note->sleepHrs = mwUI->sleepHrs->text().toInt();
+    new_note->sleepMins = mwUI->sleepMins->text().toInt();
+    new_note->weight = mwUI->weight->text().toInt();
+    new_note->weightUnit = mwUI->lbsRadioButton->isChecked() ? LBS : KG;
+    new_note->notes = mwUI->notes->toPlainText();
+
+    if (mwUI->emoStateVerySad->isChecked())
+        new_note->emotionalState = VERY_SAD;
+    else if (mwUI->emoStateSad->isChecked())
+        new_note->emotionalState = SAD;
+    else if (mwUI->emoStateNeutral->isChecked())
+        new_note->emotionalState = NEUTRAL;
+    else if (mwUI->emoStateHappy->isChecked())
+        new_note->emotionalState = HAPPY;
+    else if (mwUI->emoStateVeryHappy->isChecked())
+        new_note->emotionalState = VERY_HAPPY;
+
+    if (mwUI->overallFeelingVerySad->isChecked())
+        new_note->overallFeeling = VERY_SAD;
+    else if (mwUI->overallFeelingSad->isChecked())
+        new_note->overallFeeling = SAD;
+    else if (mwUI->OverallFeelingNeutral->isChecked())
+        new_note->overallFeeling = NEUTRAL;
+    else if (mwUI->overallFeelingHappy->isChecked())
+        new_note->overallFeeling = HAPPY;
+    else if (mwUI->overallFeelingVeryHappy->isChecked())
+        new_note->overallFeeling = VERY_HAPPY;
+
+    QStringList tags;
+
+    for (QPushButton *button : tagButtonGroup)
+    {
+        if (button->isChecked())
+        {
+            tags.append(button->text());
+        }
+    }
+
+    // Add more tag buttons as needed
+    new_note->tags = tags;
+
+    // DELETE LATER
+    // Combine Data into a Structured Format
+    QString data = QString(
+                       "Body Temperature: %1 %2\n"
+                       "Blood Pressure (Left Hand): %3/%4\n"
+                       "Blood Pressure (Right Hand): %5/%6\n"
+                       "Heart Rate: %7 bpm\n"
+                       "Sleeping Time: %8 h %9 m\n"
+                       "Current Weight: %10 %11\n"
+                       "Emotional State: %12\n"
+                       "Overall Feeling: %13\n"
+                       "Tags: %14\n"
+                       "Notes: %15\n")
+                       .arg(new_note->bodyTemp)
+                       .arg(new_note->tempUnit)
+                       .arg(new_note->bloodPressureLeftSystolic)
+                       .arg(new_note->bloodPressureLeftDiastolic)
+                       .arg(new_note->bloodPressureRightSystolic)
+                       .arg(new_note->bloodPressureRightDiastolic)
+                       .arg(new_note->heartRate)
+                       .arg(new_note->sleepHrs)
+                       .arg(new_note->sleepMins)
+                       .arg(new_note->weight)
+                       .arg(new_note->weightUnit)
+                       .arg(new_note->emotionalState)
+                       .arg(new_note->overallFeeling)
+                       .arg(new_note->tags.join(", "))
+                       .arg(new_note->notes);
+
+    qDebug() << "DEBUG DATA: " << data;
+}
+
+
 void Device::processRyodorakuData()
 {
-    mainWindow->processRyodorakuData(currentProfile);
+    ReadingStorage* new_results = new ReadingStorage(&ranges); //make new empty session
+    for (const QString &key : spotValues.keys()) {
+        new_results->log_data_point(key,  spotValues[key]); //fill it with the results
+        //do this all at once here to avoid partial logging if therre's an incomplete shutdown
+    }
+    currentProfile->log_session(new_results); //add to the currentuser
+    history_viewer->update_chart(*currentProfile->getSessions()); //update graph
+
+    int average = calculateAverage();
+    int below = average * 0.8;
+    int above = average * 1.2;
+
+    // Result container for classifications
+    QMap<QString, QString> results;
+
+    for (const QString &key : spotValues.keys()) {
+            int value = spotValues[key];
+            if (value < below) {
+                results[key] = "BelowNorm";
+            } else if (value > above) {
+                results[key] = "AboveNorm";
+            } else {
+                results[key] = "Normal";
+            }
+        }
+
+        // DELETE LATER
+        qDebug() << "Ryodoraku Data Results:";
+        for (const QString &key : results.keys()) {
+            qDebug() << key << ":" << results[key];
+        }
 }
 
-void Device::saveNotes()
-{
-    mainWindow->saveNotes(currentProfile);
-}
-
-void Device::updateNotes()
-{
-    mainWindow->display_note(currentProfile);
-}
-
-void Device::updateChart(){
-    mainWindow->update_chart(currentProfile);
-}
-
-void Device::shutdown(){
-    QMessageBox msgBox;
-    msgBox.setText("Battery Exhausted, Shutting Down");
-    msgBox.exec();
-    if(mainWindow){mainWindow->close(); delete mainWindow;}
-    if(loginWindow){loginWindow->close(); delete loginWindow;}
-    if(createWindow){createWindow->close(); delete createWindow;}
-    exit(0);
-}
