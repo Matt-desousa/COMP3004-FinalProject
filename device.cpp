@@ -139,22 +139,6 @@ void Device::logoutProfile()
     currentProfile = NULL;
 }
 
-void Device::getProfileNames(list<string> *names)
-{
-    for (Profile* user : profiles){
-        names->push_back(user->getName());
-    }
-}
-
-void Device::printProfiles()
-{
-    list<Profile*>::iterator it;
-    it = profiles.begin();
-    for (;it != profiles.end(); it++){
-        qDebug() << QString::fromStdString((*it)->getName());
-    }
-}
-
 void Device::onProfileCreated()
 {
     string fName = cwUI->txtFName->text().toStdString();
@@ -312,5 +296,5 @@ void Device::shutdown(){
     if(mainWindow){mainWindow->close(); delete mainWindow;}
     if(loginWindow){loginWindow->close(); delete loginWindow;}
     if(createWindow){createWindow->close(); delete createWindow;}
-    delete this;
+    exit(0);
 }

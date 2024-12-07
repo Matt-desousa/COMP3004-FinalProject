@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <string>
+#include <unistd.h>
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -73,6 +74,10 @@ MainWindow::MainWindow(QWidget *parent)
     //Print
     connect(ui->Dia_button, &QRadioButton::pressed, this, &MainWindow::PrintDia);
 
+    // FOR TESTING DELETE LATER
+    // Auto Scan Button
+    connect(ui->btnScan, SIGNAL(pressed()), this, SLOT(onAutoScanPressed()));
+
 
     //create history chart dropdown
     ui->ChartSelection->addItem("Average");
@@ -115,6 +120,7 @@ void MainWindow::checkAllScansCompleted(){
         ui->result->setEnabled(true);
     }
 }
+
 // Skin contact
 void MainWindow::handleCheckboxToggled(bool checked)
 {
@@ -258,6 +264,20 @@ void MainWindow::onAddTagButtonClicked()
     ui->addTag->setChecked(false);
 }
 
+void MainWindow::onAutoScanPressed()
+{
+    srand(time(0));
+    int i = 0;
+    for (QCheckBox *checkbox : scanCheckboxes) {
+        ui->dropdown->setCurrentIndex(i++);
+        ui->skinContactChecked->toggle();
+        QString selectedOption = ui->dropdown->currentText();
+        QPair<int,int> range = ranges[selectedOption];
+        ui->horizontalSlider->setValue((rand()%(range.second-range.first+1))+range.first);
+        ui->skinContactChecked->toggle();
+    }
+}
+
 void MainWindow::addData(Profile* currentProfile)
 {qDebug("aaaa");
     if(currentProfile->getSessions()->size() == 0){ //if user has no sessions
@@ -284,8 +304,6 @@ int MainWindow::calculateAverage(){
 }
 
 void MainWindow::processRyodorakuData(Profile* currentProfile){
-
-
     ReadingStorage* new_results = new ReadingStorage(&ranges); //make new empty session
     for (const QString &key : spotValues.keys()) {
         new_results->log_data_point(key,  spotValues[key]); //fill it with the results

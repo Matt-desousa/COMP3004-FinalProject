@@ -19,16 +19,9 @@ class Device : public QObject
     Q_OBJECT
 public:
     explicit Device(QObject *parent = nullptr);
-    void startBattery(QCheckBox* charging_port_UI, QProgressBar* charging_indicator_UI);
     bool createProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password);
     bool verifyProfile(string password, int index);
     void logoutProfile();
-
-    void getProfileNames(list<string>* names);
-
-    void printProfiles();
-
-    Profile* currentProfile;
 
 private:
     MainWindow* mainWindow;
@@ -40,6 +33,7 @@ private:
 
     void shutdown();
 
+    Profile* currentProfile;
     Battery* battery;
     list<Profile*> profiles;
     int nextID = 0;

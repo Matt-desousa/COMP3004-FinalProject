@@ -47,9 +47,6 @@ private:
     int calculateAverage();
     void PrintDia();
 
-
-
-
     QList<QCheckBox*> scanCheckboxes; //List of all checkboxes
     QList<QPushButton*> tagButtonGroup; //data collections:tags
     QMap<QString,int> spotValues; // store scanned data
@@ -64,5 +61,6 @@ private slots:
     void onFahrenheitSelected();//temp conversion
     void onCelsiusSelected();//temp convresion
     void onAddTagButtonClicked(); //add tag
+    void onAutoScanPressed();
 };
 #endif // MAINWINDOW_H

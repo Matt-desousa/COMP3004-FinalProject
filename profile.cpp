@@ -16,7 +16,7 @@ Profile::Profile(int userID, string fName, string lName, SEX sex, float weight, 
     profileWindow->getUI(&pwUI);
     popup->getUI(&cdUI);
 
-    this->userID = userID;
+    this->profileID = userID;
     this->fName = fName;
     this->lName = lName;
     this->dob = date;
@@ -47,10 +47,6 @@ Profile::~Profile(){
 void Profile::showProfile()
 {
     profileWindow->show();
-}
-
-void Profile::verifyProfileForDelete(string password)
-{
 }
 
 bool Profile::verifyPassword(string password)

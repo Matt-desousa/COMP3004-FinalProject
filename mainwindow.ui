@@ -99,7 +99,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -289,7 +289,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>result</string>
+       <string>Result</string>
       </property>
       <property name="checkable">
        <bool>false</bool>
@@ -559,6 +559,19 @@
         </widget>
        </item>
       </layout>
+     </widget>
+     <widget class="QPushButton" name="btnScan">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>380</y>
+        <width>121</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Auto Scan</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">
