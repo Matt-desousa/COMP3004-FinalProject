@@ -49,7 +49,7 @@ void Battery::battery_sim(){
         emit die();
     }
 
-    update_battery_UIs(); //update charge indicator
+    update_battery_UIs(); //update charge indicators
     QTimer::singleShot(1000, this, &Battery::battery_sim); //run battery sim again in one second
 }
 
@@ -73,10 +73,11 @@ void Battery::update_battery_UIs(){
 
 }
 
+//signal when a plug is checked on or off
 void Battery::plug_change(bool state){
-    plugged_in = state;
+    plugged_in = state; //update plug state
     for(QCheckBox* charging_port : charging_ports){
-        charging_port->setChecked(plugged_in); //update to all ports
+        charging_port->setChecked(plugged_in); //update change to all UI checkboxes
     }
 }
 

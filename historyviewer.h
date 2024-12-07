@@ -19,7 +19,7 @@ class HistoryViewer : public QObject
 public:
     explicit HistoryViewer(QGroupBox* chart, QGroupBox* note_viewer);
 
-    void update_chart(QVector<ReadingStorage*>& data);
+    void update_chart(QVector<ReadingStorage*>& data); //draw chart
 
     Note* get_note(Profile* user);
 
@@ -38,7 +38,7 @@ private:
     QLabel* chart_max;
     QLabel* chart_min;
 
-    int note_index;
+    int note_index; //keeps track of which note the viewer is looking at
 
 };
 

@@ -5,12 +5,14 @@
 
 HistoryViewer::HistoryViewer(QGroupBox* chart, QGroupBox* note_viewer)
 {
+    //store and connect note browser buttons
     note_previous_button = note_viewer->findChild<QPushButton*>("note_previous");
     connect(note_previous_button, &QPushButton::pressed, this, &HistoryViewer::previous_note);
     note_next_button = note_viewer->findChild<QPushButton*>("note_next");
     connect(note_next_button, &QPushButton::pressed, this, &HistoryViewer::next_note);
     note_counter = note_viewer->findChild<QLabel*>("note_counter");
 
+    //find and store chart bars in array
     num_bars = 20;
     for(int i = 1; i <= num_bars; i++){
         const QString bar_name =  QString("col%1").arg(i);
@@ -20,23 +22,24 @@ HistoryViewer::HistoryViewer(QGroupBox* chart, QGroupBox* note_viewer)
 
     note_index = 0;
 
+    //find and store chart labels and selector
     chart_selector = chart->findChild<QComboBox*>("ChartSelection");
     chart_avg = chart->findChild<QLabel*>("label_avg");
     chart_max = chart->findChild<QLabel*>("label_max");
     chart_min = chart->findChild<QLabel*>("label_min");
-
 }
 
+//draw the requested data to the chart
 void HistoryViewer::update_chart(QVector<ReadingStorage*>& data){
     if(data.size()  == 0){return;} //no readings to display
 
-    QString body_part = chart_selector->currentText();
+    QString body_part = chart_selector->currentText(); //get what is in the combobox
+    bool is_average_chart_selected = chart_selector->currentIndex() == 0; //index 0 is always "average" instead of a specific body part
+    //"average" refers to the average value of all 24 points
 
-
-    bool is_average_chart_selected = chart_selector->currentIndex() == 0;
-
-    int min = -1;
-    int max = -1;
+    //data min and max to set bars' scale
+    int min;
+    int max;
 
     if(is_average_chart_selected){ //set hard coded max and min of session average
         min = 5;
@@ -48,19 +51,19 @@ void HistoryViewer::update_chart(QVector<ReadingStorage*>& data){
         max = minmax.second;
     }
 
-    QVector<int> values;
+    QVector<int> values; //temp buffer to store retrieved values
 
     //COLLECT DATA
     for(int i = 0; i < data.size(); i++){
         int val;
 
+        //if the user wants the total average
         if(is_average_chart_selected){
             val = data[i]->retrieve_session_average();
-
         }
-        else{ //the rest are each individual body part
+        //if user wants a specific body part
+        else{
             val = data[i]->retrieve_data_point(body_part);
-
         }
         values.append(val);
     }
@@ -72,7 +75,7 @@ void HistoryViewer::update_chart(QVector<ReadingStorage*>& data){
     for(int i = 0; i < num_bars; i++){
         int bar_value;
         if(i >= values.size()){ //no more data (empty bar)
-            bar_value = min; //set to bottom
+            bar_value = min; //set to bottom  (no bar showing)
             chart_bars[i]->setToolTip("No Data");
             chart_bars[i]->setEnabled(false); //grey out
         }
@@ -96,7 +99,7 @@ void HistoryViewer::update_chart(QVector<ReadingStorage*>& data){
 
 }
 
-//retrieve a note  from a user
+//retrieve a note from a user
 Note* HistoryViewer::get_note(Profile* user){
         int total_note_count = user->getSessions()->size();
         if(note_index >= total_note_count){note_index = total_note_count - 1;} //cap index to avoid IOOB
@@ -109,15 +112,10 @@ Note* HistoryViewer::get_note(Profile* user){
 void HistoryViewer::next_note(){
     if(note_index == 0){return;}
     note_index--;
-    //qDebug() << QString("Note %1").arg(note_index);
-    //display_note();
 }
 
 void HistoryViewer::previous_note(){
-    //if(note_index == 0){return;}
-    note_index++;
-    qDebug() << QString("Note %1").arg(note_index);
-    //display_note();
+    note_index++; //overflow is handled elsewhere
 }
 
 

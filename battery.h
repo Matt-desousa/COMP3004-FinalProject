@@ -19,7 +19,7 @@ public:
 
     void turn_on_or_off(bool isOn); //start or stop using battery power
     inline double get_battery_percent(){return charge_level;}
-    void add_battery_UI(QCheckBox* charging_port_UI, QProgressBar* charging_indicator_UI);
+    void add_battery_UI(QCheckBox* charging_port_UI, QProgressBar* charging_indicator_UI); //there are multiple UI indicators, one on most windows
     void update_battery_UIs(); //update the UI indicator
 
 signals:
