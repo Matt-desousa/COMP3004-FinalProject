@@ -245,6 +245,9 @@ Password</string>
     <property name="text">
      <string/>
     </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
    </widget>
    <widget class="QDoubleSpinBox" name="dsbHeight">
     <property name="geometry">
@@ -329,6 +332,9 @@ of Birth</string>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::PasswordEchoOnEdit</enum>
     </property>
    </widget>
    <widget class="QPushButton" name="btnConfirm">
