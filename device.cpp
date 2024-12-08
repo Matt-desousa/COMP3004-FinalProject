@@ -12,6 +12,9 @@
 Device::Device(QObject *parent)
     : QObject{parent}
 {
+    /*
+        Init the windos and UIs
+    */
     mainWindow = new MainWindow;
     loginWindow = new LoginWindow;
     createWindow = new CreateProfileWindow;
@@ -20,6 +23,10 @@ Device::Device(QObject *parent)
     loginWindow->getUI(&lwUI);
     createWindow->getUI(&cwUI);
 
+
+    /*
+        Init default values and pointers
+    */
     history_viewer = new HistoryViewer(mwUI->HistoryChart, mwUI->note_controls);
 
     tagButtonGroup = {mwUI->activeTag, mwUI->calmTag, mwUI->basisMorningTag};
@@ -40,24 +47,27 @@ Device::Device(QObject *parent)
             mwUI->checkboxF5Left, mwUI->checkboxF5Right, mwUI->checkboxF6Left, mwUI->checkboxF6Right
         };
 
+
     /*
         Main Window Signals and Slots
     */
-    // Logout Button
+    // Logout Button Pressed
     connect(mwUI->btnLogOut, SIGNAL(pressed()), this, SLOT(onProfileLogout()));
 
     // Profile Button Pressed
     connect(mwUI->btnProfile, SIGNAL(pressed()), this, SLOT(onProfileShow()));
 
-    // Auto Scan Button
+    // Auto Scan Button Pressed
     connect(mwUI->btnScan, SIGNAL(pressed()), this, SLOT(onAutoScanPressed()));
 
-    // Save Notes
+    // Save Notes Button Pressed
     connect(mwUI->saveBtn, SIGNAL(pressed()), this, SLOT(onSaveNotesPressed()));
 
+    // Cycle Next and Previous Notes Button Pressed
     connect(mwUI->note_next, &QRadioButton::released, this, &Device::display_note);
     connect(mwUI->note_previous, &QRadioButton::released, this, &Device::display_note);
 
+    // Chart Selection Combo Box Text Changed
     connect(mwUI->ChartSelection, &QComboBox::currentTextChanged, this, &Device::update_chart);
 
     // Connect dropdown to update the slider range and value
@@ -85,24 +95,24 @@ Device::Device(QObject *parent)
     // Skin Contact Checkbox Toggled
     connect(mwUI->skinContactChecked, &QCheckBox::toggled, this, &Device::handleCheckboxToggled);
 
-    // Add tag buttons
+    // Add Tag Button Pressed
     connect(mwUI->addTag, &QPushButton::clicked, this, &Device::onAddTagButtonClicked);
 
     // Temperature conversion
     connect(mwUI->fahrenheitRadioButton, &QRadioButton::pressed, this, &Device::onFahrenheitSelected);
     connect(mwUI->celsiusRadioButton, &QRadioButton::pressed, this, &Device::onCelsiusSelected);
 
-
+    // Result Button Pressed
     connect(mwUI->result,SIGNAL(pressed()),this,SLOT(processRyodorakuData()));
 
 
     /*
         Login Window Signals and Slots
     */
-    // Login Button
+    // Login Button Pressed
     connect(lwUI->btnLogin, SIGNAL(pressed()), this, SLOT(onProfileLogin()));
 
-    // Create Profile Button
+    // Create Profile Button Pressed
     connect(lwUI->btnCreateProfile, SIGNAL(pressed()), createWindow, SLOT(show()));
     connect(lwUI->btnCreateProfile, SIGNAL(pressed()), loginWindow, SLOT(hide()));
 
@@ -110,25 +120,26 @@ Device::Device(QObject *parent)
     /*
         Create Profile Window Signals and Slots
     */
-    // Cancel Button
+    // Cancel Button Pressed
     connect(cwUI->btnCancel, SIGNAL(pressed()), loginWindow, SLOT(show()));
     connect(cwUI->btnCancel, SIGNAL(pressed()), createWindow, SLOT(hide()));
 
-    // Create Profile Button
+    // Create Profile Button Pressed
     connect(cwUI->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onProfileCreated()));
 
-    //battery setup
+    // Init Battery
     battery = new Battery();
-    battery->add_battery_UI(mwUI->isCharging, mwUI->ChargeIndicator);
+    battery->add_battery_UI(mwUI->isCharging, mwUI->ChargeIndicator); // Adding UI elements to the battery
     battery->add_battery_UI(lwUI->isCharging, lwUI->ChargeIndicator);
     battery->add_battery_UI(cwUI->isCharging, cwUI->ChargeIndicator);
     battery->update_battery_UIs();
-    connect(battery, &Battery::die, this, &Device::shutdown);
+    connect(battery, &Battery::die, this, &Device::shutdown); // On Battery Depleted
     battery->turn_on_or_off(true); // start using battery power
 
-    currentProfile = NULL;
+    // Creating a test profile
     createProfile("Test", "User", UNDEFINED, 50, 175, QDate(), "911", "x@y.z", "test");
 
+    // Show the loginWindow to start the program
     loginWindow->show();
 }
 
@@ -140,15 +151,14 @@ bool Device::createProfile(string fName, string lName, SEX sex, float weight, fl
         return false;
     }
 
-    qDebug() << profiles.size();
     int maxUsers = NUM_USERS;
-    if (profiles.size() < maxUsers){
+    if (profiles.size() < maxUsers){ // Checking if there are less than NUM_USERS
         profiles.push_back(new Profile(nextID++, fName, lName, sex, weight, height, date, phoneNum, email, password));
 
         qDebug() << "User created.";
-        createWindow->hide();
 
-        lwUI->cmbProfile->addItem(QString::fromStdString(fName + " " + lName));
+        createWindow->hide();
+        lwUI->cmbProfile->addItem(QString::fromStdString(fName + " " + lName)); // Adding the new profile to the loginWindow list of profiles
         loginWindow->show();
         return true;
     }
@@ -160,16 +170,17 @@ bool Device::createProfile(string fName, string lName, SEX sex, float weight, fl
 
 bool Device::verifyProfile(string password, int index)
 {
+    // Iterate through profiles to get the profile at index
     list<Profile*>::iterator it;
     it = profiles.begin();
     for (int i = 0; i < index; i++){
         it++;
     }
 
-    if ((*it)->verifyPassword(password)){
+    if ((*it)->verifyPassword(password)){ // Verify the profiles password
         qDebug() << "User verified.";
 
-        currentProfile = *it;
+        currentProfile = *it; // Setting the currentProfile
 
         // On Profile Updated
         connect(currentProfile, SIGNAL(profileUpdated(string)), this, SLOT(onProfileUpdate(string)));
@@ -177,7 +188,6 @@ bool Device::verifyProfile(string password, int index)
         // On Profile Deleted
         connect(currentProfile, SIGNAL(profileDeleted()), this, SLOT(onProfileDeleted()));
 
-        emit profileLogin(currentProfile->getName());
         return true;
     }
     else {
@@ -194,16 +204,18 @@ void Device::logoutProfile()
     }
     currentProfile = NULL;
 
-    reset();
+    reset(); // Reset the data collection tab in mainWindow
 
+    // Reset the recommendations tab in mainWindow
     mwUI->Dia->setText("");
     mwUI->Organ->setText("");
     mwUI->Supp->setText("");
 }
 
 void Device::addData()
-{qDebug("aaaa");
+{
     if(currentProfile->getSessions()->size() == 0){ //if user has no sessions
+        qDebug("Adding random data.");
         //insert some random readings just to show graph history
         for (int i = 0; i < 15; i++){
             ReadingStorage* new_test_reading = new ReadingStorage(&ranges);
@@ -212,9 +224,7 @@ void Device::addData()
 
         }
     }
-qDebug("aaaa");
     history_viewer->update_chart(*currentProfile->getSessions()); //update graph
-    qDebug("aaaa");
 }
 
 void Device::display_note()
@@ -264,6 +274,7 @@ void Device::reset()
         spotValues[key] = 5;
     }
 
+    // Set mainWindow ui elements to default states and values
     mwUI->dropdown->setEnabled(false);
     mwUI->dropdown->setCurrentIndex(0);
     mwUI->horizontalSlider->setValue(5);
@@ -355,7 +366,7 @@ void Device::PrintDia()
 
     Recommendation recommend;
 
-    QMap<QString,int> currentSession = *currentProfile->getSessions()->front()->get_readings();
+    QMap<QString,int> currentSession = *currentProfile->getSessions()->front()->get_readings(); // Get the most recent readings
 
     recommend.AddAbnormalPartinQ("H1 Left","H1 Right", currentSession);
     recommend.AddAbnormalPartinQ("H2 Left","H2 Right", currentSession);
@@ -514,6 +525,7 @@ void Device::PrintDia()
 
 void Device::onProfileCreated()
 {
+    // Get all of the information from the createWindow
     string fName = cwUI->txtFName->text().toStdString();
     string lName = cwUI->txtLName->text().toStdString();
     float weight = cwUI->dsbWeight->value();
@@ -524,6 +536,7 @@ void Device::onProfileCreated()
     string password = cwUI->txtPass->text().toStdString();
     string conPassword = cwUI->txtConPass->text().toStdString();
 
+    // Get which radio button is checked
     SEX sex;
     if (cwUI->rbtnMale->isChecked()){
         sex = MALE;
@@ -533,6 +546,7 @@ void Device::onProfileCreated()
     }
     else sex = UNDEFINED;
 
+    // Check that both passwords match
     if (password.compare(conPassword)){
         qDebug() << "Passwords do not match.";
         cwUI->txtPass->setStyleSheet("border-style: solid;border-width: 2px;border-color: red");
@@ -540,8 +554,10 @@ void Device::onProfileCreated()
         return;
     }
 
+    // Boolean to check if the profile was succesfully created
     bool validUser = createProfile(fName, lName, sex, weight, height, date, phoneNum, email, password);
 
+    // If the profile wasnt valid, set the empty fields to red.
     if (!validUser){
         if (fName == "") cwUI->txtFName->setStyleSheet("border-style: solid;border-width: 2px;border-color: red");
         else cwUI->txtFName->setStyleSheet("");
@@ -560,7 +576,7 @@ void Device::onProfileCreated()
         if (conPassword == "") cwUI->txtConPass->setStyleSheet("border-style: solid;border-width: 2px;border-color: red");
         else cwUI->txtConPass->setStyleSheet("");
     }
-    else {
+    else { // Otherwise set the creatWindow UI to default
         cwUI->txtFName->setStyleSheet("");
         cwUI->txtLName->setStyleSheet("");
         cwUI->dsbWeight->setStyleSheet("");
@@ -574,20 +590,23 @@ void Device::onProfileCreated()
 
 void Device::onProfileLogin()
 {
+    // Get the password and index of the profile
     string password = lwUI->txtLoginPass->text().toStdString();
     int index = lwUI->cmbProfile->currentIndex();
 
+    // If the loginWindow profiles list is empty/there are no profiles
     if (index == -1) return;
 
+    // Verify the profile
     bool loggedIn = verifyProfile(password, index);
 
-    if (loggedIn){
+    if (loggedIn){ // If the profile is verified, set up the mainWindow for the currentProfile
         mainWindow->show();
         mwUI->lblCurrentUser->setText(QString::fromStdString(currentProfile->getName()));
 
-        addData();
+        addData(); // Display data in the chart
         display_note();
-        PrintDia();
+        PrintDia(); // Display the most recent recommendations
 
         loginWindow->hide();
         lwUI->txtLoginPass->setStyleSheet("");
@@ -601,6 +620,7 @@ void Device::onProfileLogin()
 
 void Device::onProfileLogout()
 {
+    qDebug() << "User Logged out.";
     mainWindow->hide();
     mwUI->lblCurrentUser->setText(QString::fromStdString(""));
     loginWindow->show();
@@ -611,26 +631,28 @@ void Device::onProfileUpdate(string name)
 {
     qDebug() << "User Updated.";
     int index = lwUI->cmbProfile->currentIndex();
-    lwUI->cmbProfile->setItemText(index, QString::fromStdString(name));
-    mwUI->lblCurrentUser->setText(QString::fromStdString(name));
+    lwUI->cmbProfile->setItemText(index, QString::fromStdString(name)); // Update the profile name in the loginWindow
+    mwUI->lblCurrentUser->setText(QString::fromStdString(name)); // Update the profile name in the mainWindow
 }
 
 void Device::onProfileDeleted()
 {
     list<Profile*>::iterator it;
     it = profiles.begin();
-    for (;it != profiles.end(); it++){
-        if ((*it) == currentProfile){
+    for (;it != profiles.end(); it++){ // Iterate through the profiles
+        if ((*it) == currentProfile){ // When the currentProfile (the one to delete) is reached
+            // Remove the profile from the list
             profiles.remove(currentProfile);
 
+            // Remove the profile from all UI
             qDebug() << "User Deleted.";
             int index = lwUI->cmbProfile->currentIndex();
             lwUI->cmbProfile->removeItem(index);
 
-            if (profiles.size() == 0){
+            if (profiles.size() == 0){ // If there are not more profiles, show the createProfileWindow
                 createWindow->show();
             }
-            else
+            else // Otherwise just show the loginWindow
                 loginWindow->show();
 
             mainWindow->hide();
@@ -648,16 +670,19 @@ void Device::onProfileShow()
 
 void Device::onAutoScanPressed()
 {
+    // Reset the scan
+    mwUI->skinContactChecked->setChecked(false);
+    lastState = false;
+
     srand(time(0));
     int numScans = scanCheckboxes.size();
-    for (int i = 0; i < numScans; i++) {
-        mwUI->dropdown->setCurrentIndex(i);
-        mwUI->skinContactChecked->toggle();
-        QString selectedOption = mwUI->dropdown->currentText();
-        QPair<int,int> range = ranges[selectedOption];
+    for (int i = 0; i < numScans; i++) { // For each scanCheckbox
+        mwUI->dropdown->setCurrentIndex(i); // Set the dropdown to the current index
+        mwUI->skinContactChecked->toggle(); // Toggle the skin contact
+        QPair<int,int> range = ranges[mwUI->dropdown->currentText()]; // Get the ranges for the selected option
         // (rand()%(range.second-range.first+1))+range.first
-        mwUI->horizontalSlider->setValue(5);
-        mwUI->skinContactChecked->toggle();
+        mwUI->horizontalSlider->setValue(5); // Randomize the value of the slider
+        mwUI->skinContactChecked->toggle(); // Toggle the skin contact
     }
 }
 
@@ -815,6 +840,5 @@ void Device::processRyodorakuData()
 
     PrintDia();
 
-    reset();
+    reset(); // Reset the data collection tab after each set of readings is processed
 }
-

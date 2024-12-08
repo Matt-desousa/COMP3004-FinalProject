@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QMessageBox>
 #include <iostream>
 using namespace std;
 
@@ -10,12 +11,14 @@ using namespace std;
 Profile::Profile(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent)
     : QObject{parent}
 {
-    profileWindow = new ProfileWindow(fName, lName, sex, weight, height, date, phoneNum, email, password);
+    // Init the windows and UIs
+    profileWindow = new ProfileWindow;
     popup = new ConfirmDeletePopup;
 
     profileWindow->getUI(&pwUI);
     popup->getUI(&cdUI);
 
+    // Set the properties.
     this->profileID = userID;
     this->fName = fName;
     this->lName = lName;
@@ -27,10 +30,15 @@ Profile::Profile(int userID, string fName, string lName, SEX sex, float weight, 
     this->email = email;
     this->password = password;
 
-    // Confirm Changes Button
+    initProfileWindow();
+
+    // Confirm Changes Button Pressed
     connect(pwUI->btnConfirm, SIGNAL(pressed()), this, SLOT(onProfileUpdate()));
 
-    // Delete Profile button
+    // "X" Button Pressed
+    connect(profileWindow, SIGNAL(closed()), this, SLOT(onProfileClosed()));
+
+    // Delete Profile Button Pressed
     connect(pwUI->btnDeleteProfile, SIGNAL(pressed()), popup, SLOT(exec()));
 
     // Popup Confirm Delete Button Pressed
@@ -38,6 +46,7 @@ Profile::Profile(int userID, string fName, string lName, SEX sex, float weight, 
 
     // Popup Cancel Button Pressed
     connect(cdUI->btnCancel, SIGNAL(pressed()), popup, SLOT(hide()));
+
 }
 
 Profile::~Profile(){
@@ -51,7 +60,7 @@ void Profile::showProfile()
 
 bool Profile::verifyPassword(string password)
 {
-    if (!this->password.compare(password)){
+    if (!this->password.compare(password)){ // If both passwords match
         return true;
     }
     else {
@@ -59,13 +68,25 @@ bool Profile::verifyPassword(string password)
     }
 }
 
-string Profile::getName()
+void Profile::initProfileWindow()
 {
-    return fName + " " + lName;
+    pwUI->txtFName->setText(QString::fromStdString(fName));
+    pwUI->txtLName->setText(QString::fromStdString(lName));
+
+    if (sex == FEMALE) pwUI->rbtnFemale->setChecked(true);
+    else pwUI->rbtnMale->setChecked(true);
+
+    pwUI->dsbWeight->setValue(weight);
+    pwUI->dsbHeight->setValue(height);
+    pwUI->datDOB->setDate(dob);
+    pwUI->txtPhoneNum->setText(QString::fromStdString(phoneNumber));
+    pwUI->txtEmail->setText(QString::fromStdString(email));
+    pwUI->txtPass->setText(QString::fromStdString(password));
 }
 
 void Profile::onProfileUpdate()
 {
+    // Get all of the information from the profileWindow.
     string fName = pwUI->txtFName->text().toStdString();
     string lName = pwUI->txtLName->text().toStdString();
     float weight = pwUI->dsbWeight->value();
@@ -76,6 +97,7 @@ void Profile::onProfileUpdate()
     string password = pwUI->txtPass->text().toStdString();
     string conPassword = pwUI->txtConPass->text().toStdString();
 
+    // Get which radio button is checked.
     SEX sex;
     if (pwUI->rbtnMale->isChecked()){
         sex = MALE;
@@ -85,6 +107,7 @@ void Profile::onProfileUpdate()
     }
     else sex = UNDEFINED;
 
+    // Check that both passwords match.
     if (password.compare(conPassword)){
         qDebug() << "Passwords do not match.";
         pwUI->txtPass->setStyleSheet("border-style: solid;border-width: 2px;border-color: red");
@@ -92,6 +115,7 @@ void Profile::onProfileUpdate()
         return;
     }
 
+    // Boolean to check if the provided information is valid.
     bool validUser = true;
 
     if (fName == "") {pwUI->txtFName->setStyleSheet("border-style: solid;border-width: 2px;border-color: red"); validUser = false;}
@@ -111,6 +135,7 @@ void Profile::onProfileUpdate()
     if (conPassword == "") {pwUI->txtConPass->setStyleSheet("border-style: solid;border-width: 2px;border-color: red"); validUser = false;}
     else pwUI->txtConPass->setStyleSheet("");
 
+    // If all the information is valid, update the information if its been changed.
     if (validUser){
         if (this->fName.compare(fName)){
             this->fName = fName;
@@ -140,20 +165,32 @@ void Profile::onProfileUpdate()
             this->sex = sex;
         }
 
+        // Notify the device
         emit profileUpdated(this->fName + " " + this->lName);
+
+        profileWindow->hide();
     }
 }
 
 void Profile::onProfileDelete()
 {
     string conPass = cdUI->txtPass->text().toStdString();
-    if (verifyPassword(conPass)){
+    if (verifyPassword(conPass)){ // Verifies the password.
         popup->hide();
         profileWindow->hide();
         emit profileDeleted();
     }
     else{
-        cdUI->txtPass->setStyleSheet("border-style: solid;border-width: 2px;border-color: red");
         cdUI->txtPass->setText("");
+        QMessageBox msgBox;
+        msgBox.setText("Incorrect Password. Cancelling...");
+        msgBox.exec();
+        popup->hide();
     }
+}
+
+void Profile::onProfileClosed()
+{
+    // Reset the profile window
+    initProfileWindow();
 }

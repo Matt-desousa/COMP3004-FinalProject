@@ -6,24 +6,29 @@
 using namespace std;
 
 #include "defs.h"
+#include <QDebug>
 
-class Profile;
-
-namespace Ui {
-class ProfileWindow;
-}
+QT_BEGIN_NAMESPACE
+namespace Ui { class ProfileWindow; }
+QT_END_NAMESPACE
 
 class ProfileWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit ProfileWindow(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QWidget *parent = nullptr);
+    explicit ProfileWindow(QWidget *parent = nullptr);
     ~ProfileWindow();
     inline void getUI(Ui::ProfileWindow** ui){*ui=this->ui;}
 
 private:
     Ui::ProfileWindow *ui;
+
+protected:
+    void closeEvent(QCloseEvent * event){ emit closed();}
+
+signals:
+    void closed();
 };
 
 #endif // PROFILEWINDOW_H
