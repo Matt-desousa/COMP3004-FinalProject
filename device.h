@@ -66,6 +66,7 @@ private:
     QList<QCheckBox*> scanCheckboxes; //List of all checkboxes
     QList<QPushButton*> tagButtonGroup; //data collections:tags
     QMap<QString,int> spotValues; // store scanned data
+    Recommendation recommend; // Recommendation Class
     int nextID = 0; // Given to each user on login (for testing)
     bool lastState = false; // The last state of the Skin Contact check box. True or False for checked and not checked.
 

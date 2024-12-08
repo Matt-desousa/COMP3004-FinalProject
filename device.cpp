@@ -364,8 +364,6 @@ void Device::PrintDia()
     mwUI->Organ->setText("");
     mwUI->Supp->setText("");
 
-    Recommendation recommend;
-
     QMap<QString,int> currentSession = *currentProfile->getSessions()->front()->get_readings(); // Get the most recent readings
 
     recommend.AddAbnormalPartinQ("H1 Left","H1 Right", currentSession);
