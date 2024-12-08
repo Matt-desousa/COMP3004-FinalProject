@@ -92,8 +92,7 @@ Device::Device(QObject *parent)
     connect(mwUI->fahrenheitRadioButton, &QRadioButton::pressed, this, &Device::onFahrenheitSelected);
     connect(mwUI->celsiusRadioButton, &QRadioButton::pressed, this, &Device::onCelsiusSelected);
 
-    //debug
-    //DELETE LATER
+
     connect(mwUI->result,SIGNAL(pressed()),this,SLOT(processRyodorakuData()));
 
 
@@ -776,7 +775,7 @@ void Device::onSaveNotesPressed()
                        .arg(new_note->tags.join(", "))
                        .arg(new_note->notes);
 
-    qDebug() << "DEBUG DATA: " << data;
+    //qDebug() << "DEBUG DATA: " << data;
 }
 
 
@@ -809,11 +808,10 @@ void Device::processRyodorakuData()
             }
         }
 
-        // DELETE LATER
-        qDebug() << "Ryodoraku Data Results:";
-        for (const QString &key : results.keys()) {
-            qDebug() << key << ":" << results[key];
-        }
+        //qDebug() << "Ryodoraku Data Results:";
+        //for (const QString &key : results.keys()) {
+        //    qDebug() << key << ":" << results[key];
+        //}
 
     PrintDia();
 
