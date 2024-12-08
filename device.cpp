@@ -713,8 +713,8 @@ void Device::onAutoScanPressed()
         mwUI->dropdown->setCurrentIndex(i); // Set the dropdown to the current index
         mwUI->skinContactChecked->toggle(); // Toggle the skin contact
         QPair<int,int> range = ranges[mwUI->dropdown->currentText()]; // Get the ranges for the selected option
-        // (rand()%(range.second-range.first+1))+range.first
-        mwUI->horizontalSlider->setValue(5); // Randomize the value of the slider
+//        mwUI->horizontalSlider->setValue(5); // Set the value of the slider to 5
+        mwUI->horizontalSlider->setValue((rand()%(range.second-range.first+1))+range.first); // Randomize the value of the slider
         mwUI->skinContactChecked->toggle(); // Toggle the skin contact
     }
 }
