@@ -1724,19 +1724,6 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="Dia_button">
-      <property name="geometry">
-       <rect>
-        <x>420</x>
-        <y>110</y>
-        <width>101</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Result</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_28">
       <property name="geometry">
        <rect>
@@ -1765,9 +1752,9 @@
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>380</x>
       <y>500</y>
-      <width>251</width>
+      <width>401</width>
       <height>41</height>
      </rect>
     </property>
@@ -1782,7 +1769,7 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>71</width>
+       <width>201</width>
        <height>21</height>
       </rect>
      </property>
@@ -1798,6 +1785,9 @@
      <property name="text">
       <string/>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
      <property name="indent">
       <number>-1</number>
      </property>
@@ -1805,7 +1795,7 @@
     <widget class="QPushButton" name="btnLogOut">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>330</x>
        <y>10</y>
        <width>61</width>
        <height>25</height>
@@ -1818,7 +1808,7 @@
     <widget class="QPushButton" name="btnProfile">
      <property name="geometry">
       <rect>
-       <x>100</x>
+       <x>250</x>
        <y>10</y>
        <width>61</width>
        <height>25</height>

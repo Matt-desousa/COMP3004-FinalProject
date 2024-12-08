@@ -2,10 +2,6 @@
 
 ReadingStorage::ReadingStorage(QMap<QString,QPair<int,int>>* body_parts)
 {
-    for ( const auto &p : *body_parts ) //for every body part...
-    {
-       readings.insert((QString)p.first, -1); //insert empty data point
-    }
     body_parts_info = body_parts; //store ranges for percentage calculations
     note = new Note(); //store a note page
 }

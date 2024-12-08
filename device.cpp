@@ -92,9 +92,6 @@ Device::Device(QObject *parent)
     connect(mwUI->fahrenheitRadioButton, &QRadioButton::pressed, this, &Device::onFahrenheitSelected);
     connect(mwUI->celsiusRadioButton, &QRadioButton::pressed, this, &Device::onCelsiusSelected);
 
-    //Print
-    connect(mwUI->Dia_button, &QRadioButton::pressed, this, &Device::PrintDia);
-
     //debug
     //DELETE LATER
     connect(mwUI->result,SIGNAL(pressed()),this,SLOT(processRyodorakuData()));
@@ -145,8 +142,10 @@ bool Device::createProfile(string fName, string lName, SEX sex, float weight, fl
     }
 
     qDebug() << profiles.size();
-    if (profiles.size() < NUM_USERS){
+    int maxUsers = NUM_USERS;
+    if (profiles.size() < maxUsers){
         profiles.push_back(new Profile(nextID++, fName, lName, sex, weight, height, date, phoneNum, email, password));
+
         qDebug() << "User created.";
         createWindow->hide();
 
@@ -195,6 +194,12 @@ void Device::logoutProfile()
         disconnect(currentProfile, SIGNAL(profileDeleted()), this, SLOT(onProfileDeleted()));
     }
     currentProfile = NULL;
+
+    reset();
+
+    mwUI->Dia->setText("");
+    mwUI->Organ->setText("");
+    mwUI->Supp->setText("");
 }
 
 void Device::addData()
@@ -212,7 +217,6 @@ qDebug("aaaa");
     history_viewer->update_chart(*currentProfile->getSessions()); //update graph
     qDebug("aaaa");
 }
-
 
 void Device::display_note()
 {
@@ -252,6 +256,24 @@ void Device::display_note()
 void Device::update_chart()
 {
     history_viewer->update_chart(*currentProfile->getSessions());
+}
+
+void Device::reset()
+{
+    // Reset the spot values.
+    for (const QString &key : spotValues.keys()) {
+        spotValues[key] = 5;
+    }
+
+    mwUI->dropdown->setEnabled(false);
+    mwUI->dropdown->setCurrentIndex(0);
+    mwUI->horizontalSlider->setValue(5);
+    mwUI->horizontalSlider->setEnabled(false);
+    mwUI->skinContactChecked->setChecked(false);
+    for (QCheckBox *checkbox : scanCheckboxes){
+        checkbox->setChecked(false);
+    }
+    mwUI->result->setEnabled(false);
 }
 
 void Device::shutdown(){
@@ -328,18 +350,26 @@ int Device::calculateAverage()
 
 void Device::PrintDia()
 {
-    recommend.AddAbnormalPartinQ("H1 Left","H1 Right", spotValues);
-    recommend.AddAbnormalPartinQ("H2 Left","H2 Right", spotValues);
-    recommend.AddAbnormalPartinQ("H3 Left","H3 Right", spotValues);
-    recommend.AddAbnormalPartinQ("H4 Left","H4 Right", spotValues);
-    recommend.AddAbnormalPartinQ("H5 Left","H5 Right", spotValues);
-    recommend.AddAbnormalPartinQ("H6 Left","H6 Right", spotValues);
-    recommend.AddAbnormalPartinQ("F1 Left","F1 Right", spotValues);
-    recommend.AddAbnormalPartinQ("F2 Left","F2 Right", spotValues);
-    recommend.AddAbnormalPartinQ("F3 Left","F3 Right", spotValues);
-    recommend.AddAbnormalPartinQ("F4 Left","F4 Right", spotValues);
-    recommend.AddAbnormalPartinQ("F5 Left","F5 Right", spotValues);
-    recommend.AddAbnormalPartinQ("F6 Left","F6 Right", spotValues);
+    mwUI->Dia->setText("");
+    mwUI->Organ->setText("");
+    mwUI->Supp->setText("");
+
+    Recommendation recommend;
+
+    QMap<QString,int> currentSession = *currentProfile->getSessions()->front()->get_readings();
+
+    recommend.AddAbnormalPartinQ("H1 Left","H1 Right", currentSession);
+    recommend.AddAbnormalPartinQ("H2 Left","H2 Right", currentSession);
+    recommend.AddAbnormalPartinQ("H3 Left","H3 Right", currentSession);
+    recommend.AddAbnormalPartinQ("H4 Left","H4 Right", currentSession);
+    recommend.AddAbnormalPartinQ("H5 Left","H5 Right", currentSession);
+    recommend.AddAbnormalPartinQ("H6 Left","H6 Right", currentSession);
+    recommend.AddAbnormalPartinQ("F1 Left","F1 Right", currentSession);
+    recommend.AddAbnormalPartinQ("F2 Left","F2 Right", currentSession);
+    recommend.AddAbnormalPartinQ("F3 Left","F3 Right", currentSession);
+    recommend.AddAbnormalPartinQ("F4 Left","F4 Right", currentSession);
+    recommend.AddAbnormalPartinQ("F5 Left","F5 Right", currentSession);
+    recommend.AddAbnormalPartinQ("F6 Left","F6 Right", currentSession);
     QString temp_body = "";
     int temp_degree = 0;
     if(recommend.GetWrong_partSize() == 0){
@@ -480,7 +510,6 @@ void Device::PrintDia()
         }else{
             mwUI->Dia->append("ERROR");
         }
-
     }
 }
 
@@ -559,6 +588,7 @@ void Device::onProfileLogin()
 
         addData();
         display_note();
+        PrintDia();
 
         loginWindow->hide();
         lwUI->txtLoginPass->setStyleSheet("");
@@ -575,6 +605,7 @@ void Device::onProfileLogout()
     mainWindow->hide();
     mwUI->lblCurrentUser->setText(QString::fromStdString(""));
     loginWindow->show();
+    logoutProfile();
 }
 
 void Device::onProfileUpdate(string name)
@@ -582,6 +613,7 @@ void Device::onProfileUpdate(string name)
     qDebug() << "User Updated.";
     int index = lwUI->cmbProfile->currentIndex();
     lwUI->cmbProfile->setItemText(index, QString::fromStdString(name));
+    mwUI->lblCurrentUser->setText(QString::fromStdString(name));
 }
 
 void Device::onProfileDeleted()
@@ -618,13 +650,14 @@ void Device::onProfileShow()
 void Device::onAutoScanPressed()
 {
     srand(time(0));
-    int i = 0;
-    for (QCheckBox *checkbox : scanCheckboxes) {
-        mwUI->dropdown->setCurrentIndex(i++);
+    int numScans = scanCheckboxes.size();
+    for (int i = 0; i < numScans; i++) {
+        mwUI->dropdown->setCurrentIndex(i);
         mwUI->skinContactChecked->toggle();
         QString selectedOption = mwUI->dropdown->currentText();
         QPair<int,int> range = ranges[selectedOption];
-        mwUI->horizontalSlider->setValue((rand()%(range.second-range.first+1))+range.first);
+        // (rand()%(range.second-range.first+1))+range.first
+        mwUI->horizontalSlider->setValue(5);
         mwUI->skinContactChecked->toggle();
     }
 }
@@ -754,6 +787,7 @@ void Device::processRyodorakuData()
         new_results->log_data_point(key,  spotValues[key]); //fill it with the results
         //do this all at once here to avoid partial logging if therre's an incomplete shutdown
     }
+
     currentProfile->log_session(new_results); //add to the currentuser
     history_viewer->update_chart(*currentProfile->getSessions()); //update graph
 
@@ -780,5 +814,9 @@ void Device::processRyodorakuData()
         for (const QString &key : results.keys()) {
             qDebug() << key << ":" << results[key];
         }
+
+    PrintDia();
+
+    reset();
 }
 

@@ -24,6 +24,7 @@ int Recommendation::GetAverage(QMap<QString,int>& data)
 
 
 }
+
 //add abnormal part in body_part & higher or lower
 void Recommendation::AddAbnormalPartinQ(QString left,QString right, QMap<QString,int>& data)
 {
@@ -35,6 +36,7 @@ void Recommendation::AddAbnormalPartinQ(QString left,QString right, QMap<QString
     //if part_average is higher than the average zone
     if(leftaverage > average * 1.2 || rightaverage > average * 1.2 )
     {
+        qDebug() << "HIGH";
         //store body part name in queue
         wrong_part.enqueue(temp);
         //store higher
@@ -42,6 +44,7 @@ void Recommendation::AddAbnormalPartinQ(QString left,QString right, QMap<QString
     //if part_average is lower than the average zone
     }else if(leftaverage < average * 0.8 || rightaverage < average * 0.8 )
     {
+        qDebug() << "LOW";
         //store body part name in queue
         wrong_part.enqueue(temp);
         //store lower

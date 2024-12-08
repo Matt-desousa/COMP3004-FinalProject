@@ -27,6 +27,7 @@ public:
     void addData();
     void display_note();
     void update_chart();
+    void reset();
 
 private:
     // Windows and UIs
@@ -46,9 +47,8 @@ private:
     QList<QCheckBox*> scanCheckboxes; //List of all checkboxes
     QList<QPushButton*> tagButtonGroup; //data collections:tags
     QMap<QString,int> spotValues; // store scanned data
-    Recommendation recommend;
     int nextID = 0;
-    bool lastState;
+    bool lastState = false;
 
     // Private Functions
     void shutdown();

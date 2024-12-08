@@ -23,6 +23,7 @@ public:
     int  retrieve_session_average(); //overall average of 24 points
 
     inline Note* get_note(){return note;}
+    inline QMap<QString,int>* get_readings(){return &readings;}
 
     void debug_print(QString body_part); //debug print a point
     void debug_populate_logs(); //fill storage with random data
@@ -31,13 +32,6 @@ private:
     QMap<QString,int> readings; //all readings (bodypart:value)
     Note* note;
     QMap<QString,QPair<int,int>>* body_parts_info; //used to reference body part names and recommended ranges
-
-
-
-
-
-
-
 };
 
 #endif // READINGSTORAGE_H

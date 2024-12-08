@@ -10,7 +10,6 @@ using namespace std;
 
 #include "profilewindow.h"
 #include "confirmdeletepopup.h"
-
 #include "readingstorage.h"
 
 class ProfileWindow;
