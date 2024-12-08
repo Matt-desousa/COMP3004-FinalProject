@@ -22,16 +22,7 @@ class Device : public QObject
 public:
     explicit Device(QObject *parent = nullptr);
 
-    /*
-        Creates a Profile using the given information.
-        Returns true if a profile is successfully created.
-    */
-    bool createProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password);
-
-    /*
-        Verifies a Profile using the password given.
-        Returns true if the password and index match.
-    */
+    // Verifies a Profile using the password given. Returns true if the password and index match.
     bool verifyProfile(string password, int index);
 
     // Logs a profile out.
@@ -77,6 +68,8 @@ private:
     void checkAllScansCompleted(); //Check if scanning is completed
     int calculateAverage();
     void PrintDia(); // Displays the diagnostic and recommendations in the recommendations tab in mainWindow.
+    void createTestProfile(); // Sets all the values in the createWindow for ease of use
+    void resetCreateWindow(); // Resets the createWindow
 
     //testing stuff //DELETE LATER
     ReadingStorage* test_storage;

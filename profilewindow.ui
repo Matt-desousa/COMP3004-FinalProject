@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>511</width>
-    <height>415</height>
+    <height>395</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -335,7 +335,7 @@ of Birth</string>
     <property name="geometry">
      <rect>
       <x>380</x>
-      <y>300</y>
+      <y>270</y>
       <width>121</width>
       <height>25</height>
      </rect>
@@ -348,7 +348,7 @@ of Birth</string>
     <property name="geometry">
      <rect>
       <x>380</x>
-      <y>340</y>
+      <y>310</y>
       <width>121</width>
       <height>25</height>
      </rect>

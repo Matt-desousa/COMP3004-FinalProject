@@ -19,17 +19,13 @@ public:
     explicit Profile(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent = nullptr);
     virtual ~Profile();
 
-    /*
-        Verifies the profile with the given password.
-        Returns true if the stored password and given password match.
-    */
+    // Verifies the Profile using the password given.
     bool verifyPassword(string password);
 
+    // Init the profile window with the profiles information. Also used to reset the window.
     void initProfileWindow();
 
-    /*
-        Shows the profileWindow of the profile.
-    */
+    // Shows the profileWindow of the profile.
     void showProfile();
 
     inline string getName(){return fName + " " + lName;}; // Returns the first and last name of the profile.

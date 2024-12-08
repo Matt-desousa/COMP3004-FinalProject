@@ -123,9 +123,13 @@ Device::Device(QObject *parent)
     // Cancel Button Pressed
     connect(cwUI->btnCancel, SIGNAL(pressed()), loginWindow, SLOT(show()));
     connect(cwUI->btnCancel, SIGNAL(pressed()), createWindow, SLOT(hide()));
+    connect(cwUI->btnCancel, &QPushButton::pressed, this, &Device::resetCreateWindow);
 
     // Create Profile Button Pressed
     connect(cwUI->btnCreateProfile, SIGNAL(pressed()), this, SLOT(onProfileCreated()));
+
+    // Create Test Profile Button Pressed
+    connect(cwUI->btnCreateProfile_2, &QPushButton::pressed, this, &Device::createTestProfile);
 
     // Init Battery
     battery = new Battery();
@@ -137,35 +141,11 @@ Device::Device(QObject *parent)
     battery->turn_on_or_off(true); // start using battery power
 
     // Creating a test profile
-    createProfile("Test", "User", UNDEFINED, 50, 175, QDate(), "911", "x@y.z", "test");
+    createTestProfile();
+    onProfileCreated();
 
     // Show the loginWindow to start the program
     loginWindow->show();
-}
-
-bool Device::createProfile(string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password)
-{
-
-    if (fName == "" || lName == "" || weight <= 0 || height <= 0 || phoneNum == "" || email == "" || password == ""){
-        qDebug() << "Invalid input.";
-        return false;
-    }
-
-    int maxUsers = NUM_USERS;
-    if (profiles.size() < maxUsers){ // Checking if there are less than NUM_USERS
-        profiles.push_back(new Profile(nextID++, fName, lName, sex, weight, height, date, phoneNum, email, password));
-
-        qDebug() << "User created.";
-
-        createWindow->hide();
-        lwUI->cmbProfile->addItem(QString::fromStdString(fName + " " + lName)); // Adding the new profile to the loginWindow list of profiles
-        loginWindow->show();
-        return true;
-    }
-    else {
-        qDebug() << "Maximum users reached.";
-        return false;
-    }
 }
 
 bool Device::verifyProfile(string password, int index)
@@ -521,6 +501,42 @@ void Device::PrintDia()
     }
 }
 
+void Device::createTestProfile()
+{
+    string lNname = "Profile(" + to_string(nextID) + ")";
+    cwUI->txtFName->setText("Test");
+    cwUI->txtLName->setText(QString::fromStdString(lNname));
+    cwUI->dsbWeight->setValue(52);
+    cwUI->dsbHeight->setValue(173);
+    cwUI->datDOB->date();
+    cwUI->txtPhoneNum->setText("123 456 7890");
+    cwUI->txtEmail->setText("email@email.com");
+    cwUI->txtPass->setText("test");
+    cwUI->txtConPass->setText("test");
+}
+
+void Device::resetCreateWindow()
+{
+    cwUI->txtFName->setStyleSheet("");
+    cwUI->txtLName->setStyleSheet("");
+    cwUI->dsbWeight->setStyleSheet("");
+    cwUI->dsbHeight->setStyleSheet("");
+    cwUI->txtPhoneNum->setStyleSheet("");
+    cwUI->txtEmail->setStyleSheet("");
+    cwUI->txtPass->setStyleSheet("");
+    cwUI->txtConPass->setStyleSheet("");
+
+    cwUI->txtFName->setText("");
+    cwUI->txtLName->setText("");
+    cwUI->dsbWeight->setValue(0);
+    cwUI->dsbHeight->setValue(0);
+    cwUI->txtPhoneNum->setText("");
+    cwUI->txtEmail->setText("");
+    cwUI->txtPass->setText("");
+    cwUI->txtConPass->setText("");
+    cwUI->rbtnMale->setChecked(true);
+}
+
 void Device::onProfileCreated()
 {
     // Get all of the information from the createWindow
@@ -553,7 +569,33 @@ void Device::onProfileCreated()
     }
 
     // Boolean to check if the profile was succesfully created
-    bool validUser = createProfile(fName, lName, sex, weight, height, date, phoneNum, email, password);
+    bool validUser = true;
+
+    if (fName == "" || lName == "" || weight <= 0 || height <= 0 || phoneNum == "" || email == "" || password == ""){
+        qDebug() << "Invalid input.";
+        validUser = false;
+    }
+
+    int maxUsers = NUM_USERS;
+    if (profiles.size() < maxUsers && validUser){ // Checking if there are less than NUM_USERS
+        profiles.push_back(new Profile(nextID++, fName, lName, sex, weight, height, date, phoneNum, email, password));
+
+        qDebug() << "User created.";
+
+        createWindow->hide();
+        lwUI->cmbProfile->addItem(QString::fromStdString(fName + " " + lName)); // Adding the new profile to the loginWindow list of profiles
+        loginWindow->show();
+    }
+    else if (profiles.size() >= maxUsers){
+        qDebug() << "Maximum users reached.";
+        QMessageBox msgBox;
+        msgBox.setText("Maximum number of profiles reached.");
+        msgBox.exec();
+        createWindow->hide();
+        loginWindow->show();
+        resetCreateWindow();
+        return;
+    }
 
     // If the profile wasnt valid, set the empty fields to red.
     if (!validUser){
@@ -575,14 +617,7 @@ void Device::onProfileCreated()
         else cwUI->txtConPass->setStyleSheet("");
     }
     else { // Otherwise set the creatWindow UI to default
-        cwUI->txtFName->setStyleSheet("");
-        cwUI->txtLName->setStyleSheet("");
-        cwUI->dsbWeight->setStyleSheet("");
-        cwUI->dsbHeight->setStyleSheet("");
-        cwUI->txtPhoneNum->setStyleSheet("");
-        cwUI->txtEmail->setStyleSheet("");
-        cwUI->txtPass->setStyleSheet("");
-        cwUI->txtConPass->setStyleSheet("");
+        resetCreateWindow();
     }
 }
 

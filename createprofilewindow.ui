@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Test</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_15">
@@ -75,7 +75,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>test</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_23">
@@ -108,7 +108,7 @@ Password</string>
      </rect>
     </property>
     <property name="text">
-     <string>User</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_22">
@@ -159,7 +159,7 @@ Password</string>
      <double>1000.000000000000000</double>
     </property>
     <property name="value">
-     <double>52.000000000000000</double>
+     <double>0.000000000000000</double>
     </property>
    </widget>
    <widget class="QRadioButton" name="rbtnFemale">
@@ -178,9 +178,9 @@ Password</string>
    <widget class="QPushButton" name="btnCreateProfile">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>310</y>
-      <width>111</width>
+      <x>370</x>
+      <y>330</y>
+      <width>121</width>
       <height>25</height>
      </rect>
     </property>
@@ -198,7 +198,7 @@ Password</string>
      </rect>
     </property>
     <property name="text">
-     <string>test@email.com</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_19">
@@ -237,7 +237,7 @@ of Birth</string>
      <double>1000.000000000000000</double>
     </property>
     <property name="value">
-     <double>173.000000000000000</double>
+     <double>0.000000000000000</double>
     </property>
    </widget>
    <widget class="QLabel" name="label_20">
@@ -337,15 +337,15 @@ Number</string>
      </rect>
     </property>
     <property name="text">
-     <string>test</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="btnCancel">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>310</y>
-      <width>81</width>
+      <x>370</x>
+      <y>370</y>
+      <width>121</width>
       <height>25</height>
      </rect>
     </property>
@@ -363,7 +363,7 @@ Number</string>
      </rect>
     </property>
     <property name="text">
-     <string>123 456 7890</string>
+     <string/>
     </property>
    </widget>
    <widget class="QCheckBox" name="isCharging">
@@ -439,6 +439,32 @@ Number</string>
     </property>
     <property name="textDirection">
      <enum>QProgressBar::TopToBottom</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnCreateProfile_2">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>290</y>
+      <width>121</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Create Test Profile</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>104</x>
+      <y>211</y>
+      <width>41</width>
+      <height>10</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>M/D/Y</string>
     </property>
    </widget>
   </widget>
