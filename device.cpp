@@ -656,6 +656,7 @@ void Device::onProfileLogout()
     qDebug() << "User Logged out.";
     mainWindow->hide();
     mwUI->lblCurrentUser->setText(QString::fromStdString(""));
+    history_viewer->reset();
     loginWindow->show();
     logoutProfile();
 }

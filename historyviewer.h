@@ -26,6 +26,7 @@ public:
 
     void next_note();
     void previous_note();
+    inline void reset(){note_index = 0;}
 
 private:
     int num_bars;
