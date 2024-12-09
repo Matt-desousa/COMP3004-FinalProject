@@ -102,6 +102,10 @@ Device::Device(QObject *parent)
     connect(mwUI->fahrenheitRadioButton, &QRadioButton::pressed, this, &Device::onFahrenheitSelected);
     connect(mwUI->celsiusRadioButton, &QRadioButton::pressed, this, &Device::onCelsiusSelected);
 
+    //weight conversion
+    connect(mwUI->lbsRadioButton,&QRadioButton::pressed,this,&Device::onLbsSelected);
+    connect(mwUI->kgRadioButton,&QRadioButton::pressed,this,&Device::onKgSelected);
+
     // Result Button Pressed
     connect(mwUI->result,SIGNAL(pressed()),this,SLOT(processRyodorakuData()));
 
@@ -716,14 +720,30 @@ void Device::onAutoScanPressed()
 
 void Device::onFahrenheitSelected()
 {
+    double celsiusValue = mwUI->bodyTemp->value();
+    double fahrenheitValue = celsiusValue * 9.0 / 5.0 + 32.0;
     mwUI->bodyTemp->setRange(32.0, 212.0);
-    mwUI->bodyTemp->setValue(32.0);
+    mwUI->bodyTemp->setValue(fahrenheitValue);
 }
 
 void Device::onCelsiusSelected()
 {
+    double fahrenheitValue = mwUI->bodyTemp->value();
+    double celsiusValue = (fahrenheitValue - 32.0) * 5.0 / 9.0;
+
     mwUI->bodyTemp->setRange(0.0, 100.0);
-    mwUI->bodyTemp->setValue(0.0);
+    mwUI->bodyTemp->setValue(celsiusValue);
+}
+
+void Device::onLbsSelected(){
+    double kgValue = mwUI->weight->text().toDouble();
+    double lbsValue = kgValue * 2.20462;
+    mwUI->weight->setText(QString::number(lbsValue,'f',2));
+}
+void Device::onKgSelected(){
+    double lbsValue = mwUI->weight->text().toDouble();
+    double kgValue = lbsValue * 0.453592;
+    mwUI->weight->setText(QString::number(kgValue,'f',2));
 }
 
 void Device::onAddTagButtonClicked()

@@ -80,7 +80,9 @@ private slots:
     void onProfileShow();
     void onAutoScanPressed();
     void onFahrenheitSelected();//temp conversion
-    void onCelsiusSelected();//temp convresion
+    void onCelsiusSelected();//temp conversion
+    void onLbsSelected();//weight conversion
+    void onKgSelected();// weight conversion
     void onAddTagButtonClicked(); //add tag
     void onSaveNotesPressed(); //Data collection
 
