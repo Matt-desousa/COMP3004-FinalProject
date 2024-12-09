@@ -71,11 +71,6 @@ private:
     void createTestProfile(); // Sets all the values in the createWindow for ease of use
     void resetCreateWindow(); // Resets the createWindow
 
-    //testing stuff //DELETE LATER
-    ReadingStorage* test_storage;
-    Profile* test_user;
-    QVector<ReadingStorage*> test_readings;
-
 private slots:
     void onProfileCreated();
     void onProfileLogin();

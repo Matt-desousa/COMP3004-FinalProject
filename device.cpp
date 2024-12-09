@@ -799,36 +799,6 @@ void Device::onSaveNotesPressed()
     // Add more tag buttons as needed
     new_note->tags = tags;
 
-    // DELETE LATER
-    // Combine Data into a Structured Format
-    QString data = QString(
-                       "Body Temperature: %1 %2\n"
-                       "Blood Pressure (Left Hand): %3/%4\n"
-                       "Blood Pressure (Right Hand): %5/%6\n"
-                       "Heart Rate: %7 bpm\n"
-                       "Sleeping Time: %8 h %9 m\n"
-                       "Current Weight: %10 %11\n"
-                       "Emotional State: %12\n"
-                       "Overall Feeling: %13\n"
-                       "Tags: %14\n"
-                       "Notes: %15\n")
-                       .arg(new_note->bodyTemp)
-                       .arg(new_note->tempUnit)
-                       .arg(new_note->bloodPressureLeftSystolic)
-                       .arg(new_note->bloodPressureLeftDiastolic)
-                       .arg(new_note->bloodPressureRightSystolic)
-                       .arg(new_note->bloodPressureRightDiastolic)
-                       .arg(new_note->heartRate)
-                       .arg(new_note->sleepHrs)
-                       .arg(new_note->sleepMins)
-                       .arg(new_note->weight)
-                       .arg(new_note->weightUnit)
-                       .arg(new_note->emotionalState)
-                       .arg(new_note->overallFeeling)
-                       .arg(new_note->tags.join(", "))
-                       .arg(new_note->notes);
-
-    //qDebug() << "DEBUG DATA: " << data;
 }
 
 
