@@ -583,7 +583,7 @@ void Device::onProfileCreated()
         qDebug() << "User created.";
 
         createWindow->hide();
-        lwUI->cmbProfile->addItem(QString::fromStdString(fName + " " + lName)); // Adding the new profile to the loginWindow list of profiles
+        lwUI->cmbProfile->addItem(QString::fromStdString(to_string(nextID - 1) + " - " + fName + " " + lName)); // Adding the new profile to the loginWindow list of profiles
         loginWindow->show();
     }
     else if (profiles.size() >= maxUsers){
