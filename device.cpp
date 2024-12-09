@@ -195,7 +195,7 @@ void Device::logoutProfile()
 void Device::addData()
 {
     if(currentProfile->getSessions()->size() == 0){ //if user has no sessions
-        qDebug("Adding random data.");
+        qDebug("Adding random data for testing purposes.");
         //insert some random readings just to show graph history
         for (int i = 0; i < 15; i++){
             ReadingStorage* new_test_reading = new ReadingStorage(&ranges);
@@ -846,6 +846,7 @@ void Device::processRyodorakuData()
     }
 
     currentProfile->log_session(new_results); //add to the currentuser
+    display_note();
     history_viewer->update_chart(*currentProfile->getSessions()); //update graph
 
     int average = calculateAverage();
@@ -866,10 +867,6 @@ void Device::processRyodorakuData()
             }
         }
 
-        //qDebug() << "Ryodoraku Data Results:";
-        //for (const QString &key : results.keys()) {
-        //    qDebug() << key << ":" << results[key];
-        //}
 
     PrintDia();
 

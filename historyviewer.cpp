@@ -103,9 +103,8 @@ void HistoryViewer::update_chart(QVector<ReadingStorage*>& data){
 Note* HistoryViewer::get_note(Profile* user){
         int total_note_count = user->getSessions()->size();
         if(note_index >= total_note_count){note_index = total_note_count - 1;} //cap index to avoid IOOB
-        int index = total_note_count - 1 - note_index; //note_index uses 0 to represent the newest note, so it has to be reversed to get the actual array index
-        note_counter->setText(QString("%1").arg(index + 1)); //update note counter label
-        Note* n = user->getSessions()->at(index)->get_note();
+        note_counter->setText(QString("%1").arg(total_note_count - note_index)); //update note counter label (reverse order from indexes)
+        Note* n = user->getSessions()->at(note_index)->get_note();
         return n;
 }
 
