@@ -16,7 +16,7 @@ class Profile : public QObject
 {
     Q_OBJECT
 public:
-    explicit Profile(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent = nullptr);
+    explicit Profile(int userID, string fName, string lName, SEX sex, float height, QDate date, string phoneNum, string email, string password, QObject *parent = nullptr);
     virtual ~Profile();
 
     // Verifies the Profile using the password given.
@@ -45,7 +45,6 @@ private:
     string lName;
     QDate dob;
     float height;
-    float weight;
     SEX sex;
     string phoneNumber;
     string email;

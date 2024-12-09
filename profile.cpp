@@ -8,7 +8,7 @@ using namespace std;
 #include "ui_profilewindow.h"
 #include "ui_confirmdeletepopup.h"
 
-Profile::Profile(int userID, string fName, string lName, SEX sex, float weight, float height, QDate date, string phoneNum, string email, string password, QObject *parent)
+Profile::Profile(int userID, string fName, string lName, SEX sex, float height, QDate date, string phoneNum, string email, string password, QObject *parent)
     : QObject{parent}
 {
     // Init the windows and UIs
@@ -24,7 +24,6 @@ Profile::Profile(int userID, string fName, string lName, SEX sex, float weight, 
     this->lName = lName;
     this->dob = date;
     this->height = height;
-    this->weight = weight;
     this->sex = sex;
     this->phoneNumber = phoneNum;
     this->email = email;
@@ -76,7 +75,6 @@ void Profile::initProfileWindow()
     if (sex == FEMALE) pwUI->rbtnFemale->setChecked(true);
     else pwUI->rbtnMale->setChecked(true);
 
-    pwUI->dsbWeight->setValue(weight);
     pwUI->dsbHeight->setValue(height);
     pwUI->datDOB->setDate(dob);
     pwUI->txtPhoneNum->setText(QString::fromStdString(phoneNumber));
@@ -89,7 +87,6 @@ void Profile::onProfileUpdate()
     // Get all of the information from the profileWindow.
     string fName = pwUI->txtFName->text().toStdString();
     string lName = pwUI->txtLName->text().toStdString();
-    float weight = pwUI->dsbWeight->value();
     float height = pwUI->dsbHeight->value();
     QDate date = pwUI->datDOB->date();
     string phoneNum = pwUI->txtPhoneNum->text().toStdString();
@@ -122,8 +119,6 @@ void Profile::onProfileUpdate()
     else pwUI->txtFName->setStyleSheet("");
     if (lName == "") {pwUI->txtLName->setStyleSheet("border-style: solid;border-width: 2px;border-color: red"); validUser = false;}
     else pwUI->txtLName->setStyleSheet("");
-    if (weight <= 0) {pwUI->dsbWeight->setStyleSheet("border-style: solid;border-width: 2px;border-color: red"); validUser = false;}
-    else pwUI->dsbWeight->setStyleSheet("");
     if (height <= 0) {pwUI->dsbHeight->setStyleSheet("border-style: solid;border-width: 2px;border-color: red"); validUser = false;}
     else pwUI->dsbHeight->setStyleSheet("");
     if (phoneNum == "") {pwUI->txtPhoneNum->setStyleSheet("border-style: solid;border-width: 2px;border-color: red"); validUser = false;}
@@ -148,9 +143,6 @@ void Profile::onProfileUpdate()
         }
         if (this->height != height){
             this->height = height;
-        }
-        if (this->weight != weight){
-            this->weight = weight;
         }
         if (this->phoneNumber.compare(phoneNum)){
             this->phoneNumber = phoneNum;

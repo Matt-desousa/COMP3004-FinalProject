@@ -506,7 +506,6 @@ void Device::createTestProfile()
     string lNname = "Profile(" + to_string(nextID) + ")";
     cwUI->txtFName->setText("Test");
     cwUI->txtLName->setText(QString::fromStdString(lNname));
-    cwUI->dsbWeight->setValue(52);
     cwUI->dsbHeight->setValue(173);
     cwUI->datDOB->date();
     cwUI->txtPhoneNum->setText("123 456 7890");
@@ -519,7 +518,6 @@ void Device::resetCreateWindow()
 {
     cwUI->txtFName->setStyleSheet("");
     cwUI->txtLName->setStyleSheet("");
-    cwUI->dsbWeight->setStyleSheet("");
     cwUI->dsbHeight->setStyleSheet("");
     cwUI->txtPhoneNum->setStyleSheet("");
     cwUI->txtEmail->setStyleSheet("");
@@ -528,7 +526,6 @@ void Device::resetCreateWindow()
 
     cwUI->txtFName->setText("");
     cwUI->txtLName->setText("");
-    cwUI->dsbWeight->setValue(0);
     cwUI->dsbHeight->setValue(0);
     cwUI->txtPhoneNum->setText("");
     cwUI->txtEmail->setText("");
@@ -542,7 +539,6 @@ void Device::onProfileCreated()
     // Get all of the information from the createWindow
     string fName = cwUI->txtFName->text().toStdString();
     string lName = cwUI->txtLName->text().toStdString();
-    float weight = cwUI->dsbWeight->value();
     float height = cwUI->dsbHeight->value();
     QDate date = cwUI->datDOB->date();
     string phoneNum = cwUI->txtPhoneNum->text().toStdString();
@@ -571,14 +567,14 @@ void Device::onProfileCreated()
     // Boolean to check if the profile was succesfully created
     bool validUser = true;
 
-    if (fName == "" || lName == "" || weight <= 0 || height <= 0 || phoneNum == "" || email == "" || password == ""){
+    if (fName == "" || lName == "" || height <= 0 || phoneNum == "" || email == "" || password == ""){
         qDebug() << "Invalid input.";
         validUser = false;
     }
 
     int maxUsers = NUM_USERS;
     if (profiles.size() < maxUsers && validUser){ // Checking if there are less than NUM_USERS
-        profiles.push_back(new Profile(nextID++, fName, lName, sex, weight, height, date, phoneNum, email, password));
+        profiles.push_back(new Profile(nextID++, fName, lName, sex, height, date, phoneNum, email, password));
 
         qDebug() << "User created.";
 
@@ -603,8 +599,6 @@ void Device::onProfileCreated()
         else cwUI->txtFName->setStyleSheet("");
         if (lName == "") cwUI->txtLName->setStyleSheet("border-style: solid;border-width: 2px;border-color: red");
         else cwUI->txtLName->setStyleSheet("");
-        if (weight <= 0) cwUI->dsbWeight->setStyleSheet("border-style: solid;border-width: 2px;border-color: red");
-        else cwUI->dsbWeight->setStyleSheet("");
         if (height <= 0) cwUI->dsbHeight->setStyleSheet("border-style: solid;border-width: 2px;border-color: red");
         else cwUI->dsbHeight->setStyleSheet("");
         if (phoneNum == "") cwUI->txtPhoneNum->setStyleSheet("border-style: solid;border-width: 2px;border-color: red");
