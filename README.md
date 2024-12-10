@@ -33,7 +33,13 @@
 	- Profile creation, deletion, and updating.
  	- State machine.
 
-### Jaedong Koh
+### Jaedong Koh (soso11234 on github)
+-Data recommendations:
+	- Diagnoses
+	- Supplement Recommendations
+ 	- Organ Readings
+  	- Recommended Range Processing
+-Sequence Diagrams: Print Recommendations
 
 ### Group Efforts
 - UML Class Diagram
