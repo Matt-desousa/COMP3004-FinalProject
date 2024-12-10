@@ -1,4 +1,5 @@
 # COMP-3004 Team 42
+https://github.com/Matt-desousa/COMP3004-FinalProject
 
 ## Members:
 
@@ -10,7 +11,7 @@
 - Battery
 	- Simulated charging and power drain
     	- Graceful Shutdown
-- Video Demos: Battery and Shutdown, Note Viewing and Editing, Session Visualization and Note Creation
+- Video Demos: Battery and Shutdown, Note Viewing and Editing, Session Visualization and Note Creation, Reccommendations
 - Sequence Diagrams: Visualize Reading Data, View Notes, Battery
 
 ### Rachel Wong (rachelwongrwcl on github)
