@@ -22,6 +22,7 @@ https://github.com/Matt-desousa/COMP3004-FinalProject
   		- Scanning starts when there is skin contact
   		- Device starts to scan only after the user lifts up the devices and move to the next scanning point(skin contact checkbox FALSE-> move to next scanning point -> skin contact checkbox TRUE)
   		- Result button will be disabled until scannings are completed
+- Diagrams: Data Collection
 
 ### Matthew de Sousa (Matt-desousa on github)
 - Profile functions:
