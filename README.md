@@ -4,7 +4,14 @@
 
 ### Evan Raz (EvanRazHoC and GreenPixel10 on github)
 - Data storage and display
+	- Chart visualization of reading data
+	- Note browsing and Updating
+  	- Data storage wappers
 - Battery
+	- Simulated charging and power drain
+    	- Graceful Shutdown
+- Video Demos: Battery and Shutdown, Note Viewing and Editing, Session Visualization and Note Creation
+- Sequence Diagrams: Visualize Reading Data, View Notes, Battery
 
 ### Rachel Wong (rachelwongrwcl on github)
 - Data collection and processing 
